@@ -25,6 +25,7 @@ import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoException;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
@@ -68,6 +69,7 @@ public class ProductosController extends HttpServlet {
 	Timestamp pFechaModificacion = null;
 	Timestamp pFechaEliminacion = null;
 	Usuario pUsuario = null;
+	Categoria pCategoria = null;
 
 	Producto pProducto = null;
 	
@@ -178,7 +180,7 @@ public class ProductosController extends HttpServlet {
 		}
 
 		Producto resultado = new Producto(pId, pNombre, pPrecio, pImagen, pDescripcion, pDescuento, pFechaCreacion,
-				pFechaModificacion, pFechaEliminacion, pUsuario);
+				pFechaModificacion, pFechaEliminacion, pUsuario, pCategoria);
 
 		LOG.debug("Devuelve el Producto mapeado");
 		return resultado;

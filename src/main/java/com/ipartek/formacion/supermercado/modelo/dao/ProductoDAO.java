@@ -576,6 +576,7 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(5, pojo.getDescuento());
 			pst.setString(6, pojo.getDescripcion());
 			pst.setInt(7, pojo.getUsuario().getId());
+			pst.setInt(8, pojo.getCategoria().getId());
 
 			LOG.debug("Ejecuta la query: " + pst.toString());
 

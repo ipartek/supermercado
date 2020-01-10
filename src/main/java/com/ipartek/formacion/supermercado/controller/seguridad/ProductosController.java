@@ -68,6 +68,7 @@ public class ProductosController extends HttpServlet {
 	Timestamp pFechaModificacion = null;
 	Timestamp pFechaEliminacion = null;
 	Usuario pUsuario = null;
+	Categoria pCategoria = null;
 	
 	Producto pProducto = null;
 	
@@ -174,8 +175,14 @@ public class ProductosController extends HttpServlet {
 			}
 		}
 		
+		if (request.getParameter("categoria") == null) {
+			if (request.getParameter("categoria_id") != null) {
+				pCategoria = daoCategoria.getById(Integer.parseInt(request.getParameter("categoria_id")));
+			}
+		}
+		
 		Producto resultado = new Producto(pId, pNombre, pPrecio, pImagen, pDescripcion, pDescuento, pFechaCreacion,
-				pFechaModificacion, pFechaEliminacion, pUsuario);
+				pFechaModificacion, pFechaEliminacion, pUsuario, pCategoria);
 
 		LOG.debug("Devuelve el Producto mapeado: " + resultado.toString());
 		

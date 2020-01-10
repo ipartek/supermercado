@@ -69,7 +69,8 @@ public class Producto {
 	}
 
 	public Producto(int id, String nombre, float precio, String imagen, String descripcion, int descuento,
-			Timestamp fechaCreacion, Timestamp fechaModificacion, Timestamp fechaEliminacion, Usuario usuario) {
+			Timestamp fechaCreacion, Timestamp fechaModificacion, Timestamp fechaEliminacion, Usuario usuario, 
+			Categoria categoria) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -81,6 +82,7 @@ public class Producto {
 		this.fechaModificacion = fechaModificacion;
 		this.fechaEliminacion = fechaEliminacion;
 		this.usuario = usuario;
+		this.categoria = categoria;
 	}
 
 	public Producto(String nombre, float precio, String imagen, String descripcion, int descuento,
@@ -198,7 +200,7 @@ public class Producto {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", imagen=" + imagen
 				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", fechaCreacion=" + fechaCreacion
 				+ ", fechaModificacion=" + fechaModificacion + ", fechaEliminacion=" + fechaEliminacion + ", usuario="
-				+ usuario + "]";
+				+ usuario + ", categoria=" + categoria + "]";
 	}
 
 }
