@@ -1,0 +1,12 @@
+Imagen para producto
+Producto fecha alta, fecha baja, descripcion
+Borrado lógico del producto
+Backoffice 2 listados Productos (activos, inactivos, por validar)
+Pantalla Inicial (Productos activos + Usuario + Categoria)
+CRUD categorias
+CRUD usuario
+Ponerlo bonito
+Frontoffice Inicio (Datosd el Usuario y número de productos a traves de un controlador + Cambiar Password en el avatar)
+Filtrar por categoria y nombre del producto
+Encriptar las contraseñas MD5
+Validar producto by admin (Tinyint)
