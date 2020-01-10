@@ -1,16 +1,16 @@
 package com.ipartek.formacion.supermercado.modelo.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -19,29 +19,6 @@ public class ProductoDAO implements IProductoDAO {
 	private final static Logger LOG = Logger.getLogger(ProductoDAO.class);
 
 	private static ProductoDAO INSTANCE;
-
-	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id " + " ORDER BY p.id DESC LIMIT 500;";
-
-	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND u.id = ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
-
-	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
-	
-	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
-	
-
-	private static final String SQL_GET_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
-	private static final String SQL_GET_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
-	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
-	
-	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ? ;";
-	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ? ;";
 	
 
 	private ProductoDAO() {
@@ -59,91 +36,133 @@ public class ProductoDAO implements IProductoDAO {
 
 	@Override
 	public List<Producto> getAll() {
-
+		return null;
+	}
+	
+	public List<Producto> getAllActivos(){
+		LOG.trace("Recuperar todos los Productos que estan Activos");
 		ArrayList<Producto> lista = new ArrayList<Producto>();
-
+		
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL);
-				ResultSet rs = pst.executeQuery()) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_getallactivos()}");) {
 
-			while (rs.next()) {
+			LOG.debug(cs);
 
-				lista.add(mapper(rs));
-
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					lista.add(mapper(rs));
+				}
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+			
+		} catch (Exception e) {
+			LOG.error(e);
 		}
+		
+		return lista;
+	}
+	
+	public List<Producto> getAllBaja(){
+		LOG.trace("Recuperar todos los Productos que estan de Baja");
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+		
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_getallbaja()}");) {
 
+			LOG.debug(cs);
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					lista.add(mapper(rs));
+				}
+			}
+			
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+		
+		return lista;
+	}
+	
+	public List<Producto> getAllInactivos(int validacion){
+		LOG.trace("Recuperar todos los Productos que estan Inactivos");
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+		
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_getallinactivos(?)}");) {
+
+			cs.setInt(1, validacion);
+			LOG.debug(cs);
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					lista.add(mapper(rs));
+				}
+			}
+			
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+		
 		return lista;
 	}
 
 	public List<Producto> getAllByUser(int idUsuario) {
-
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_BY_USER);) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_getallbyuser(?)}");) {
 
-			pst.setInt(1, idUsuario);
-			LOG.debug(pst);
+			cs.setInt(1, idUsuario);
+			LOG.debug(cs);
 
-			try (ResultSet rs = pst.executeQuery()) {
+			try (ResultSet rs = cs.executeQuery()) {
 				while (rs.next()) {
 					lista.add(mapper(rs));
 				}
-			} // executeQuery
-
+			}
 		} catch (SQLException e) {
 			LOG.error(e);
 		}
-
 		return lista;
 	}
 
 	@Override
 	public Producto getById(int id) {
-
-		Producto p = null;
+		LOG.trace("Recuperar Producto por id " + id);
+		Producto registro = new Producto();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID);) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_getbyid(?)}");) {
 
-			// sustituyo parametros en la SQL, en este caso 1º ? por id
-			pst.setInt(1, id);
+			cs.setInt(1, id);
+			LOG.debug(cs);
 
-			// ejecuto la consulta
-			try (ResultSet rs = pst.executeQuery()) {
-
-				while (rs.next()) {
-					p = mapper(rs);
+			try (ResultSet rs = cs.executeQuery()) {
+				if (rs.next()) {
+					registro = mapper(rs);
+				} else {
+					registro = null;
 				}
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOG.error(e);
 		}
-
-		return p;
+		return registro;
 	}
-	
 	
 	@Override
 	public Producto getByIdByUser(int idProducto, int idUsuario) throws ProductoException {
 		Producto p = null;
-
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID_BY_USER);) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_getbyidbyuser(?,?)}");) {
 
 			// sustituyo parametros en la SQL, en este caso 1º ? por id
-			pst.setInt(1, idProducto);
-			pst.setInt(2, idUsuario);
+			cs.setInt(1, idProducto);
+			cs.setInt(2, idUsuario);
 
-			LOG.debug(pst);
+			LOG.debug(cs);
 			// ejecuto la consulta
-			try (ResultSet rs = pst.executeQuery()) {
-
+			try (ResultSet rs = cs.executeQuery()) {
 				if (rs.next()) {
 					p = mapper(rs);
 				}else {
@@ -151,32 +170,27 @@ public class ProductoDAO implements IProductoDAO {
 					throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
 				}
 			}
-
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
 		}	
-
 		return p;
 	}
 	
-
 	@Override
 	public Producto delete(int id) throws Exception {
-
 		Producto registro = null;
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DELETE)) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_deletelogico(?)}");) {
 
-			pst.setInt(1, id);
+			cs.setInt(1, id);
 
-			registro = this.getById(id); // recuperar
+			registro = this.getById(id); // Recuperar
 
-			int affectedRows = pst.executeUpdate(); // eliminar
+			int affectedRows = cs.executeUpdate(); // Eliminar
 			if (affectedRows != 1) {
 				registro = null;
 				throw new Exception("No se puede eliminar " + registro);
 			}
-
 		}
 		return registro;
 	}
@@ -186,51 +200,52 @@ public class ProductoDAO implements IProductoDAO {
 
 		Producto registro = null;
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DELETE_BY_USER)) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_deletebyuserlogico(?,?)}");) {
 
-			pst.setInt(1, idProducto);
-			pst.setInt(2, idUsuario);
+			cs.setInt(1, idProducto);
+			cs.setInt(2, idUsuario);
 
 			registro = this.getById(idProducto); // recuperar
 
-			LOG.debug(pst);
+			LOG.debug(cs);
 			
-			int affectedRows = pst.executeUpdate();
+			int affectedRows = cs.executeUpdate();
 			 
-			
 			if (affectedRows == 1) {
-				LOG.debug("registro eliminado");
+				LOG.debug("Registro Eliminado");
 				
 			}else {
 				
 				LOG.warn("No te pertenece producto al usuario");
 				throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
-				
 			}
-
 		} catch (SQLException e) {
 			throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
 		}
 		return registro;
 	}
 	
-	
-
 	@Override
 	public Producto update(int id, Producto pojo) throws Exception {
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_UPDATE)) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_update(?,?,?,?,?,?,?,?,?)}");) {
 
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
-			pst.setInt(3, id);
+			cs.setString(1, pojo.getNombre());
+			cs.setInt(2, pojo.getCategoria().getId());
+			cs.setInt(3, pojo.getUsuario().getId());
+			cs.setString(4, pojo.getDescripcion());
+			cs.setFloat(5, pojo.getPrecio());
+			cs.setInt(6, pojo.getDescuento());
+			cs.setString(7, pojo.getImagen());
+			cs.setInt(8, pojo.getValidado());
+			cs.setInt(9, id);
 
-			int affectedRows = pst.executeUpdate(); // lanza una excepcion si nombre repetido
+			int affectedRows = cs.executeUpdate(); // lanza una excepcion si nombre repetido
 			if (affectedRows == 1) {
 				pojo.setId(id);
 			} else {
-				throw new Exception("No se encontro registro para id=" + id);
+				throw new Exception("No se encontro registro para id =" + id);
 			}
 
 		}
@@ -239,18 +254,23 @@ public class ProductoDAO implements IProductoDAO {
 	
 	
 	@Override
-	public Producto updateByUser(int idProducto, int idUsuario, Producto pojo) throws SQLException,ProductoException {
+	public Producto updateByUser(int idProducto, int idUsuario, Producto pojo) throws SQLException,ProductoException { //TODO Por hacer de momento
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_UPDATE_BY_USER)) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_updatebyuser(?,?,?,?,?,?,?,?,?)}");) {
 
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());			
-			pst.setInt(3, idProducto);
-			pst.setInt(4, idUsuario);
+			cs.setString(1, pojo.getNombre());
+			cs.setInt(2, pojo.getCategoria().getId());
+			cs.setString(3, pojo.getDescripcion());
+			cs.setFloat(4, pojo.getPrecio());
+			cs.setInt(5, pojo.getDescuento());
+			cs.setString(6, pojo.getImagen());
+			cs.setInt(7, pojo.getValidado());
+			cs.setInt(8, idProducto);
+			cs.setInt(9, idUsuario);
 			
-			LOG.debug(pst);
+			LOG.debug(cs);
 
-			int affectedRows = pst.executeUpdate(); // lanza una excepcion si nombre repetido
+			int affectedRows = cs.executeUpdate(); // lanza una excepcion si nombre repetido
 			if (affectedRows == 1) {
 				LOG.debug("producto modificado");
 				pojo.setId(idProducto);
@@ -269,35 +289,28 @@ public class ProductoDAO implements IProductoDAO {
 
 	@Override
 	public Producto create(Producto pojo) throws Exception {
-
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_insert(?,?,?,?,?,?,?)}");) {
 
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
+			cs.setString(1, pojo.getNombre());
+			cs.setInt(2, pojo.getUsuario().getId());
+			cs.setInt(3, pojo.getCategoria().getId());
+			cs.setString(4, pojo.getDescripcion());
+			cs.setFloat(5, pojo.getPrecio());
+			cs.setInt(6, pojo.getDescuento());
+			cs.setInt(7, pojo.getValidado());
 
-			int affectedRows = pst.executeUpdate();
+			int affectedRows = cs.executeUpdate();
 			if (affectedRows == 1) {
 				// conseguimos el ID que acabamos de crear
-				ResultSet rs = pst.getGeneratedKeys();
+				ResultSet rs = cs.getGeneratedKeys();
 				if (rs.next()) {
 					pojo.setId(rs.getInt(1));
 				}
-
 			}
-
 		}
-
 		return pojo;
 	}
-
-	
-
-
-
-
-
-
 	
 	/**
 	 * Utilidad para mapear un ResultSet a un Producto
@@ -311,11 +324,23 @@ public class ProductoDAO implements IProductoDAO {
 		Producto p = new Producto();
 		p.setId(rs.getInt("id_producto"));
 		p.setNombre(rs.getString("nombre_producto"));
+		p.setPrecio(rs.getFloat("precio"));
+		p.setImagen(rs.getString("imagen"));
+		p.setDescripcion(rs.getString("descripcion"));
+		p.setDescuento(rs.getInt("descuento"));
+		p.setFechaAlta(rs.getString("fecha_alta"));
+		p.setFechaBaja(rs.getString("fecha_baja"));
+		p.setValidado(rs.getInt("validado"));
 
 		Usuario u = new Usuario();
 		u.setId(rs.getInt("id_usuario"));
 		u.setNombre(rs.getString("nombre_usuario"));
 		p.setUsuario(u);
+		
+		Categoria c = new Categoria();
+		c.setId(rs.getInt("id_categoria"));
+		c.setNombre(rs.getString("nombre_categoria"));
+		p.setCategoria(c);
 
 		return p;
 	}

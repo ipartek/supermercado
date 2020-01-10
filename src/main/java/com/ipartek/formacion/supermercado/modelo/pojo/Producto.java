@@ -18,23 +18,20 @@ public class Producto {
 	
 	@NotNull
 	@NotBlank
-	@Size( min = 2, max = 50)
+	@Size(min = 2, max = 50)
 	private String nombre;
 	
 	private float precio;
-	
 	private String imagen;
-	
 	private String descripcion;
 	
 	@Range(min = 0, max= 100)
 	private int descuento;
 	
 	private Usuario usuario;
-	
 	private Categoria categoria;
-	
 	private String fechaAlta;
+	private String fechaBaja;
 	
 	@Range(min = 0, max= 1)
 	private int validado;
@@ -52,6 +49,7 @@ public class Producto {
 		this.usuario = new Usuario();
 		this.categoria = new Categoria();
 		this.fechaAlta = "";
+		this.fechaBaja = "";
 		this.validado = 0;
 	}
 
@@ -131,6 +129,14 @@ public class Producto {
 		this.fechaAlta = fechaAlta;
 	}
 
+	public String getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(String fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+
 	public int getValidado() {
 		return validado;
 	}
@@ -143,7 +149,7 @@ public class Producto {
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", imagen=" + imagen
 				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", usuario=" + usuario + ", categoria="
-				+ categoria + ", fechaAlta=" + fechaAlta + ", validado=" + validado + "]";
+				+ categoria + ", fechaAlta=" + fechaAlta + ", fechaBaja=" + fechaBaja + ", validado=" + validado + "]";
 	}
 		
 }

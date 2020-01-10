@@ -2,8 +2,8 @@ package com.ipartek.formacion.supermercado.modelo.dao;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,12 +20,6 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 public class UsuarioDAO implements IUsuarioDAO {
 
 	private final static Logger LOG = Logger.getLogger(UsuarioDAO.class);
-
-	private static final String SQL_EXIST = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol' "
-			+ " FROM usuario u, rol r " + " WHERE u.id_rol = r.id AND " + " u.nombre = ? AND contrasenia = ? ; ";
-
-	private static final String SQL_GET_ALL = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol' "
-			+ " FROM usuario u, rol r " + " WHERE u.id_rol = r.id " + " ORDER BY u.id DESC LIMIT 500;";
 
 	private static UsuarioDAO INSTANCE;
 
@@ -44,63 +38,138 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public List<Usuario> getAll() {
-		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-
+		LOG.trace("Recuperar todos los Usuarios");
+		List<Usuario> registros = new ArrayList<Usuario>();
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL);) {
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_getall()}");) {
 
-			LOG.debug(pst);
+			LOG.debug(cs);
 
-			try (ResultSet rs = pst.executeQuery()) {
+			try (ResultSet rs = cs.executeQuery()) {
 				while (rs.next()) {
-					lista.add(mapper(rs));
+					registros.add(mapper(rs));
 				}
-			}//executeQuery
-
-			
-		} catch (SQLException e) {
+			}
+		} catch (Exception e) {
 			LOG.error(e);
 		}
-		return lista;
+		return registros;
 	}
 
 	@Override
 	public Usuario getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		LOG.trace("Recuperar Usuario por id " + id);
+		Usuario registro = new Usuario();
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_getbyid(?)}");) {
+
+			cs.setInt(1, id);
+			LOG.debug(cs);
+
+			try (ResultSet rs = cs.executeQuery()) {
+				if (rs.next()) {
+					registro = mapper(rs);
+				} else {
+					registro = null;
+				}
+			}
+
+		}catch (Exception e) {
+			LOG.error(e);
+		}
+
+		return registro;
 	}
 
 	@Override
 	public Usuario delete(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		LOG.trace("Eliminacion logica de un Usuario por su id " + id);
+
+		// Recuperar el Usuario antes de eliminacion logica
+		Usuario registro = getById(id);
+		if (registro == null) {
+			throw new Exception("Registro no encontrado " + id);
+		}
+
+		// Eliminacion Logica
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_deletelogico(?)}");) {
+
+			cs.setInt(1, id);
+			LOG.debug(cs);
+
+			int affectedRows = cs.executeUpdate();
+			if (affectedRows != 1) {
+				registro = null;
+				throw new Exception("No se puede eliminar " + registro);
+			}
+		} 
+
+		return registro;
 	}
 
 	@Override
 	public Usuario update(int id, Usuario pojo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		LOG.trace("Modificar Usuario por id " + id + " " + pojo );
+		Usuario registro = pojo;
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_update(?,?)}");) {
+
+			cs.setInt(1, id);
+			cs.setString(2, pojo.getNombre());
+			
+			LOG.debug(cs);
+
+			if (cs.executeUpdate() == 1) {
+				pojo.setId(id);
+			}else {
+				throw new Exception("No se puede modificar registro " + pojo + " por id " + id);
+			}
+		} 
+
+		return registro;
 	}
 
 	@Override
 	public Usuario create(Usuario pojo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		LOG.trace("Inserta nuevo Usuario " + pojo);
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL usuario_insert(?,?,?,?,?)}");) { 
+
+			cs.setString(1, pojo.getNombre());
+			cs.setString(2, pojo.getContrasenia());
+			cs.setString(3, pojo.getImagen());
+			cs.setInt(4, pojo.getRol().getId());
+			cs.setInt(5, pojo.getValidado());
+
+			LOG.debug(cs);
+
+			int affectedRows = cs.executeUpdate();
+			if (affectedRows == 1) {
+				// conseguimos el ID que acabamos de crear
+				ResultSet rs = cs.getGeneratedKeys();
+				if (rs.next()) {
+					pojo.setId(rs.getInt(1));
+				}
+			}
+		}
+		return pojo;
 	}
 
 	@Override
-	public Usuario exist(String nombre, String contrasenia) {
+	public Usuario exist(String nombre, String contrasenia) { //TODO Mirar si Funciona
 		Usuario resul = null;
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_EXIST);) {
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_existe()}");) {
 
-			pst.setString(1, nombre);
-			pst.setString(2, contrasenia);
-			LOG.debug(pst);
+			cs.setString(1, nombre);
+			cs.setString(2, contrasenia);
+			LOG.debug(cs);
 
-			try (ResultSet rs = pst.executeQuery()) {
-
+			try (ResultSet rs = cs.executeQuery()) {
 				if (rs.next()) {
 					resul = mapper(rs);
 				}
@@ -119,6 +188,8 @@ public class UsuarioDAO implements IUsuarioDAO {
 		u.setId(rs.getInt("id_usuario"));
 		u.setNombre(rs.getString("nombre_usuario"));
 		u.setContrasenia(rs.getString("contrasenia"));
+		u.setValidado(rs.getInt("validado"));
+		u.setImagen(rs.getString("imagen"));
 
 		Rol r = new Rol();
 		r.setId(rs.getInt("id_rol"));

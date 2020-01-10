@@ -35,7 +35,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 		List<Categoria> registros = new ArrayList<Categoria>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall("{ CALL pa_categoria_getall() }");) {
+				CallableStatement cs = con.prepareCall("{CALL pa_categoria_getall()}");) {
 
 			LOG.debug(cs);
 
@@ -58,7 +58,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 		Categoria registro = new Categoria();
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall("{ CALL pa_categoria_get_by_id(?) }");) {
+				CallableStatement cs = con.prepareCall("{CALL pa_categoria_get_by_id(?)}");) {
 
 			cs.setInt(1, id);
 			LOG.debug(cs);
@@ -70,17 +70,15 @@ public class CategoriaDAO implements ICategoriaDAO {
 					registro = null;
 				}
 			}
-
-		}catch (Exception e) {
+		} catch (Exception e) {
 			LOG.error(e);
 		}
-
 		return registro;
 	}
 
 	@Override
 	public Categoria delete(int id) throws Exception {
-		LOG.trace("eliminar categoria por id " + id);
+		LOG.trace("Eliminar categoria por id " + id);
 
 		// recuperar la categoria antes de eliminar
 		Categoria registro = getById(id);
@@ -134,7 +132,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 			// parametro de entrada 1º?
 			cs.setString(1, pojo.getNombre());
 
-			// registro el paremetro de salida 2º ?
+			// registro el paremetro de salida 2º?
 			cs.registerOutParameter(2, java.sql.Types.INTEGER);
 
 			LOG.debug(cs);
