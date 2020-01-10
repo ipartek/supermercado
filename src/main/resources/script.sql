@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Versión del servidor:         10.1.38-MariaDB - mariadb.org binary distribution
+-- Host:                         127.0.0.1
+-- Versión del servidor:         8.0.18 - MySQL Community Server - GPL
 -- SO del servidor:              Win64
--- HeidiSQL Versión:             9.4.0.5125
+-- HeidiSQL Versión:             10.3.0.5771
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,26 +12,26 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
--- Volcando estructura de base de datos para supermercado
-CREATE DATABASE IF NOT EXISTS `supermercado_grupo` /*!40100 DEFAULT CHARACTER SET utf8 */;
+-- Volcando estructura de base de datos para supermercado_grupo
+CREATE DATABASE IF NOT EXISTS `supermercado_grupo` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `supermercado_grupo`;
 
--- Volcando estructura para tabla supermercado.categoria
+-- Volcando estructura para tabla supermercado_grupo.categoria
 CREATE TABLE IF NOT EXISTS `categoria` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado.categoria: ~8 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado_grupo.categoria: ~9 rows (aproximadamente)
 DELETE FROM `categoria`;
 /*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
 INSERT INTO `categoria` (`id`, `nombre`) VALUES
 	(14, '0categoria'),
 	(3, 'electrodomesticos'),
 	(8, 'fruteria'),
-	(1, 'mock1578556983823'),
+	(1, 'mock1578649529903'),
 	(2, 'musica'),
 	(4, 'nueva'),
 	(5, 'nueva2'),
@@ -39,7 +39,7 @@ INSERT INTO `categoria` (`id`, `nombre`) VALUES
 	(7, 'otra333');
 /*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
 
--- Volcando estructura para tabla supermercado.historico
+-- Volcando estructura para tabla supermercado_grupo.historico
 CREATE TABLE IF NOT EXISTS `historico` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `precio` float NOT NULL DEFAULT '0',
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `historico` (
   CONSTRAINT `FK_producto` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado.historico: ~7 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado_grupo.historico: ~10 rows (aproximadamente)
 DELETE FROM `historico`;
 /*!40000 ALTER TABLE `historico` DISABLE KEYS */;
 INSERT INTO `historico` (`id`, `precio`, `fecha`, `id_producto`) VALUES
@@ -66,14 +66,16 @@ INSERT INTO `historico` (`id`, `precio`, `fecha`, `id_producto`) VALUES
 	(10, 1, '2020-01-10 08:24:12', 8);
 /*!40000 ALTER TABLE `historico` ENABLE KEYS */;
 
--- Volcando estructura para tabla supermercado.producto
+-- Volcando estructura para tabla supermercado_grupo.producto
 CREATE TABLE IF NOT EXISTS `producto` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
-  `id_categoria` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
   `precio` float NOT NULL DEFAULT '0',
-  `descuento` int(11) DEFAULT '0' COMMENT 'porcentaje descuento de 0 a 100',
+  `imagen` varchar(150) NOT NULL DEFAULT 'https://image.flaticon.com/icons/png/512/372/372627.png',
+  `descripcion` mediumtext NOT NULL,
+  `descuento` int(11) NOT NULL DEFAULT '0' COMMENT 'porcentaje descuento de 0 a 100',
+  `id_usuario` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL,
   `fecha_modificacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre` (`nombre`),
@@ -83,21 +85,20 @@ CREATE TABLE IF NOT EXISTS `producto` (
   CONSTRAINT `FK_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado.producto: ~8 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado_grupo.producto: ~8 rows (aproximadamente)
 DELETE FROM `producto`;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
-INSERT INTO `producto` (`id`, `nombre`, `id_categoria`, `id_usuario`, `precio`, `descuento`, `fecha_modificacion`) VALUES
-	(8, 'unicoeeeernioeeeeeee', 1, 1, 2, 0, '2020-01-10 08:24:12'),
-	(12, 'hsdfhjkdfhjksdsabor a unicornio', 2, 1, 0, 0, '2020-01-09 12:56:42'),
-	(21, 'nuevo33333', 1, 4, 0, 0, '2020-01-09 13:03:52'),
-	(22, 'morcilla', 1, 1, 0, 2, '2020-01-09 13:04:17'),
-	(29, 'morcilla de burgos', 1, 1, 0, 0, '2020-01-09 12:56:42'),
-	(30, 'queso de burgos', 1, 1, 0, 50, '2020-01-09 12:56:42'),
-	(31, 'queso manchego', 1, 1, 0, 100, '2020-01-09 12:56:42'),
-	(36, 'morcillaeeeeee3333', 1, 1, 0, 0, '2020-01-09 13:03:57');
+INSERT INTO `producto` (`id`, `nombre`, `precio`, `imagen`, `descripcion`, `descuento`, `id_usuario`, `id_categoria`, `fecha_modificacion`) VALUES
+	(8, 'unicornio', 2, 'https://image.flaticon.com/icons/png/512/372/372627.png', '0', 0, 1, 1, '2020-01-10 13:59:20'),
+	(12, 'Sabor a unicornio', 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', '0', 0, 1, 2, '2020-01-10 13:52:11'),
+	(21, 'nuevo33333', 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', '0', 0, 4, 1, '2020-01-10 13:52:11'),
+	(22, 'morcilla', 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', '0', 2, 1, 1, '2020-01-10 13:52:11'),
+	(29, 'morcilla de burgos', 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', '0', 0, 1, 1, '2020-01-10 13:52:11'),
+	(30, 'queso de burgos', 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', '0', 50, 1, 1, '2020-01-10 13:52:11'),
+	(31, 'queso manchego', 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', '0', 100, 1, 1, '2020-01-10 13:52:11');
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
 
--- Volcando estructura para tabla supermercado.rol
+-- Volcando estructura para tabla supermercado_grupo.rol
 CREATE TABLE IF NOT EXISTS `rol` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '1: Usuario normal   2: Administrador',
   `nombre` varchar(15) NOT NULL DEFAULT '0',
@@ -105,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `rol` (
   UNIQUE KEY `nombre` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado.rol: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado_grupo.rol: ~2 rows (aproximadamente)
 DELETE FROM `rol`;
 /*!40000 ALTER TABLE `rol` DISABLE KEYS */;
 INSERT INTO `rol` (`id`, `nombre`) VALUES
@@ -113,7 +114,7 @@ INSERT INTO `rol` (`id`, `nombre`) VALUES
 	(1, 'usuario');
 /*!40000 ALTER TABLE `rol` ENABLE KEYS */;
 
--- Volcando estructura para tabla supermercado.usuario
+-- Volcando estructura para tabla supermercado_grupo.usuario
 CREATE TABLE IF NOT EXISTS `usuario` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL DEFAULT '0',
@@ -125,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   CONSTRAINT `FK_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado.usuario: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado_grupo.usuario: ~2 rows (aproximadamente)
 DELETE FROM `usuario`;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT INTO `usuario` (`id`, `nombre`, `contrasenia`, `id_rol`) VALUES
@@ -133,9 +134,9 @@ INSERT INTO `usuario` (`id`, `nombre`, `contrasenia`, `id_rol`) VALUES
 	(4, 'Dolores', '123456', 1);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
--- Volcando estructura para procedimiento supermercado.pa_categoria_delete
+-- Volcando estructura para procedimiento supermercado_grupo.pa_categoria_delete
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pa_categoria_delete`(
+CREATE PROCEDURE `pa_categoria_delete`(
 	IN `pId` INT
 )
 BEGIN
@@ -145,9 +146,9 @@ BEGIN
 END//
 DELIMITER ;
 
--- Volcando estructura para procedimiento supermercado.pa_categoria_getall
+-- Volcando estructura para procedimiento supermercado_grupo.pa_categoria_getall
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pa_categoria_getall`()
+CREATE PROCEDURE `pa_categoria_getall`()
 BEGIN
 
    	-- nuestro primer PA
@@ -160,9 +161,9 @@ BEGIN
 END//
 DELIMITER ;
 
--- Volcando estructura para procedimiento supermercado.pa_categoria_get_by_id
+-- Volcando estructura para procedimiento supermercado_grupo.pa_categoria_get_by_id
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pa_categoria_get_by_id`(
+CREATE PROCEDURE `pa_categoria_get_by_id`(
 	IN `pId` INT
 )
 BEGIN
@@ -172,9 +173,9 @@ BEGIN
 END//
 DELIMITER ;
 
--- Volcando estructura para procedimiento supermercado.pa_categoria_insert
+-- Volcando estructura para procedimiento supermercado_grupo.pa_categoria_insert
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pa_categoria_insert`(
+CREATE PROCEDURE `pa_categoria_insert`(
 	IN `p_nombre` VARCHAR(100),
 	OUT `p_id` INT
 )
@@ -190,9 +191,9 @@ BEGIN
 END//
 DELIMITER ;
 
--- Volcando estructura para procedimiento supermercado.pa_categoria_update
+-- Volcando estructura para procedimiento supermercado_grupo.pa_categoria_update
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pa_categoria_update`(
+CREATE PROCEDURE `pa_categoria_update`(
 	IN `pId` INT,
 	IN `pNombre` VARCHAR(100)
 )
@@ -205,98 +206,6 @@ BEGIN
 
 END//
 DELIMITER ;
-
--- Volcando estructura para función supermercado.HELLO_WORLD
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `HELLO_WORLD`() RETURNS varchar(100) CHARSET utf8
-BEGIN
-
-	RETURN "hola mundo";
-
-END//
-DELIMITER ;
-
--- Volcando estructura para función supermercado.HELLO_WORLD2
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `HELLO_WORLD2`(
-	`pNombre` VARCHAR(50)
-) RETURNS varchar(100) CHARSET utf8
-BEGIN
-
-	DECLARE nombre VARCHAR(100) DEFAULT 'anonimo';
-
-   IF( TRIM(pNombre) != '' ) THEN
-   	SET nombre = TRIM(pNombre);
-   END IF;
-
-	--	RETURN "Hello" +  pNombre;
-	RETURN CONCAT("hello"," ",nombre);
-
-END//
-DELIMITER ;
-
--- Volcando estructura para disparador supermercado.tau_producto_historico
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-DELIMITER //
-CREATE TRIGGER `tau_producto_historico` AFTER UPDATE ON `producto` FOR EACH ROW BEGIN
-
-	-- meter un registro en la tabla historico con el precio del producto cambiado
-	
-	-- comprobar que inserte solo si cambia el precio
-	
-	IF ( NEW.precio <> OLD.precio ) THEN
-	
-		INSERT INTO historico (precio, id_producto ) VALUES ( OLD.precio , OLD.id );
-		
-	END IF;
-		
-
-END//
-DELIMITER ;
-SET SQL_MODE=@OLDTMP_SQL_MODE;
-
--- Volcando estructura para disparador supermercado.tbi_producto
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-DELIMITER //
-CREATE TRIGGER `tbi_producto` BEFORE INSERT ON `producto` FOR EACH ROW BEGIN
-
-	/* 
-		comprobar que el descuento sea entre 0 y 100 
-		si descuento < 0 = 0
-		si descuento > 100 = 100
-	*/
-
-	IF NEW.descuento < 0 THEN 
-		SET NEW.descuento = 0; 
-	END IF;
-	
-	IF NEW.descuento > 100 THEN 
-		SET NEW.descuento = 100; 
-	END IF;	
-
-END//
-DELIMITER ;
-SET SQL_MODE=@OLDTMP_SQL_MODE;
-
--- Volcando estructura para disparador supermercado.tbu_producto
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-DELIMITER //
-CREATE TRIGGER `tbu_producto` BEFORE UPDATE ON `producto` FOR EACH ROW BEGIN
-
-	IF NEW.descuento < 0 THEN 
-		SET NEW.descuento = 0; 
-	END IF;
-	
-
-	IF NEW.descuento > 100 THEN 
-		SET NEW.descuento = 100; 
-	END IF;	
-
-	-- INSERT INTO categoria (nombre) VALUE ( CONCAT(NEW.descuento, 'categoria'));
-
-END//
-DELIMITER ;
-SET SQL_MODE=@OLDTMP_SQL_MODE;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
