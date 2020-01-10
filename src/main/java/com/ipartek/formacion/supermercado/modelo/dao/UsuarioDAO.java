@@ -27,6 +27,9 @@ public class UsuarioDAO implements IUsuarioDAO {
 	
 	private static final String SQL_GET_UPDATE = "{CALL pa_usuario_update()}";
 	
+	private static final String SQL_GET_DELETE = "{CALL pa_usuario_delete_logico()}";
+	
+	
 	
 	
 	private static UsuarioDAO INSTANCE;
