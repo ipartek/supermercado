@@ -36,15 +36,6 @@ main{
 
 
 
-@media (min-width: 576px) { 
-
-    .contenedor-productos > div {
-        width: 20%;
-    }    
-
- }
-
-
 
 /* producto
 *******************************************/
@@ -53,6 +44,7 @@ main{
     width: 200px;
     border: 1px solid #F0F0F0;
     position: relative;
+    margin: 10px auto;
 }
 
 .producto .descuento{

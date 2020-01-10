@@ -8,10 +8,10 @@
 	<table  class="tabla display" style="width:100%">
         <thead>
             <tr>
-                <th>Id</th>                
-                <th>Nombre</th>
-                <th>Rol</th>
-                <th>Editar</th>                
+                <th>ID</th>                
+                <th>NOMBRE</th>
+                <th>ROL</th>
+                <th>EDITAR</th>                
             </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                 	<td>${u.id}</td>
                 	<td>${u.nombre }</td>
                 	<td>${u.rol.nombre}</td>
-                	<td><a href="seguridad/usuarios?accion=formulario&id=${p.id}">Editar</a></td>
+                	<td><a href="seguridad/usuarios?accion=formulario&id=${u.id}">Editar</a></td>
             	</tr>
             </c:forEach>	
         </tbody>    

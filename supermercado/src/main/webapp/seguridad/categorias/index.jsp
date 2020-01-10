@@ -3,24 +3,22 @@
 <%@ include file="/includes/header.jsp" %>   
     	
 	
-	<a href="seguridad/productos?accion=formulario">Nuevo Producto</a>
+	<a href="seguridad/categorias?accion=formulario">Nueva categoría</a>
 	
 	<table  class="tabla display" style="width:100%">
         <thead>
             <tr>
-                <th>id</th>                
-                <th>nombre</th>
-                <th>usuario</th>
+                <th>ID</th>                
+                <th>Nombre</th>
                 <th>Editar</th>                
             </tr>
         </thead>
         <tbody>
-        	<c:forEach items="${productos}" var="p">
+        	<c:forEach items="${categorias}" var="c">
             	<tr>
-                	<td>${p.id}</td>
-                	<td>${p.nombre }</td>
-                	<td>${p.usuario.nombre}</td>
-                	<td><a href="seguridad/productos?accion=formulario&id=${p.id}">Editar</a></td>
+                	<td>${c.id}</td>
+                	<td>${c.nombre }</td>
+                	<td><a href="seguridad/categorias?accion=formulario&id=${c.id}">Editar</a></td>
             	</tr>
             </c:forEach>	
         </tbody>    

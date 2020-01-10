@@ -14,7 +14,7 @@
 		
 		<div class="form-group">				
 			<label>Contraseña:</label>
-			<input type="password" name="contrasenia" value="${usuario.contrasenia}" class="form-control">
+			<input type="password" name="contrasenia" value="${usuario.contrasenia}" class="form-control" placeholder="Introduce una contraseña segura">
 		</div>
 		
 		<div class="form-group">		
@@ -26,10 +26,10 @@
 			</select>
 		</div>
 		
-		<input type="hidden" name="id" value="${producto.id}">
+		<input type="hidden" name="id" value="${usuario.id}">
 		<input type="hidden" name="accion" value="guardar">
 		
-		<input type="submit" value="${(producto.id>0)?"Modificar":"Crear" }" class="btn btn-block btn-primary">
+		<input type="submit" value="${(usuario.id>0)?"Modificar":"Crear" }" class="btn btn-block btn-primary">
 	
 	</form>
 	

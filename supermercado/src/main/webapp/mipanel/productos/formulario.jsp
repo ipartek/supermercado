@@ -2,7 +2,7 @@
 
 <%@ include file="/includes/header.jsp" %>   
     	
-	<h1>FORMULARIO</h1>
+	<h1>PRODUCTO</h1>
 	
 	<form action="mipanel/productos" method="post" class="mb-4">
 		
@@ -26,8 +26,6 @@
 	
 	<c:if test="${producto.id > 0}">
 	
-
-		
 	
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
