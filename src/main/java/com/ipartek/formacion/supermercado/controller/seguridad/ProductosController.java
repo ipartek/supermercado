@@ -261,8 +261,10 @@ public class ProductosController extends HttpServlet {
 		}
 
 		if (destino.equals(VIEW_TABLA)) {
-			LOG.debug("Pasa la lista de Productos del Usuario a la request");
+			LOG.debug("Pasa la lista de Productos a la request");
 			request.setAttribute("productos", daoProducto.getAll());
+			request.setAttribute("productosInactivos", daoProducto.getAllInactive());
+			request.setAttribute("productosToValidate", daoProducto.getAllToValidate());
 			vista = destino;
 		}
 		return vista;
@@ -347,13 +349,6 @@ public class ProductosController extends HttpServlet {
 	private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		LOG.debug("Entra en listar");
-		
-		
-		request.setAttribute("productos", daoProducto.getAll());
-		request.setAttribute("productosInactivos", daoProducto.getAllInactive());
-		request.setAttribute("productosToValidate", daoProducto.getAllToValidate());
-		LOG.debug("Pasa el listado de productos a la request");
-		
 		
 		mensajes.clear();
 		vistaSeleccionada = operacionesVista(request, response, VIEW_TABLA);
