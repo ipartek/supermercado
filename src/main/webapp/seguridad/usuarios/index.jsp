@@ -7,8 +7,8 @@
 <div class="card shadow mb-4">
 	<div class="card-header py-3">
 		<h6 class="m-0 font-weight-bold text-center">
-			<a href="mipanel/productos?accion=formulario&id=0"
-				class="btn btn-primary">Nuevo Producto</a>
+			<a href="seguridad/usuarios?accion=formulario&id=0"
+				class="btn btn-primary">Nuevo Usuario</a>
 		</h6>
 	</div>
 	<div class="card-body">
@@ -20,11 +20,9 @@
 						<th>Id</th>
 						<th>Foto</th>
 						<th>Nombre</th>
-						<th>Precio</th>
-						<th>Descripción</th>
-						<th>Descuento</th>
+						<th>Contraseña</th>
+						<th>Email</th>
 						<th>Fecha Última Modificación</th>
-						<th>Usuario</th>
 					</tr>
 				</thead>
 				<tfoot>
@@ -32,32 +30,28 @@
 						<th>Id</th>
 						<th>Foto</th>
 						<th>Nombre</th>
-						<th>Precio</th>
-						<th>Descripción</th>
-						<th>Descuento</th>
+						<th>Contraseña</th>
+						<th>Email</th>
 						<th>Fecha Última Modificación</th>
-						<th>Usuario</th>
 					</tr>
 				</tfoot>
 				<tbody>
-					<c:forEach items="${productos}" var="p">
+					<c:forEach items="${usuarios}" var="u">
 						<tr>
-							<td>${p.id}</td>
+							<td>${u.id}</td>
 							<td><img class="img-thumbnail rounded-circle img-tabla"
-								src="${p.imagen}"></td>
-							<td>${p.nombre}</td>
-							<td>${p.precio}</td>
-							<td>${p.descripcion}</td>
-							<td>${p.descuento}</td>
-							<c:if test="${p.fechaModificacion == null}">
-								<td>${p.fechaCreacion}</td>
+								src="${u.imagen}"></td>
+							<td>${u.nombre}</td>
+							<td>${u.contrasenia}</td>
+							<td>${u.email}</td>
+							<c:if test="${u.fechaModificacion == null}">
+								<td>${u.fechaCreacion}</td>
 							</c:if>
-							<c:if test="${p.fechaModificacion != null}">
-								<td>${p.fechaModificacion}</td>
+							<c:if test="${u.fechaModificacion != null}">
+								<td>${u.fechaModificacion}</td>
 							</c:if>
-							<td>${p.usuario.nombre}</td>
 							<td><a
-								href="mipanel/productos?accion=formulario&id=${p.id}">Editar</a></td>
+								href="seguridad/usuarios?accion=formulario&id=${u.id}">Editar</a>
 						</tr>
 					</c:forEach>
 				</tbody>

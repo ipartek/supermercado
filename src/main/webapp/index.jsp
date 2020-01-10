@@ -1,51 +1,39 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<%@ include file="includes/header.jsp" %>   
-    	
-    	
-    	${categorias}
+<%@include file="/includes/header.jsp"%>
 
-        <div class="row contenedor-productos">
-        
-        	<c:forEach items="${productos}" var="p">
+		<div class="row contenedor-productos">
+			<c:forEach items="${productos}" var="p">
+				<div class="col">
+					<!-- producto -->
+					<div class="producto">
+						<c:if test="${p.descuento!=0}"><span class="descuento">${p.descuento}%</span> </c:if><img class="" src="${p.imagen}"
+							alt="imagen de ${p.nombre}" >
 
-	            <div class="col">
-	
-	                <!-- producto -->
-	                <div class="producto">
-	                    <span class="descuento">${p.descuento}%</span>
-	                    <img src="${p.imagen}" alt="imagen de ${p.nombre}">
-	
-	                    <div class="body">
-	                        <p>
-	                            <span class="precio-descuento">	                            	
-	                            	<fmt:formatNumber minFractionDigits="2" type="currency" currencySymbol="€" value="${p.precio}" />	                            
-	                            </span>
-	                            <span class="precio-original">
-	                            	<fmt:formatNumber minFractionDigits="2" type="currency" currencySymbol="€" value="${p.precioDescuento}" />
-	                            </span>
-	                        </p>
-	                        <p class="text-muted precio-unidad ">${p.nombre}</p>
-	                        <p class="descripcion text-truncate">${p.descripcion}</p>
-	                    </div>
-	
-	                    <div class="botones">
-	                        <button class="minus">-</button>
-	                        <input type="text" value="1">
-	                        <button class="plus">+</button>
-	                    </div>
-	
-	                    <button class="carro">añadir al carro</button>
-	
-	                </div>
-	                <!-- /.producto -->
-	
-	            </div>  
-	            <!-- /.col -->          
-	
+						<div class="body">
+							<p>
+								<c:if test="${p.descuento!=0}"><span class="precio-descuento"><fmt:formatNumber type="currency" currencySymbol="€" value="${p.precio}" /></c:if></span> <span
+									class="precio-original"><fmt:formatNumber type="currency" currencySymbol="€" value="${p.getPrecioDescuento()}" /></span>
+							</p>
+							<p class="text-muted precio-unidad">${p.nombre}</p>
+							<p class="descripcion text-truncate">${p.descripcion}</p>
+						</div>
+
+						<div class="botones">
+							<button class="minus">-</button>
+							<input type="text" value="1">
+							<button class="plus">+</button>
+						</div>
+
+						<button class="carro">añadir al carro</button>
+
+					</div>
+					<!-- /.producto -->
+
+				</div>
 			</c:forEach>
-           
-        </div>
-        <!-- row contenedor-productos -->
+		</div>
 
-<%@ include file="includes/footer.jsp" %> 
+	<%@include file="/includes/footer.jsp"%>
+	
+	

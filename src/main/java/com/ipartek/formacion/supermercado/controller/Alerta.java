@@ -2,50 +2,40 @@ package com.ipartek.formacion.supermercado.controller;
 
 public class Alerta {
 	
-	
-	//TODO resto de tipos: success, warning,...
 	public static final String TIPO_PRIMARY = "primary";
 	public static final String TIPO_DANGER = "danger";
+	public static final String TIPO_WARNING = "warning";
 	
-	private String texto;
+	private String mensaje;
 	private String tipo;
 	
 	public Alerta() {
 		super();
-		this.texto = "ERROR inexperado de la aplicación";
+		this.mensaje = "ERROR inesperado de la aplicación";
 		this.tipo = TIPO_DANGER;
 	}
-	
-	
 
-	public Alerta(String tipo, String texto) {
+	public Alerta(String mensaje, String tipo) {
 		super();
+		this.mensaje = mensaje;
 		this.tipo = tipo;
-		this.texto = texto;		
 	}
-
-
-
-	public String getTexto() {
-		return texto;
+	
+	public String getMensaje() {
+		return mensaje;
 	}
-
-	public void setTexto(String texto) {
-		this.texto = texto;
+	
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
 	}
-
+	
 	public String getTipo() {
 		return tipo;
 	}
-
+	
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-
-	@Override
-	public String toString() {
-		return "Alerta [texto=" + texto + ", tipo=" + tipo + "]";
-	}
 	
-
+	
 }
