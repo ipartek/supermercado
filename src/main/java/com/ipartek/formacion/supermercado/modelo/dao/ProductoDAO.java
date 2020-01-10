@@ -35,12 +35,12 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static final String SQL_GET_BY_ID_BY_USER = "{CALL pa_producto_get_byid_byuser(?,?)}";
 
-	private static final String SQL_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
-	private static final String SQL_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
-	private static final String SQL_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
+	private static final String SQL_INSERT = "{CALL pa_producto_insert(?, ?, ?, ?, ?, ?, ?, ?)}";
+	private static final String SQL_UPDATE = "{CALL pa_producto_update(?, ?, ?, ?, ?, ?, ?, ?)}";
+	private static final String SQL_UPDATE_BY_USER = "{CALL `pa_producto_update_byuser`(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
-	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ? ;";
-	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ? ;";
+	private static final String SQL_DELETE = "{CALL pa_producto_delete_logico(?)}";
+	private static final String SQL_DELETE_BY_USER = "{CALL pa_producto_delete_logico_byuser(?,?)}";
 
 	private ProductoDAO() {
 		super();
@@ -165,9 +165,11 @@ public class ProductoDAO implements IProductoDAO {
 
 		Producto registro = null;
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DELETE)) {
+				CallableStatement pst = con.prepareCall(SQL_DELETE)) {
 
 			pst.setInt(1, id);
+
+			LOG.debug(pst);
 
 			registro = this.getById(id); // recuperar
 
@@ -186,7 +188,7 @@ public class ProductoDAO implements IProductoDAO {
 
 		Producto registro = null;
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DELETE_BY_USER)) {
+				CallableStatement pst = con.prepareCall(SQL_DELETE_BY_USER)) {
 
 			pst.setInt(1, idProducto);
 			pst.setInt(2, idUsuario);
@@ -217,11 +219,21 @@ public class ProductoDAO implements IProductoDAO {
 	public Producto update(int id, Producto pojo) throws Exception {
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_UPDATE)) {
+				CallableStatement pst = con.prepareCall(SQL_UPDATE)) {
 
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
-			pst.setInt(3, id);
+			pst.setInt(1, id);
+			pst.setString(2, pojo.getNombre());
+			// TODO: poner la categoria bien
+			pst.setInt(3, 1);
+			pst.setInt(4, pojo.getUsuario().getId());
+			pst.setFloat(5, pojo.getPrecio());
+			pst.setInt(6, pojo.getDescuento());
+			pst.setString(7, pojo.getImagen());
+			pst.setString(8, pojo.getDescripcion());
+
+			LOG.debug(pst);
+
+
 
 			int affectedRows = pst.executeUpdate(); // lanza una excepcion si nombre repetido
 			if (affectedRows == 1) {
@@ -237,12 +249,18 @@ public class ProductoDAO implements IProductoDAO {
 	@Override
 	public Producto updateByUser(int idProducto, int idUsuario, Producto pojo) throws SQLException, ProductoException {
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_UPDATE_BY_USER)) {
+				CallableStatement pst = con.prepareCall(SQL_UPDATE_BY_USER)) {
 
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
-			pst.setInt(3, idProducto);
-			pst.setInt(4, idUsuario);
+			pst.setInt(1, idProducto);
+			pst.setInt(2, idUsuario);
+			pst.setString(3, pojo.getNombre());
+			// TODO: poner la categoria bien
+			pst.setInt(4, 1);
+			pst.setInt(5, pojo.getUsuario().getId());
+			pst.setFloat(6, pojo.getPrecio());
+			pst.setInt(7, pojo.getDescuento());
+			pst.setString(8, pojo.getImagen());
+			pst.setString(9, pojo.getDescripcion());
 
 			LOG.debug(pst);
 
@@ -266,19 +284,25 @@ public class ProductoDAO implements IProductoDAO {
 	public Producto create(Producto pojo) throws Exception {
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+				CallableStatement cs = con.prepareCall(SQL_INSERT)) {
 
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
+			cs.setString(1, pojo.getNombre());
+			// TODO: poner la categoria bien
+			cs.setInt(2, 1);
+			cs.setInt(3, pojo.getUsuario().getId());
+			cs.setFloat(4, pojo.getPrecio());
+			cs.setInt(5, pojo.getDescuento());
+			cs.setString(6, pojo.getImagen());
+			cs.setString(7, pojo.getDescripcion());
 
-			int affectedRows = pst.executeUpdate();
+
+			// registro el paremetro de salida 2º ?
+			cs.registerOutParameter(8, java.sql.Types.INTEGER);
+
+			LOG.debug(cs);
+			int affectedRows = cs.executeUpdate();
 			if (affectedRows == 1) {
-				// conseguimos el ID que acabamos de crear
-				ResultSet rs = pst.getGeneratedKeys();
-				if (rs.next()) {
-					pojo.setId(rs.getInt(1));
-				}
-
+				pojo.setId(cs.getInt(8));
 			}
 
 		}

@@ -10,28 +10,29 @@ import org.hibernate.validator.constraints.Range;
 
 public class Producto {
 
-	
 	public static final int DESCUENTO_MIN = 0;
 	public static final int DESCUENTO_MAX = 100;
-	
+
 	private int id;
-	
+
 	@NotNull
 	@NotBlank
-	@Size( min = 2, max = 50)
+	@Size(min = 2, max = 50)
 	private String nombre;
-	
+
 	private float precio;
-	
+
 	private String imagen;
-	
+
 	private String descripcion;
-	
-	@Range(min = 0, max= 100)
+
+	@Range(min = 0, max = 100)
 	private int descuento;
-	
+
 	private Usuario usuario;
-	
+
+	private Categoria categoria;
+
 	public Producto() {
 		super();
 		this.id = 0;
@@ -41,6 +42,7 @@ public class Producto {
 		this.descripcion = "";
 		this.descuento = DESCUENTO_MIN;
 		this.usuario = new Usuario();
+		this.categoria = new Categoria();
 	}
 
 	public int getId() {
@@ -90,9 +92,9 @@ public class Producto {
 	public void setDescuento(int descuento) {
 		this.descuento = descuento;
 	}
-	
+
 	public float getPrecioDescuento() {
-		return (  (this.precio * ( 100 - this.descuento )) / 100  );
+		return ((this.precio * (100 - this.descuento)) / 100);
 	}
 
 	public Usuario getUsuario() {
@@ -103,10 +105,19 @@ public class Producto {
 		this.usuario = usuario;
 	}
 
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", imagen=" + imagen
-				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", usuario=" + usuario + "]";
+				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", usuario=" + usuario + ", categoria="
+				+ categoria + "]";
 	}
-		
+
 }
