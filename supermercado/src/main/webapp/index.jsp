@@ -3,9 +3,7 @@
 <%@ include file="includes/header.jsp" %>   
     	
     	
-    	${categorias}
-
-        <div class="row contenedor-productos">
+    	<div class="row contenedor-productos">
         
         	<c:forEach items="${productos}" var="p">
 
