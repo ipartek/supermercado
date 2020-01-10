@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ProductosAltaController
  */
-@WebServlet("/mipanel/visualizarAlta")
+@WebServlet("/seguridad/visualizarAlta")
 public class ProductosAltaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -29,15 +29,18 @@ public class ProductosAltaController extends HttpServlet {
 		switch(accion) {
 		
 		case "alta":
-			request.getRequestDispatcher("").forward(request, response);
+			
+			request.getRequestDispatcher("productosAlta/index.jsp").forward(request, response);
 			break;
 			
 		case "baja":
-			request.getRequestDispatcher("").forward(request, response);			
+			
+			request.getRequestDispatcher("productosAlta/index.jsp").forward(request, response);			
 			break;
 		
 		default: 
-			request.getRequestDispatcher("").forward(request, response);
+			
+			request.getRequestDispatcher("productosAlta/index.jsp").forward(request, response);
 			break;
 		}
 		

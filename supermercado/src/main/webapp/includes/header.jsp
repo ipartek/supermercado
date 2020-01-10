@@ -65,6 +65,18 @@
 						<a class="dropdown-item" href="seguridad/usuarios?accion=formulario"><i class="far fa-plus-square mr-2"></i>Nuevo</a>
 					</div>
 				</div>
+				
+				<div class="dropdown show">
+					
+					<a class="btn btn-lg  dropdown-toggle" href="#" role="button"
+						id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false"><i class="fas fa-user fa-sm"></i> Productos Disponibilidad </a>
+
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+						<a class="dropdown-item" href="seguridad//visualizarAlta?accion=alta"><i class="fas fa-list fa-sm mr-2"></i>Productos en Alta</a> 
+						<a class="dropdown-item" href="seguridad/visualizarAlta?accion=baja"><i class="far fa-plus-square mr-2"></i>Productos en Baja</a>
+					</div>
+				</div>
 				<div class="dropdown show">
 					
 					<a class="btn btn-lg  dropdown-toggle" href="#" role="button"
