@@ -29,17 +29,13 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static final String SQL_GET_ALL = "{CALL pa_producto_getall()}";
 
-	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto', p.descripcion 'descripcion_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND u.id = ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL_BY_USER = "{CALL pa_producto_getall_byuser(?)}";
 
 	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto' p.descripcion 'descripcion_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario'  "
 			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? "
 			+ " ORDER BY p.id DESC LIMIT 500;";
 
-	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto' p.descripcion 'descripcion_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario'  "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_BY_ID_BY_USER = "{CALL pa_get_byid_byuser(?,?)}";
 
 	private static final String SQL_GET_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
 	private static final String SQL_GET_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
@@ -60,27 +56,6 @@ public class ProductoDAO implements IProductoDAO {
 
 		return INSTANCE;
 	}
-
-//	@Override
-//	public List<Categoria> getAll() {
-//		LOG.trace("recuperar todas las categorias");
-//		List<Categoria> registros = new ArrayList<>();
-//
-//		try (Connection con = ConnectionManager.getConnection();
-//				CallableStatement cs = con.prepareCall("{CALL pa_categoria_getall()}");) {
-//
-//			LOG.debug(cs);
-//			try (ResultSet rs = cs.executeQuery()) {
-//				while (rs.next()) {
-//					registros.add(mapper(rs));
-//				}
-//			}
-//
-//		} catch (SQLException e) {
-//			LOG.error(e);
-//		}
-//		return registros;
-//	}
 
 	@Override
 	public List<Producto> getAll() {
@@ -112,7 +87,7 @@ public class ProductoDAO implements IProductoDAO {
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_BY_USER);) {
+				CallableStatement pst = con.prepareCall(SQL_GET_ALL_BY_USER);) {
 
 			pst.setInt(1, idUsuario);
 			LOG.debug(pst);
@@ -161,7 +136,7 @@ public class ProductoDAO implements IProductoDAO {
 		Producto p = null;
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID_BY_USER);) {
+				CallableStatement pst = con.prepareCall(SQL_GET_BY_ID_BY_USER);) {
 
 			// sustituyo parametros en la SQL, en este caso 1º ? por id
 			pst.setInt(1, idProducto);
