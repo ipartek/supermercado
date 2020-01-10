@@ -69,7 +69,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 		List<Categoria> resultado = new ArrayList<Categoria>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall( " { CALL pa_categoria_get_all () } ")) {
+				CallableStatement cs = con.prepareCall( " { CALL pa_categoria_get_all() } ")) {
 
 			LOG.debug("Ejecuta la query: " + cs.toString());
 

@@ -17,18 +17,21 @@
 <meta name="author" content="Ander Uraga">
 <title>Supermercado</title>
 <base href="${pageContext.request.contextPath}/">
+
 <!-- Bootstrap core CSS -->
 <link
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	rel="stylesheet">
-
-<!-- nuestro css -->
-<link rel="stylesheet" href="css/custom.css">
-
+	
+<!-- font awesome -->
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
 	integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
 	crossorigin="anonymous">
+
+<!-- nuestro css -->
+<link rel="stylesheet" href="css/custom.css?time=<%=System.currentTimeMillis()%>">
+
 
 </head>
 <body id="top">

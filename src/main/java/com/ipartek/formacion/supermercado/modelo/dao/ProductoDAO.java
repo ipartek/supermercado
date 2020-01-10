@@ -1,5 +1,6 @@
 package com.ipartek.formacion.supermercado.modelo.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -208,6 +209,31 @@ public class ProductoDAO implements IProductoDAO {
 		}
 
 		return lista;
+	}
+	
+	public List<Producto> getAllByName(String nombre) {
+		LOG.trace("Recuperar todos los productos por filtro de nombre: " + nombre);
+		List<Producto> resultado = new ArrayList<Producto>();
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall( " { CALL pa_categoria_get_byname(?) } ")) {
+			cs.setString(1, nombre);
+
+			LOG.debug("Ejecuta la query: " + cs.toString());
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto p = mapper(rs);
+					resultado.add(p);
+				}
+
+			}
+
+		} catch (SQLException e) {
+			LOG.error(e);
+			e.printStackTrace();
+		}
+		return resultado;
 	}
 
 	@Override
