@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
+import com.ipartek.formacion.supermercado.modelo.pojo.Alerta;
 import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 
@@ -73,13 +74,10 @@ public class InicioController extends HttpServlet {
 				try {
 					Categoria c = new Categoria();
 					c.setNombre("mock" + System.currentTimeMillis() );
-					daoCategoria.create(c);
-					
-					daoCategoria.delete(c.getId());
-					
-					daoCategoria.update(1, c);
-					
-					daoCategoria.getById(1) ;
+				//	daoCategoria.create(c);		
+				//	daoCategoria.delete(c.getId());					
+				//	daoCategoria.update(1, c);				
+				//	daoCategoria.getById(1) ;
 					
 				}catch (Exception e) {
 					e.printStackTrace();

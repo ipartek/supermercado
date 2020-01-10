@@ -20,16 +20,11 @@ public class Producto {
 	@NotBlank
 	@Size( min = 2, max = 50)
 	private String nombre;
-	
 	private float precio;
-	
-	private String imagen;
-	
+	private String imagen;	
 	private String descripcion;
-	
 	@Range(min = 0, max= 100)
 	private int descuento;
-	
 	private Usuario usuario;
 	
 	public Producto() {
