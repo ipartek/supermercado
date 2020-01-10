@@ -32,6 +32,15 @@ public class Producto {
 	
 	private Usuario usuario;
 	
+	private Categoria categoria;
+	
+	private String fechaAlta;
+	
+	@Range(min = 0, max= 1)
+	private int validado;
+	
+	
+
 	public Producto() {
 		super();
 		this.id = 0;
@@ -41,6 +50,9 @@ public class Producto {
 		this.descripcion = "";
 		this.descuento = DESCUENTO_MIN;
 		this.usuario = new Usuario();
+		this.categoria = new Categoria();
+		this.fechaAlta = "";
+		this.validado = 0;
 	}
 
 	public int getId() {
@@ -102,11 +114,36 @@ public class Producto {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public String getFechaAlta() {
+		return fechaAlta;
+	}
+
+	public void setFechaAlta(String fechaAlta) {
+		this.fechaAlta = fechaAlta;
+	}
+
+	public int getValidado() {
+		return validado;
+	}
+
+	public void setValidado(int validado) {
+		this.validado = validado;
+	}
 
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", imagen=" + imagen
-				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", usuario=" + usuario + "]";
+				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", usuario=" + usuario + ", categoria="
+				+ categoria + ", fechaAlta=" + fechaAlta + ", validado=" + validado + "]";
 	}
 		
 }

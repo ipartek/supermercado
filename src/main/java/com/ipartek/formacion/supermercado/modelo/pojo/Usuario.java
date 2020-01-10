@@ -17,6 +17,10 @@ public class Usuario {
 	private String contrasenia;
 		
 	private Rol rol;
+	
+	private int validado;
+	
+	private String imagen;
 
 	public Usuario() {
 		super();
@@ -24,6 +28,8 @@ public class Usuario {
 		this.nombre = "";
 		this.contrasenia = "";
 		this.rol = new Rol();
+		this.validado=0;
+		this.imagen = "https://www.instamatico.io/wp-content/uploads/2019/11/Icon-Real-Profiles.png";
 	}
 
 	public int getId() {
@@ -56,11 +62,28 @@ public class Usuario {
 
 	public void setRol(Rol rol) {
 		this.rol = rol;
+	}	
+	
+	public int getValidado() {
+		return validado;
+	}
+
+	public void setValidado(int validado) {
+		this.validado = validado;
+	}
+
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", contrasenia=" + contrasenia + ", rol=" + rol + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", contrasenia=" + contrasenia + ", rol=" + rol
+				+ ", validado=" + validado + ", imagen=" + imagen + "]";
 	}
 
 
