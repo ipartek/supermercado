@@ -6,7 +6,7 @@
 	
 	<div class="row flex-row mt-4 mb-4">
 		<div class="col-4">
-			<h2> Listado de productos activos</h2>
+			<h2> Listado de productos inactivos</h2>
 		</div>
 		<div class="col-3">
 			<a href="seguridad/productos?accion=formulario" class="btn btn-primary"> Añadir nuevo producto </a>
@@ -24,7 +24,7 @@
 			    <th scope="col">Descuento</th>
 			    <th scope="col">Categoria</th>
 			    <th scope="col">Usuario</th>
-			    <th scope="col">Fecha alta</th>
+			    <th scope="col">Fecha baja</th>
 			    <th scope="col"></th>
             </tr>
         </thead>
@@ -39,7 +39,7 @@
 				    <td>${p.descuento}</td>
 				    <td>${p.categoria.nombre}</td>
 				    <td>${p.usuario.nombre}</td>
-				    <td>${p.fechaAlta}</td>
+				    <td>${p.fechaBaja}</td>
 				    <td><a href="seguridad/productos?accion=formulario&id=${p.id}"> Editar </a></td>
 			  	</tr>
 			</c:forEach>
@@ -54,7 +54,7 @@
 			    <th scope="col">Descuento</th>
 			    <th scope="col">Categoria</th>
 			    <th scope="col">Usuario</th>
-			    <th scope="col">Fecha alta</th>
+			    <th scope="col">Fecha baja</th>
 			    <th scope="col"></th>
             </tr>
         </tfoot>
