@@ -31,15 +31,13 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static final String SQL_GET_ALL_BY_USER = "{CALL pa_producto_getall_byuser(?)}";
 
-	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto' p.descripcion 'descripcion_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario'  "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_BY_ID = "{ CALL pa_producto_get_byid(?) }";
 
-	private static final String SQL_GET_BY_ID_BY_USER = "{CALL pa_get_byid_byuser(?,?)}";
+	private static final String SQL_GET_BY_ID_BY_USER = "{CALL pa_producto_get_byid_byuser(?,?)}";
 
-	private static final String SQL_GET_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
-	private static final String SQL_GET_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
-	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
+	private static final String SQL_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
+	private static final String SQL_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
+	private static final String SQL_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
 
 	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ? ;";
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ? ;";
@@ -111,10 +109,11 @@ public class ProductoDAO implements IProductoDAO {
 		Producto p = null;
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID);) {
+				CallableStatement pst = con.prepareCall(SQL_GET_BY_ID);) {
 
 			// sustituyo parametros en la SQL, en este caso 1º ? por id
 			pst.setInt(1, id);
+			LOG.debug(pst);
 
 			// ejecuto la consulta
 			try (ResultSet rs = pst.executeQuery()) {
@@ -218,7 +217,7 @@ public class ProductoDAO implements IProductoDAO {
 	public Producto update(int id, Producto pojo) throws Exception {
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_UPDATE)) {
+				PreparedStatement pst = con.prepareStatement(SQL_UPDATE)) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setInt(2, pojo.getUsuario().getId());
@@ -238,7 +237,7 @@ public class ProductoDAO implements IProductoDAO {
 	@Override
 	public Producto updateByUser(int idProducto, int idUsuario, Producto pojo) throws SQLException, ProductoException {
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_UPDATE_BY_USER)) {
+				PreparedStatement pst = con.prepareStatement(SQL_UPDATE_BY_USER)) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setInt(2, pojo.getUsuario().getId());
@@ -267,7 +266,7 @@ public class ProductoDAO implements IProductoDAO {
 	public Producto create(Producto pojo) throws Exception {
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+				PreparedStatement pst = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setInt(2, pojo.getUsuario().getId());
