@@ -27,6 +27,8 @@
 	                        </p>
 	                        <p class="text-muted precio-unidad ">${p.nombre}</p>
 	                        <p class="descripcion text-truncate">${p.descripcion}</p>
+	                        <p class="descripcion">${p.categoria.nombre}</p>
+	                        <p class="descripcion">${p.usuario.nombre}</p>
 	                    </div>
 	
 	                    <div class="botones">

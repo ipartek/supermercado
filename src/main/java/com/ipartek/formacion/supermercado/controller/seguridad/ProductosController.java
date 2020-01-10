@@ -16,9 +16,13 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -29,11 +33,16 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 public class ProductosController extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger LOG = Logger.getLogger(ProductosController.class);
+	
 	private static final String VIEW_TABLA = "productos/index.jsp";
 	private static final String VIEW_FORM = "productos/formulario.jsp";
 	private static String vistaSeleccionda = VIEW_TABLA;
+	
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
 	
 	//acciones
 	public static final String ACCION_LISTAR = "listar";
@@ -55,13 +64,17 @@ public class ProductosController extends HttpServlet {
 	String pDescripcion;
 	String pDescuento;
 	String pUsuarioId;
+	String pIdCategoria;
 	
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {		
 		super.init(config);
+		
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
+		
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
 	}
@@ -69,8 +82,11 @@ public class ProductosController extends HttpServlet {
 	@Override
 	public void destroy() {	
 		super.destroy();
+		
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
+		
 		factory = null;
 		validator = null;
 	}
@@ -92,7 +108,6 @@ public class ProductosController extends HttpServlet {
 
 	private void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-	
 			//recoger parametros
 			pAccion = request.getParameter("accion");
 			pId = request.getParameter("id");
@@ -128,8 +143,7 @@ public class ProductosController extends HttpServlet {
 				
 				
 			}catch (Exception e) {
-				// TODO log
-				e.printStackTrace();
+				LOG.warn("Ha habido algún problema");
 				
 			}finally {
 				
@@ -153,24 +167,34 @@ public class ProductosController extends HttpServlet {
 			
 		}
 		
+		request.setAttribute("categorias", daoCategoria.getAll()); 
 		request.setAttribute("usuarios", daoUsuario.getAll() );
 		request.setAttribute("producto", pEditar );
+		
 		vistaSeleccionda = VIEW_FORM;
 		
 	}
 
 	private void guardar(HttpServletRequest request, HttpServletResponse response) {
 		
-		
 		int id = Integer.parseInt(pId);
+		
 		Producto pGuardar = new Producto();		
+		
 		pGuardar.setId(id);
 		pGuardar.setNombre(pNombre);
+		pGuardar.setPrecio( Float.parseFloat(pPrecio));
+		pGuardar.setImagen(pImagen);
+		pGuardar.setDescripcion(pDescripcion);
 		pGuardar.setDescuento( Integer.parseInt(pDescuento));
 		
 		Usuario u = new Usuario();
 		u.setId(Integer.parseInt(pUsuarioId));
 		pGuardar.setUsuario(u);
+		
+		Categoria c = new Categoria();
+		c.setId(Integer.parseInt(pIdCategoria)); 
+		pGuardar.setCategoria(c);
 				
 		
 		Set<ConstraintViolation<Producto>> validaciones = validator.validate(pGuardar);
@@ -182,10 +206,19 @@ public class ProductosController extends HttpServlet {
 				
 					if ( id > 0 ) {  // modificar
 						
-						daoProducto.update(id, pGuardar);		
+						LOG.trace("Modificar datos del producto");
+						
+						daoProducto.update(pGuardar, id);	
+						
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Datos del producto modificados correctamente"));
 						
 					}else {            // crear
+						
+						LOG.trace("Crear un registro un producto nuevo");
+						
 						daoProducto.create(pGuardar);
+						
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Producto añadido"));
 					}
 					
 				}catch (Exception e) {  // validacion a nivel de base datos
@@ -195,11 +228,11 @@ public class ProductosController extends HttpServlet {
 			
 		}	
 		
+		request.setAttribute("categorias", daoCategoria.getAll() );
 		request.setAttribute("usuarios", daoUsuario.getAll() );
 		request.setAttribute("producto", pGuardar);
 		vistaSeleccionda = VIEW_FORM;
-	
-		
+
 	}
 
 	private void mensajeValidacion(HttpServletRequest request, Set<ConstraintViolation<Producto>> validaciones ) {
@@ -221,11 +254,12 @@ public class ProductosController extends HttpServlet {
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) {
 	
 		int id = Integer.parseInt(pId);
+		
 		try {
 			Producto pEliminado = daoProducto.delete(id);
 			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Eliminado " + pEliminado.getNombre() ));
 		} catch (Exception e) {
-			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede Eliminar el producto"));
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede eliminar el producto"));
 			
 		}
 		

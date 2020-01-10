@@ -19,6 +19,7 @@ import javax.validation.ValidatorFactory;
 import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoException;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
@@ -31,15 +32,18 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 @WebServlet("/mipanel/productos")
 public class ProductosController extends HttpServlet {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private final static Logger LOG = Logger.getLogger(ProductosController.class);
 
-	
-	private static final long serialVersionUID = 1L;
 	private static final String VIEW_TABLA = "productos/index.jsp";
 	private static final String VIEW_FORM = "productos/formulario.jsp";
 	private static String vistaSeleccionda = VIEW_TABLA;
+	
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
+	
 	private Usuario uLogeado;
 	//acciones
 	public static final String ACCION_LISTAR = "listar";

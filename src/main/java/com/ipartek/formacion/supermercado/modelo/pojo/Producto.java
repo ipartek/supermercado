@@ -32,6 +32,8 @@ public class Producto {
 	
 	private Usuario usuario;
 	
+	private Categoria categoria;
+	
 	public Producto() {
 		super();
 		this.id = 0;
@@ -41,6 +43,20 @@ public class Producto {
 		this.descripcion = "";
 		this.descuento = DESCUENTO_MIN;
 		this.usuario = new Usuario();
+		this.categoria = new Categoria();
+	}
+
+	public Producto(int id, String nombre, float precio, String imagen, String descripcion, int descuento,
+			Usuario usuario, Categoria categoria) {
+		this();
+		this.id = id;
+		this.nombre = nombre;
+		this.precio = precio;
+		this.imagen = imagen;
+		this.descripcion = descripcion;
+		this.descuento = descuento;
+		this.usuario = usuario;
+		this.categoria = categoria;
 	}
 
 	public int getId() {
@@ -103,10 +119,19 @@ public class Producto {
 		this.usuario = usuario;
 	}
 
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", imagen=" + imagen
-				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", usuario=" + usuario + "]";
-	}
+				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", usuario=" + usuario + ", categoria="
+				+ categoria + "]";
+	}	
 		
 }
