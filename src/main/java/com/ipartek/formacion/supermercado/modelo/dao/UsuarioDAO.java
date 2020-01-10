@@ -17,12 +17,18 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	private final static Logger LOG = Logger.getLogger(UsuarioDAO.class);
 
-	private static final String SQL_EXIST = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol' "
-			+ " FROM usuario u, rol r " + " WHERE u.id_rol = r.id AND " + " u.nombre = ? AND contrasenia = ? ; ";
+	private static final String SQL_EXIST = "{CALL pa_user_exist()}";
 
-	private static final String SQL_GET_ALL = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol' "
-			+ " FROM usuario u, rol r " + " WHERE u.id_rol = r.id " + " ORDER BY u.id DESC LIMIT 500;";
-
+	private static final String SQL_GET_ALL ="{CALL pa_usuario_getall()}";
+	
+	private static final String SQL_GET_BY_ID = "{CALL pa_usuario_get_byid()}";
+	
+	private static final String SQL_GET_INSERT = "{CALL pa_usuario_insert()}";
+	
+	private static final String SQL_GET_UPDATE = "{CALL pa_usuario_update()}";
+	
+	
+	
 	private static UsuarioDAO INSTANCE;
 
 	private UsuarioDAO() {
