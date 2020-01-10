@@ -1,9 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ include file="includes/header.jsp" %>   
-    	
-    	
-    	${categorias}
 
         <div class="row contenedor-productos">
         
@@ -13,6 +10,7 @@
 	
 	                <!-- producto -->
 	                <div class="producto">
+	                	<button class="carro">${p.categoria.nombre}</button>
 	                    <span class="descuento">${p.descuento}%</span>
 	                    <img src="${p.imagen}" alt="imagen de ${p.nombre}">
 	

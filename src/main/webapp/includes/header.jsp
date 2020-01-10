@@ -14,7 +14,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
-<meta name="author" content="Ander Uraga">
+<meta name="author" content="Alejandro_Maria">
 <title>Supermercado</title>
 
 <base href="${pageContext.request.contextPath}/">
@@ -42,7 +42,7 @@
 	<nav class="site-header sticky-top py-1">
 		<div
 			class="container d-flex flex-column flex-md-row justify-content-between">
-			<a class="py-2" href="index.html"> Inicio </a>
+			<a class="py-2" href="inicio"> Inicio </a>
 
 			<c:if test="${empty usuarioLogeado }">
 				<div class="nav-item">
@@ -98,7 +98,7 @@
 					<a class="nav-link dropdown-toggle" href="#" id="dropdown02"
 						data-toggle="dropdown">${sessionScope.usuarioLogeado.nombre}</a>
 					<div class="dropdown-menu" aria-labelledby="dropdown02">
-						<a class="dropdown-item" href="logout">Cerrar Sessión</a>
+						<a class="dropdown-item" href="logout">Cerrar Sesión</a>
 
 					</div>
 				</div>
@@ -120,8 +120,7 @@
 					<a class="nav-link dropdown-toggle" href="#" id="dropdown02"
 						data-toggle="dropdown">${sessionScope.usuarioLogeado.nombre}</a>
 					<div class="dropdown-menu" aria-labelledby="dropdown02">
-						<a class="dropdown-item" href="mipanel/perfil">Mi perfil</a> <a
-							class="dropdown-item" href="logout">Cerrar Sessión</a>
+					<a class="dropdown-item" href="logout">Cerrar Sesión</a>
 
 					</div>
 				</div>

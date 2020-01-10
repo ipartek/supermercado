@@ -26,6 +26,7 @@ public class Producto {
 	@Range(min = 0, max= 100)
 	private int descuento;
 	private Usuario usuario;
+	private Categoria categoria;
 	
 	public Producto() {
 		super();
@@ -36,7 +37,9 @@ public class Producto {
 		this.descripcion = "";
 		this.descuento = DESCUENTO_MIN;
 		this.usuario = new Usuario();
+		this.categoria = new Categoria();
 	}
+
 
 	public int getId() {
 		return id;
@@ -90,6 +93,14 @@ public class Producto {
 		return (  (this.precio * ( 100 - this.descuento )) / 100  );
 	}
 
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -97,6 +108,9 @@ public class Producto {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
+
+
 
 	@Override
 	public String toString() {

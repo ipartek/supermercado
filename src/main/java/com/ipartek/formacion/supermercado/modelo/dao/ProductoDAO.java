@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -20,16 +21,24 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static ProductoDAO INSTANCE;
 
-	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id " + " ORDER BY p.id DESC LIMIT 500;";
-	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND u.id = ? "
+	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
+			+ " FROM producto p, usuario u, categoria c"
+			+ " WHERE p.id_usuario = u.id AND p.id_categoria = c.id"
 			+ " ORDER BY p.id DESC LIMIT 500;";
-	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? "
+	
+	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.categoria 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
+			+ " FROM producto p, usuario u categoria c"
+			+ " WHERE p.id_usuario = u.id AND u.id = ?"
 			+ " ORDER BY p.id DESC LIMIT 500;";
-	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ? "
+	
+	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.categoria 'id_categoria' c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
+			+ " FROM producto p, usuario u categoria c"
+			+ " WHERE p.id_usuario = u.id AND p.id= ? AND p.id_categoria = c.id"
+			+ " ORDER BY p.id DESC LIMIT 500;";
+	
+	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.categoria 'id_categoria' c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
+			+ " FROM producto p, usuario u categoria c"
+			+ " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ?"
 			+ " ORDER BY p.id DESC LIMIT 500;";
 	
 
@@ -288,14 +297,6 @@ public class ProductoDAO implements IProductoDAO {
 		return pojo;
 	}
 
-	
-
-
-
-
-
-
-	
 	/**
 	 * Utilidad para mapear un ResultSet a un Producto
 	 * 
@@ -308,6 +309,15 @@ public class ProductoDAO implements IProductoDAO {
 		Producto p = new Producto();
 		p.setId(rs.getInt("id_producto"));
 		p.setNombre(rs.getString("nombre_producto"));
+		p.setDescripcion(rs.getString("descripcion_producto"));
+		p.setImagen(rs.getString("imagen_producto"));
+		p.setPrecio(rs.getFloat("precio_producto"));
+		p.setDescuento(rs.getInt("descuento_precio"));
+		
+		Categoria c = new Categoria();
+		c.setId(rs.getInt("id_categoria"));
+		c.setNombre(rs.getString("nombre_categoria"));
+		p.setCategoria(c);
 
 		Usuario u = new Usuario();
 		u.setId(rs.getInt("id_usuario"));

@@ -10,6 +10,10 @@
             <tr>
                 <th>id</th>                
                 <th>nombre</th>
+                <th>descripcion</th>
+                <th>precio</th>
+                <th>imagen</th>
+                <th>descuento</th>
                 <th>usuario</th>
                 <th>Editar</th>                
             </tr>
@@ -18,7 +22,11 @@
         	<c:forEach items="${productos}" var="p">
             	<tr>
                 	<td>${p.id}</td>
-                	<td>${p.nombre }</td>
+                	<td>${p.nombre}</td>
+                	<td>${p.descripcion}</td>
+                	<td>${p.precio}</td>
+                	<td>${p.imagen}</td>
+                	<td>${p.descuento}</td>
                 	<td>${p.usuario.nombre}</td>
                 	<td><a href="seguridad/productos?accion=formulario&id=${p.id}">Editar</a></td>
             	</tr>

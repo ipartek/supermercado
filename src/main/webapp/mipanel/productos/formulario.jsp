@@ -11,6 +11,21 @@
 			<input type="text" name="nombre" value="${producto.nombre}" class="form-control" placeholder="mínimo 2 letras, máximo 50">
 		</div>
 		
+		<div class="form-group">
+			<label>Descripcion:</label>
+			<input type="text" name="descripcion" value="${producto.descripcion}" class="form-control" placeholder="descripcion del producto">
+		</div>
+		
+		<div class="form-group">
+			<label>Imagen:</label>
+			<input type="text" name="imagen" value="${producto.imagen}" class="form-control" placeholder="Url del producto">
+		</div>	
+		
+		<div class="form-group">
+			<label>Precio:</label>
+			<input type="number" name="precio" value="${producto.precio}" class="form-control" placeholder="precio del producto">
+		</div>
+		
 		<div class="form-group">				
 			<label>Descuento:</label>
 			<input type="number" min="0" max="100" name="descuento" value="${producto.descuento}" class="form-control">
