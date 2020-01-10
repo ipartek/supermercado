@@ -1,4 +1,4 @@
-package com.ipartek.formacion.supermercado.controller;
+package com.ipartek.formacion.supermercado.modelo.pojo;
 
 public class Alerta {
 	
