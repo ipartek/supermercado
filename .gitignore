@@ -1,6 +1,7 @@
 **/node_modules
 
 #eclipse
+**/META-INF
 **.project
 **.settings
 **.classpath

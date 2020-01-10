@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,12 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	private static final String SQL_GET_ALL = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol' "
 			+ " FROM usuario u, rol r " + " WHERE u.id_rol = r.id " + " ORDER BY u.id DESC LIMIT 500;";
+
+	private static final String SQL_DELETE = "DELETE FROM usuario WHERE id = ? ;";
+
+	private static final String SQL_UPDATE = "UPDATE usuario SET nombre = ?, contrasenia = ? WHERE id = ? ;";
+
+	private static final String SQL_INSERT = "INSERT INTO usuario (nombre, contrasenia) VALUES (?, ?);";
 
 	private static UsuarioDAO INSTANCE;
 
@@ -51,9 +58,8 @@ public class UsuarioDAO implements IUsuarioDAO {
 				while (rs.next()) {
 					lista.add(mapper(rs));
 				}
-			}//executeQuery
+			} // executeQuery
 
-			
 		} catch (SQLException e) {
 			LOG.error(e);
 		}
@@ -62,24 +68,6 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public Usuario getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Usuario delete(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Usuario update(int id, Usuario pojo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Usuario create(Usuario pojo) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -123,6 +111,76 @@ public class UsuarioDAO implements IUsuarioDAO {
 		u.setRol(r);
 
 		return u;
+	}
+
+	@Override
+	public Usuario delete(int id) throws Exception {
+		Usuario registro = null;
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_DELETE)) {
+
+			pst.setInt(1, id);
+
+			LOG.debug("PST: " + pst);
+
+			registro = this.getById(id); // recuperar
+
+			int affectedRows = pst.executeUpdate(); // eliminar
+			if (affectedRows != 1) {
+				registro = null;
+				throw new Exception("No se puede eliminar " + registro);
+			}
+
+		}
+		return registro;
+	}
+
+	@Override
+	public Usuario update(int id, Usuario pojo) throws Exception {
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_UPDATE)) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getContrasenia());
+			pst.setInt(3, id);
+
+			LOG.debug("PST: " + pst);
+
+			int affectedRows = pst.executeUpdate(); // lanza una excepcion si nombre repetido
+			if (affectedRows == 1) {
+				pojo.setId(id);
+			} else {
+				throw new Exception("No se encontro registro para id=" + id);
+			}
+
+		}
+		return pojo;
+	}
+
+	@Override
+	public Usuario create(Usuario pojo) throws Exception {
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getContrasenia());
+
+			LOG.debug("PST: " + pst);
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				// conseguimos el ID que acabamos de crear
+				ResultSet rs = pst.getGeneratedKeys();
+				if (rs.next()) {
+					pojo.setId(rs.getInt(1));
+				}
+
+			}
+
+		}
+
+		return pojo;
 	}
 
 }

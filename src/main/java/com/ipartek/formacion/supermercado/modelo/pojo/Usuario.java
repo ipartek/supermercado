@@ -5,17 +5,17 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 
 public class Usuario {
-	
+
 	private int id;
-	
+
 	@NotBlank
-	@Size( min = 2, max = 50)
+	@Size(min = 2, max = 50)
 	private String nombre;
-	
+
 	@NotBlank
-	@Size( min = 2, max = 50)
+	@Size(min = 2, max = 50)
 	private String contrasenia;
-		
+
 	private Rol rol;
 
 	public Usuario() {
@@ -63,6 +63,4 @@ public class Usuario {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", contrasenia=" + contrasenia + ", rol=" + rol + "]";
 	}
 
-
-	
 }
