@@ -3,7 +3,7 @@
 <%@ include file="includes/header.jsp" %>   
     	
     	
-    	${categorias}
+    	${categorias }
 
         <div class="row contenedor-productos">
         
