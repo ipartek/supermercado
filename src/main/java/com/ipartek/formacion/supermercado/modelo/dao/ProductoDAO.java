@@ -223,8 +223,7 @@ public class ProductoDAO implements IProductoDAO {
 
 			pst.setInt(1, id);
 			pst.setString(2, pojo.getNombre());
-			// TODO: poner la categoria bien
-			pst.setInt(3, 1);
+			pst.setInt(3, pojo.getCategoria().getId());
 			pst.setInt(4, pojo.getUsuario().getId());
 			pst.setFloat(5, pojo.getPrecio());
 			pst.setInt(6, pojo.getDescuento());
@@ -254,8 +253,7 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(1, idProducto);
 			pst.setInt(2, idUsuario);
 			pst.setString(3, pojo.getNombre());
-			// TODO: poner la categoria bien
-			pst.setInt(4, 1);
+			pst.setInt(4, pojo.getCategoria().getId());
 			pst.setInt(5, pojo.getUsuario().getId());
 			pst.setFloat(6, pojo.getPrecio());
 			pst.setInt(7, pojo.getDescuento());
@@ -287,8 +285,7 @@ public class ProductoDAO implements IProductoDAO {
 				CallableStatement cs = con.prepareCall(SQL_INSERT)) {
 
 			cs.setString(1, pojo.getNombre());
-			// TODO: poner la categoria bien
-			cs.setInt(2, 1);
+			cs.setInt(2, pojo.getCategoria().getId());
 			cs.setInt(3, pojo.getUsuario().getId());
 			cs.setFloat(4, pojo.getPrecio());
 			cs.setInt(5, pojo.getDescuento());
@@ -331,6 +328,10 @@ public class ProductoDAO implements IProductoDAO {
 		u.setId(rs.getInt("id_usuario"));
 		u.setNombre(rs.getString("nombre_usuario"));
 		p.setUsuario(u);
+
+		Categoria c = p.getCategoria();
+		c.setId(rs.getInt("id_categoria"));
+		c.setNombre(rs.getString("nombre_categoria"));
 
 		return p;
 	}
