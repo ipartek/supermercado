@@ -33,7 +33,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
 			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
 			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
-			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria"
+			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.validado = '1'"
 			+ " ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_GET_ALL_BY_USER = "SELECT " + "		p.id AS 'id_producto', "
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
@@ -46,6 +46,30 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
 			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
 			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id_usuario = ?"
+			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL_INACTIVE = "SELECT " + "		p.id AS 'id_producto', "
+			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
+			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
+			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario', " + "		u.nombre 'nombre_usuario', "
+			+ "		u.contrasenia, " + "		u.email AS 'email', " + "		u.imagen AS 'imagen_usuario', "
+			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
+			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
+			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
+			+ "WHERE p.fecha_eliminacion IS NOT NULL AND p.id_usuario = u.id AND c.id = p.id_categoria"
+			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL_TOVALIDATE = "SELECT " + "		p.id AS 'id_producto', "
+			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
+			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
+			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario', " + "		u.nombre 'nombre_usuario', "
+			+ "		u.contrasenia, " + "		u.email AS 'email', " + "		u.imagen AS 'imagen_usuario', "
+			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
+			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
+			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
+			+ " WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.validado = '0'"
 			+ " ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_GET_BY_ID = "SELECT " + "		p.id AS 'id_producto', "
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
@@ -169,6 +193,60 @@ public class ProductoDAO implements IProductoDAO {
 			ResultSet rs = pst.executeQuery();
 
 			while (rs.next()) {
+				Producto p = mapper(rs);
+				lista.add(p);
+
+			}
+
+		} catch (SQLException e) {
+			LOG.error(e);
+			e.printStackTrace();
+		}
+
+		return lista;
+	}
+	
+	public List<Producto> getAllInactive() {
+
+		LOG.debug("Entra en getAllInactive");
+
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_INACTIVE);
+				ResultSet rs = pst.executeQuery()) {
+
+			LOG.debug("Ejecuta la query: " + pst.toString());
+
+			while (rs.next()) {
+
+				Producto p = mapper(rs);
+				lista.add(p);
+
+			}
+
+		} catch (SQLException e) {
+			LOG.error(e);
+			e.printStackTrace();
+		}
+
+		return lista;
+	}
+	
+	public List<Producto> getAllToValidate() {
+
+		LOG.debug("Entra en getAllToValidate");
+
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_TOVALIDATE);
+				ResultSet rs = pst.executeQuery()) {
+
+			LOG.debug("Ejecuta la query: " + pst.toString());
+
+			while (rs.next()) {
+
 				Producto p = mapper(rs);
 				lista.add(p);
 

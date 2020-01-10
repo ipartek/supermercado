@@ -241,6 +241,7 @@ public class UsuariosController extends HttpServlet {
 
 			LOG.debug("Pasa el Usuario a la request");
 			request.setAttribute("usuario", usuarioForm);
+			request.setAttribute("roles", daoRol.getAll());
 
 			vista = destino;
 		}

@@ -39,6 +39,12 @@
 							name="descripcion" placeholder="Descripción"
 							value="${producto.descripcion}" required="required"
 							class="form-control mb-2 p-2" />
+						<label for="descripcion">Categoría</label>
+						<select name="categoria_id" class="form-control mb-2 p-2 custom-select">
+							<c:forEach items="${categorias}" var="c">
+								<option value="${c.id}" ${(c.id eq producto.categoria.id)?"selected":""}>${c.nombre}</option>
+							</c:forEach>
+						</select>
 						<input type="hidden" name="usuarioId" value="${producto.usuario.nombre}" />
 						<input type="text" name="usuario_id"
 							placeholder="ID" value="${producto.id}" required="required"

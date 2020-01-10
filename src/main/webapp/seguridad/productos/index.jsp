@@ -49,7 +49,7 @@
 	border: 1px solid transparent;
 }
 
-.project-tab .tab-pane{
+.project-tab .tab-pane {
 	padding: 10px;
 }
 
@@ -88,20 +88,48 @@
 				<div class="tab-content" id="nav-tabContent">
 					<div class="tab-pane fade show active" id="nav-home"
 						role="tabpanel" aria-labelledby="nav-home-tab">
-						<table class="tabla display" style="width: 100%">
+						<table class="table table-bordered text-center" id="dataTable"
+							width="100%" cellspacing="0">
 							<thead>
 								<tr>
-									<th>id</th>
-									<th>nombre</th>
-									<th>usuario</th>
-									<th>Editar</th>
+									<th>Id</th>
+									<th>Foto</th>
+									<th>Nombre</th>
+									<th>Precio</th>
+									<th>Descripción</th>
+									<th>Descuento</th>
+									<th>Fecha Última Modificación</th>
+									<th>Usuario</th>
 								</tr>
 							</thead>
+							<tfoot>
+								<tr>
+									<th>Id</th>
+									<th>Foto</th>
+									<th>Nombre</th>
+									<th>Precio</th>
+									<th>Descripción</th>
+									<th>Descuento</th>
+									<th>Fecha Última Modificación</th>
+									<th>Usuario</th>
+								</tr>
+							</tfoot>
 							<tbody>
 								<c:forEach items="${productos}" var="p">
 									<tr>
 										<td>${p.id}</td>
-										<td>${p.nombre }</td>
+										<td><img class="img-thumbnail rounded-circle img-tabla"
+											src="${p.imagen}"></td>
+										<td>${p.nombre}</td>
+										<td>${p.precio}</td>
+										<td>${p.descripcion}</td>
+										<td>${p.descuento}</td>
+										<c:if test="${producto.fechaModificacion == null}">
+											<td>${p.fechaCreacion}</td>
+										</c:if>
+										<c:if test="${producto.fechaModificacion != null}">
+											<td>${p.fechaModificacion}</td>
+										</c:if>
 										<td>${p.usuario.nombre}</td>
 										<td><a
 											href="seguridad/productos?accion=formulario&id=${p.id}">Editar</a></td>
@@ -112,59 +140,100 @@
 					</div>
 					<div class="tab-pane fade" id="nav-profile" role="tabpanel"
 						aria-labelledby="nav-profile-tab">
-						<table class="table" cellspacing="0">
+						<table class="table table-bordered text-center" id="dataTable"
+							width="100%" cellspacing="0">
 							<thead>
 								<tr>
-									<th>Project Name</th>
-									<th>Employer</th>
-									<th>Time</th>
+									<th>Id</th>
+									<th>Foto</th>
+									<th>Nombre</th>
+									<th>Precio</th>
+									<th>Descripción</th>
+									<th>Descuento</th>
+									<th>Fecha Última Modificación</th>
+									<th>Usuario</th>
 								</tr>
 							</thead>
+							<tfoot>
+								<tr>
+									<th>Id</th>
+									<th>Foto</th>
+									<th>Nombre</th>
+									<th>Precio</th>
+									<th>Descripción</th>
+									<th>Descuento</th>
+									<th>Fecha Última Modificación</th>
+									<th>Usuario</th>
+								</tr>
+							</tfoot>
 							<tbody>
-								<tr>
-									<td><a href="#">Work 1</a></td>
-									<td>Doe</td>
-									<td>john@example.com</td>
-								</tr>
-								<tr>
-									<td><a href="#">Work 2</a></td>
-									<td>Moe</td>
-									<td>mary@example.com</td>
-								</tr>
-								<tr>
-									<td><a href="#">Work 3</a></td>
-									<td>Dooley</td>
-									<td>july@example.com</td>
-								</tr>
+								<c:forEach items="${productosInactivos}" var="pI">
+									<tr>
+										<td>${pI.id}</td>
+										<td><img class="img-thumbnail rounded-circle img-tabla"
+											src="${pI.imagen}"></td>
+										<td>${pI.nombre}</td>
+										<td>${pI.precio}</td>
+										<td>${pI.descripcion}</td>
+										<td>${pI.descuento}</td>
+										<td>${pI.fechaEliminacion}</td>
+										<td>${pI.usuario.nombre}</td>
+										<td><a
+											href="seguridad/productos?accion=formulario&id=${pI.id}">Editar</a></td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
 					<div class="tab-pane fade" id="nav-contact" role="tabpanel"
 						aria-labelledby="nav-contact-tab">
-						<table class="table" cellspacing="0">
+						<table class="table table-bordered text-center" id="dataTable"
+							width="100%" cellspacing="0">
 							<thead>
 								<tr>
-									<th>Contest Name</th>
-									<th>Date</th>
-									<th>Award Position</th>
+									<th>Id</th>
+									<th>Foto</th>
+									<th>Nombre</th>
+									<th>Precio</th>
+									<th>Descripción</th>
+									<th>Descuento</th>
+									<th>Fecha Última Modificación</th>
+									<th>Usuario</th>
 								</tr>
 							</thead>
+							<tfoot>
+								<tr>
+									<th>Id</th>
+									<th>Foto</th>
+									<th>Nombre</th>
+									<th>Precio</th>
+									<th>Descripción</th>
+									<th>Descuento</th>
+									<th>Fecha Última Modificación</th>
+									<th>Usuario</th>
+								</tr>
+							</tfoot>
 							<tbody>
-								<tr>
-									<td><a href="#">Work 1</a></td>
-									<td>Doe</td>
-									<td>john@example.com</td>
-								</tr>
-								<tr>
-									<td><a href="#">Work 2</a></td>
-									<td>Moe</td>
-									<td>mary@example.com</td>
-								</tr>
-								<tr>
-									<td><a href="#">Work 3</a></td>
-									<td>Dooley</td>
-									<td>july@example.com</td>
-								</tr>
+								<c:forEach items="${productosToValidate}" var="pV">
+									<tr>
+										<td>${pV.id}</td>
+										<td><img class="img-thumbnail rounded-circle img-tabla"
+											src="${pV.imagen}"></td>
+										<td>${pV.nombre}</td>
+										<td>${pV.precio}</td>
+										<td>${pV.descripcion}</td>
+										<td>${pV.descuento}</td>
+										<c:if test="${pV.fechaModificacion == null}">
+											<td>${pV.fechaCreacion}</td>
+										</c:if>
+										<c:if test="${pV.fechaModificacion != null}">
+											<td>${pV.fechaModificacion}</td>
+										</c:if>
+										<td>${pV.usuario.nombre}</td>
+										<td><a
+											href="seguridad/productos?accion=formulario&id=${pV.id}">Editar</a></td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
