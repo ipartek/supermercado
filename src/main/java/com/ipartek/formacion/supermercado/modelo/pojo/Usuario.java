@@ -1,6 +1,10 @@
 package com.ipartek.formacion.supermercado.modelo.pojo;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import javax.validation.constraints.Size;
+import javax.xml.bind.DatatypeConverter;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -53,6 +57,7 @@ public class Usuario {
 	}
 
 	public void setContrasenia(String contrasenia) {
+		
 		this.contrasenia = contrasenia;
 	}
 
@@ -78,6 +83,18 @@ public class Usuario {
 
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
+	}
+	
+	public String encriptarContrasenia(String nombre, String passwd) throws NoSuchAlgorithmException {
+		
+		String combinacion = nombre+passwd;
+		
+		MessageDigest md = MessageDigest.getInstance("MD5");
+	    md.update(combinacion.getBytes());
+	    byte[] digest = md.digest();
+	    String resul = DatatypeConverter.printHexBinary(digest).toUpperCase();
+		
+		return resul;
 	}
 
 	@Override

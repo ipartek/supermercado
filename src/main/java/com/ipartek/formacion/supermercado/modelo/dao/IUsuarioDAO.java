@@ -12,4 +12,12 @@ public interface IUsuarioDAO extends IDAO<Usuario> {
 	 */
 	Usuario exist( String nombre, String contrasenia);
 	
+	/**
+	 * Junta el nombre y passwd en un solo string y crea un hash de dicho string
+	 * @param nombre
+	 * @param passwd
+	 * @return Hash del string con el nombre y passwd combinado
+	 */
+	
+	String encriptarContrasenia(String nombre, String passwd);	
 }

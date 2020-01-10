@@ -1,11 +1,15 @@
 package com.ipartek.formacion.supermercado.modelo.dao;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
 
@@ -123,6 +127,23 @@ public class UsuarioDAO implements IUsuarioDAO {
 		u.setRol(r);
 
 		return u;
+	}
+
+	@Override
+	public String encriptarContrasenia(String nombre, String passwd) {
+		String combinacion = nombre+passwd;
+		String resul = "";
+		
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(combinacion.getBytes());
+			byte[] digest = md.digest();
+			resul = DatatypeConverter.printHexBinary(digest).toUpperCase();
+		} catch (NoSuchAlgorithmException e) {
+			LOG.error(e);
+		}
+		
+		return resul;
 	}
 
 }
