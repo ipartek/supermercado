@@ -103,7 +103,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public Categoria update(int id, Categoria pojo) throws Exception {
+	public Categoria update(Categoria pojo, int id) throws Exception {
 		LOG.trace("modificar categoria por id " + id + " " + pojo );
 		Categoria registro = pojo;
 		try (Connection con = ConnectionManager.getConnection();

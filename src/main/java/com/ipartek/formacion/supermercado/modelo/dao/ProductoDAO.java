@@ -14,52 +14,69 @@ import com.ipartek.formacion.supermercado.model.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
-public class ProductoDAO implements IProductoDAO {
-
+public class ProductoDAO implements IProductoDAO{
+	
 	private final static Logger LOG = Logger.getLogger(ProductoDAO.class);
 
 	private static ProductoDAO INSTANCE;
 
-	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id " + " ORDER BY p.id DESC LIMIT 500;";
-
+	//ctes para la consulta a la base de datos:
+	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario' " + 
+												" FROM producto p, usuario u " + 
+												" WHERE p.id_usuario = u.id " + 
+												" ORDER BY p.id DESC LIMIT 500;";
+	
 	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
 			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND u.id = ? "
 			+ " ORDER BY p.id DESC LIMIT 500;";
+	
+	//usamos el alias 'id_producto' para p.id  para distinguirlo del campo id de la tabla usuario
+	
+	private static final String SQL_INSERT = "INSERT INTO `producto` (`nombre`, `precio`, `imagen`, `descripcion`, `descuento`, `id_usuario`) VALUES (?, ?, ?, ?, ?, ?);";
+	
+	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario' " + 
+												" FROM producto p, usuario u " + 
+												" WHERE p.id_usuario = u.id AND p.id= ? " + 
+												" ORDER BY p.id DESC LIMIT 500;";
+	
+	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ?;";
+	
+	private static final String SQL_UPDATE = "UPDATE `producto` SET `nombre`=?, `precio`=?, `imagen`=?, `descripcion`=?, `descuento`=?, `id_usuario`=? WHERE  `id`=?;";
 
-	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	//private static final String SQL_GET_ALL_BY_ID_USUARIO = "SELECT * FROM producto WHERE id_usuario = ? ORDER BY id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL_BY_ID_USUARIO = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario' " + 
+															" FROM producto p, usuario u " + 
+															" WHERE p.id_usuario = u.id AND id_usuario= ? " + 
+															" ORDER BY p.id DESC LIMIT 500;";
 	
-	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
 	
-
-	private static final String SQL_GET_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
-	private static final String SQL_GET_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
-	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
+	// 07/01/2020: SQLs para utilizar con la interfaz nueva para ProductoDAO, IProductoDAO:
+	private static final String SQL_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`=?, `precio`=?, `imagen`=?, `descripcion`=?, `descuento`=? WHERE `id`=? AND `id_usuario`=?;";
+	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ?;";
+	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario' " + 
+														" FROM producto p, usuario u " + 
+														" WHERE p.id_usuario = u.id AND p.id= ? AND u.id= ?" + 
+														" ORDER BY p.id DESC LIMIT 500;";
 	
-	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ? ;";
-	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ? ;";
 	
-
 	private ProductoDAO() {
 		super();
 	}
-
-	public static synchronized ProductoDAO getInstance() {
-
-		if (INSTANCE == null) {
+	
+	
+	//singleton --> https://es.wikipedia.org/wiki/Singleton --> sólo va a tener 1 único objeto en toda la clase, 1 objeto de tipo ArrayList<Producto>
+	public synchronized static ProductoDAO getInstance() {
+		if(INSTANCE == null) {
 			INSTANCE = new ProductoDAO();
 		}
 
 		return INSTANCE;
 	}
 
+	
 	@Override
 	public List<Producto> getAll() {
-
+		
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -67,18 +84,18 @@ public class ProductoDAO implements IProductoDAO {
 				ResultSet rs = pst.executeQuery()) {
 
 			while (rs.next()) {
-
+				
 				lista.add(mapper(rs));
 
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error(e); //e.printStackTrace();
 		}
 
 		return lista;
 	}
-
+	
 	public List<Producto> getAllByUser(int idUsuario) {
 
 		ArrayList<Producto> lista = new ArrayList<Producto>();
@@ -101,223 +118,278 @@ public class ProductoDAO implements IProductoDAO {
 
 		return lista;
 	}
-
-	@Override
-	public Producto getById(int id) {
-
-		Producto p = null;
-
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID);) {
-
-			// sustituyo parametros en la SQL, en este caso 1º ? por id
-			pst.setInt(1, id);
-
-			// ejecuto la consulta
-			try (ResultSet rs = pst.executeQuery()) {
-
-				while (rs.next()) {
-					p = mapper(rs);
-				}
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return p;
-	}
 	
-	
-	@Override
-	public Producto getByIdByUser(int idProducto, int idUsuario) throws ProductoException {
-		Producto p = null;
-
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID_BY_USER);) {
-
-			// sustituyo parametros en la SQL, en este caso 1º ? por id
-			pst.setInt(1, idProducto);
-			pst.setInt(2, idUsuario);
-
-			LOG.debug(pst);
-			// ejecuto la consulta
-			try (ResultSet rs = pst.executeQuery()) {
-
-				if (rs.next()) {
-					p = mapper(rs);
-				}else {
-					LOG.warn("No se encuentra producto");
-					throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
-				}
-			}
-
-		}catch (SQLException e) {
-			throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
-		}	
-
-		return p;
-	}
-	
-
-	@Override
-	public Producto delete(int id) throws Exception {
-
-		Producto registro = null;
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DELETE)) {
-
-			pst.setInt(1, id);
-
-			registro = this.getById(id); // recuperar
-
-			int affectedRows = pst.executeUpdate(); // eliminar
-			if (affectedRows != 1) {
-				registro = null;
-				throw new Exception("No se puede eliminar " + registro);
-			}
-
-		}
-		return registro;
-	}
-	
-	@Override
-	public Producto deleteByUser(int idProducto, int idUsuario) throws ProductoException {
-
-		Producto registro = null;
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DELETE_BY_USER)) {
-
-			pst.setInt(1, idProducto);
-			pst.setInt(2, idUsuario);
-
-			registro = this.getById(idProducto); // recuperar
-
-			LOG.debug(pst);
-			
-			int affectedRows = pst.executeUpdate();
-			 
-			
-			if (affectedRows == 1) {
-				LOG.debug("registro eliminado");
-				
-			}else {
-				
-				LOG.warn("No te pertenece producto al usuario");
-				throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
-				
-			}
-
-		} catch (SQLException e) {
-			throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
-		}
-		return registro;
-	}
-	
-	
-
-	@Override
-	public Producto update(int id, Producto pojo) throws Exception {
-
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_UPDATE)) {
-
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
-			pst.setInt(3, id);
-
-			int affectedRows = pst.executeUpdate(); // lanza una excepcion si nombre repetido
-			if (affectedRows == 1) {
-				pojo.setId(id);
-			} else {
-				throw new Exception("No se encontro registro para id=" + id);
-			}
-
-		}
-		return pojo;
-	}
-	
-	
-	@Override
-	public Producto updateByUser(int idProducto, int idUsuario, Producto pojo) throws SQLException,ProductoException {
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_UPDATE_BY_USER)) {
-
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());			
-			pst.setInt(3, idProducto);
-			pst.setInt(4, idUsuario);
-			
-			LOG.debug(pst);
-
-			int affectedRows = pst.executeUpdate(); // lanza una excepcion si nombre repetido
-			if (affectedRows == 1) {
-				LOG.debug("producto modificado");
-				pojo.setId(idProducto);
-			} else {
-				LOG.warn("No le pertence el producto");
-				throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
-			}
-		}catch ( SQLException e) {
-			
-			LOG.debug(e + " ya existe el nombre del producto");
-			throw e;
-		}
-		return pojo;
-	}
-	
-
 	@Override
 	public Producto create(Producto pojo) throws Exception {
-
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-
-			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
-
+		//establecemos conexión:
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+			//"INSERT INTO `producto` (`nombre`, `precio`, `imagen`, `descripcion`, `descuento`, `id_usuario`) VALUES (?, ?, ?, ?, ?, ?);";
+			
+			pst.setString(1, pojo.getNombre()); //1er interrogante con el nombre del registro que se quiere modificar; en ese caso, Nombre
+			pst.setFloat(2, pojo.getPrecio());
+			pst.setString(3, pojo.getImagen());
+			pst.setString(4, pojo.getDescripcion());
+			pst.setInt(5, pojo.getDescuento());
+			pst.setInt(6, pojo.getUsuario().getId() ); //añadimos usuario
+			LOG.debug(pst);
+			
+			
 			int affectedRows = pst.executeUpdate();
-			if (affectedRows == 1) {
+			if (affectedRows == 1) { //queremos modificar un registro, así que afectará a 1 fila
 				// conseguimos el ID que acabamos de crear
 				ResultSet rs = pst.getGeneratedKeys();
 				if (rs.next()) {
 					pojo.setId(rs.getInt(1));
 				}
-
 			}
-
+				
+		} catch (SQLException e) {
+			LOG.error(e); //e.printStackTrace();
 		}
-
-		return pojo;
+		
+		return pojo;		
 	}
 
 	
+	@Override
+	public Producto getById(int id) { 
+		
+		Producto p = null;  
+		
+		//obtenemos la conexión:
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID)) {
 
+			//sustituimos parámetros en la SQL, en este caso 1º ? por id:
+			pst.setInt(1, id);
+			LOG.debug(pst);
 
+			//ejecutamos la consulta:
+			try (ResultSet rs = pst.executeQuery()) {
+				while(rs.next()) {
 
+					p = mapper(rs);
+				
+				}
+			}
+		} catch (Exception e) {
+			LOG.error(e); //e.printStackTrace();
+		}
+		
+		return p; 
+	}
+	
+	
+	@Override
+	public Producto delete(int id) throws Exception {
+		Producto registro = null;
+		
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(SQL_DELETE);) {
 
+			pst.setInt(1, id);
+			LOG.debug(pst);
+			
+			//obtenemos el id antes de elimianrlo:
+			registro = this.getById(id);
 
+			//eliminamos el prodcuto:
+			int affetedRows = pst.executeUpdate();
+			if (affetedRows != 1) {
+				registro = null; //eliminamos
+				throw new Exception("No se puede eliminar " + registro);
+			}
 
+		} catch (Exception e) {
+			LOG.error(e); 
+		}
+		
+		return registro;
+	}
+	
+	
+	@Override
+	public Producto update(Producto pojo, int id) throws Exception {
+						
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(SQL_UPDATE);) {
+
+			//mismo orden que en la sql: "UPDATE `producto` SET `nombre`=?, `precio`=?, `imagen`=?, `descripcion`=?, `descuento`=?, `id_usuario`=? WHERE  `id`=?;";
+			pst.setString(1, pojo.getNombre());
+			pst.setFloat(2, pojo.getPrecio());
+			pst.setString(3, pojo.getImagen());
+			pst.setString(4, pojo.getDescripcion());
+			pst.setInt(5, pojo.getDescuento());
+			pst.setInt(6, pojo.getUsuario().getId());
+			pst.setInt(7, id);
+			LOG.debug(pst);
+
+			int affetedRows = pst.executeUpdate();
+			if (affetedRows == 1) {
+				pojo.setId(id);
+			} else {
+				throw new Exception ("No se encontró registro para id = " + id);
+			}
+		}
+		 
+		return pojo;
+	}
+	
+	
+	public List<Producto> getAllByIdUsuario(int idUsuario) {
+		
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_BY_ID_USUARIO);
+				) {
+			
+			//sustituimos parámetros en la SQL, en este caso 1º ? por id:
+			pst.setInt(1, idUsuario);
+			LOG.debug(pst);
+			
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				
+				lista.add(mapper(rs));
+
+			}
+
+		} catch (SQLException e) {
+			LOG.error(e); //e.printStackTrace();
+		}
+
+		return lista;
+	}
+	
 	
 	/**
-	 * Utilidad para mapear un ResultSet a un Producto
-	 * 
+	 * Utilidad para mapear un ResultSet a un pojo o a un Producto
 	 * @param rs
 	 * @return
 	 * @throws SQLException
 	 */
-	private Producto mapper(ResultSet rs) throws SQLException {
-
+	private Producto mapper(ResultSet rs) throws SQLException{
+		
 		Producto p = new Producto();
 		p.setId(rs.getInt("id_producto"));
 		p.setNombre(rs.getString("nombre_producto"));
-
+		p.setPrecio(rs.getFloat("precio"));
+		p.setImagen(rs.getString("imagen"));
+		p.setDescripcion(rs.getString("descripcion"));
+		p.setDescuento(rs.getInt("descuento"));
+		
 		Usuario u = new Usuario();
 		u.setId(rs.getInt("id_usuario"));
 		u.setNombre(rs.getString("nombre_usuario"));
 		p.setUsuario(u);
-
+		
 		return p;
+	}
+
+	
+	// 07/01/2020: implementación métodos de la interfaz nueva para ProductoDAO, IProductoDAO:
+	@Override
+	public Producto getByIdByUser(int id, int id_usuario) throws ProductoException {
+		Producto p = null;  
+		
+		//obtenemos la conexión:
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID_BY_USER)) {
+
+			//sustituimos parámetros en la SQL, en este caso 1º ? es el id del producto y el 2º ? es el id del usuario:
+			pst.setInt(1, id);
+			pst.setInt(2, id_usuario);
+			LOG.debug(pst);
+
+			//ejecutamos la consulta:
+			try (ResultSet rs = pst.executeQuery()) { //se ejecuta la consulta
+				if(rs.next()) { //si tiene resultado, llamamos a la función mapper para guardar los parámetros
+					
+					p = mapper(rs);
+				
+				}else {
+					LOG.warn("No se ha encontrado el producto");;
+					throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
+				}
+			}//try 2 
+		}catch (SQLException e) {
+			throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
+		}
+		
+		return p; 
+	}
+
+
+	@Override
+	public Producto updateByUser(int id, int id_usuario, Producto pojo) throws SQLException, ProductoException {
+		
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(SQL_UPDATE_BY_USER);) {
+
+			//mismo orden que en la sql: "UPDATE `producto` SET `nombre`=?, `precio`=?, `imagen`=?, `descripcion`=?, `descuento`=? WHERE `id`=? AND `id_usuario`=?;";
+			pst.setString(1, pojo.getNombre());
+			pst.setFloat(2, pojo.getPrecio());
+			pst.setString(3, pojo.getImagen());
+			pst.setString(4, pojo.getDescripcion());
+			pst.setInt(5, pojo.getDescuento());
+			pst.setInt(6, id);
+			pst.setInt(7, id_usuario);
+			LOG.debug(pst);
+			
+			int affetedRows = pst.executeUpdate();
+			if (affetedRows == 1) {
+				LOG.debug("Producto modificado correctamente");
+				pojo.setId(id);
+				
+			} else {
+				LOG.debug("No se encontró registro para id = " + id + " con id_usuario = " + id_usuario + ". El objeto no pertenece a ese usuario");
+				throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED); //le pasamos el mensaje que hemos definido como una cte
+			}
+			
+/*		} catch (Exception e) {
+			LOG.error(e); 
+		}
+*/		 
+		}catch (SQLException e) {
+			
+			LOG.debug("El nombre del producto ya existe en la base de datos, elige otro");
+			throw e;
+		}	
+			
+		return pojo;
+	}
+
+
+	@Override
+	public Producto deleteByUser(int id, int id_usuario) throws ProductoException {
+		
+		Producto registro = null;
+		
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(SQL_DELETE_BY_USER);) {
+
+			pst.setInt(1, id);
+			pst.setInt(2, id_usuario);
+			LOG.debug(pst);
+			
+			//obtenemos el id antes de eliminarlo:
+			registro = this.getById(id);
+	
+			//eliminamos el producto:
+			int affetedRows = pst.executeUpdate();
+			if (affetedRows == 1) {
+				
+				LOG.debug("Registro eliminado");
+				
+			}else {
+	
+				LOG.warn("Un usuario ha intentado comprar un producto que no le corresponde");
+				throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED); //le pasamos el mensaje que hemos definido como una cte
+			}
+		}catch (SQLException e) {
+			throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
+		}
+		
+		return registro;
+		
 	}
 
 }
