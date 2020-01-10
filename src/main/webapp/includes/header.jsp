@@ -42,7 +42,7 @@
   	<nav class="navbar navbar-dark bg-primary navbar-expand-lg">
 	    <div class="container"> <!-- lo metemos dentro de un container para que se centre el contenido -->
 	        
-	        <a class="navbar-brand active py-2 fas fa-shopping-cart" href="/supermercadoBD/"></a> 
+	        <a class="navbar-brand active py-2 fas fa-shopping-cart" href="/supermerkado/"></a> 
 	        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	            <span class="navbar-toggler-icon"></span>
 	        </button>
@@ -154,7 +154,7 @@
 											</c:forEach>
 										</select>
 									</div>
-								    <input type="submit" class="btn btn-block btn-outline-primary" value="Buscar" }">   
+								    <input type="submit" class="btn btn-block btn-outline-primary" value="Buscar">   
 								</form>
 								
 						  </div>
