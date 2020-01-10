@@ -23,98 +23,54 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static ProductoDAO INSTANCE;
 
-	private static final String SQL_GET_ALL = "SELECT " + 
-			"		p.id AS 'id_producto', " + 
-			"		p.nombre AS 'nombre_producto', " + 
-			"		p.imagen AS 'imagen_producto', " + 
-			"		p.precio, " + 
-			"		p.descripcion, " + 
-			"		p.descuento, " + 
-			"		p.fecha_creacion AS 'fecha_creacion_producto', " + 
-			"		p.fecha_modificacion AS 'fecha_modificacion_producto', " + 
-			"		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + 
-			"		c.id 'id_categoria', " + 
-			"		c.nombre 'nombre_categoria', " + 
-			"		u.id AS 'id_usuario', " + 
-			"		u.nombre 'nombre_usuario', " + 
-			"		u.contrasenia, " + 
-			"		u.email AS 'email', " + 
-			"		u.imagen AS 'imagen_usuario', " + 
-			"		u.fecha_creacion AS 'fecha_creacion_usuario', " + 
-			"		u.fecha_modificacion AS 'fecha_modificacion_usuario', " + 
-			"		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + 
-			"FROM producto p, categoria c, usuario u " + 
-			"WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria" + 
-			" ORDER BY p.id DESC LIMIT 500;";
-	private static final String SQL_GET_ALL_BY_USER = "SELECT " + 
-			"		p.id AS 'id_producto', " + 
-			"		p.nombre AS 'nombre_producto', " + 
-			"		p.imagen AS 'imagen_producto', " + 
-			"		p.precio, " + 
-			"		p.descripcion, " + 
-			"		p.descuento, " + 
-			"		p.fecha_creacion AS 'fecha_creacion_producto', " + 
-			"		p.fecha_modificacion AS 'fecha_modificacion_producto', " + 
-			"		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + 
-			"		c.id 'id_categoria', " + 
-			"		c.nombre 'nombre_categoria', " + 
-			"		u.id AS 'id_usuario', " + 
-			"		u.nombre 'nombre_usuario', " + 
-			"		u.contrasenia, " + 
-			"		u.email AS 'email', " + 
-			"		u.imagen AS 'imagen_usuario', " + 
-			"		u.fecha_creacion AS 'fecha_creacion_usuario', " + 
-			"		u.fecha_modificacion AS 'fecha_modificacion_usuario', " + 
-			"		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + 
-			"FROM producto p, categoria c, usuario u " + 
-			"WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id_usuario = ?" + 
-			" ORDER BY p.id DESC LIMIT 500;";
-	private static final String SQL_GET_BY_ID = "SELECT " + 
-			"		p.id AS 'id_producto', " + 
-			"		p.nombre AS 'nombre_producto', " + 
-			"		p.imagen AS 'imagen_producto', " + 
-			"		p.precio, " + 
-			"		p.descripcion, " + 
-			"		p.descuento, " + 
-			"		p.fecha_creacion AS 'fecha_creacion_producto', " + 
-			"		p.fecha_modificacion AS 'fecha_modificacion_producto', " + 
-			"		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + 
-			"		c.id 'id_categoria', " + 
-			"		c.nombre 'nombre_categoria', " + 
-			"		u.id AS 'id_usuario'," + 
-			"		u.nombre AS 'nombre_usuario', " + 
-			"		u.contrasenia, " + 
-			"		u.email, " + 
-			"		u.imagen AS 'imagen_usuario', " + 
-			"		u.fecha_creacion AS 'fecha_creacion_usuario'," + 
-			"		u.fecha_modificacion AS 'fecha_modificacion_usuario', " + 
-			"		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + 
-			"FROM producto p, categoria c, usuario u " + 
-			"WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? " + 
-			"ORDER BY p.id DESC LIMIT 500;";
-	private static final String SQL_GET_BY_ID_BY_USER = "SELECT " + 
-			"		p.id AS 'id_producto', " + 
-			"		p.nombre AS 'nombre_producto', " + 
-			"		p.imagen AS 'imagen_producto', " + 
-			"		p.precio, " + 
-			"		p.descripcion, " + 
-			"		p.descuento, " + 
-			"		p.fecha_creacion AS 'fecha_creacion_producto', " + 
-			"		p.fecha_modificacion AS 'fecha_modificacion_producto', " + 
-			"		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + 
-			"		c.id 'id_categoria', " + 
-			"		c.nombre 'nombre_categoria', " + 
-			"		u.id AS 'id_usuario'," + 
-			"		u.nombre AS 'nombre_usuario', " + 
-			"		u.contrasenia, " + 
-			"		u.email, " + 
-			"		u.imagen AS 'imagen_usuario', " + 
-			"		u.fecha_creacion AS 'fecha_creacion_usuario'," + 
-			"		u.fecha_modificacion AS 'fecha_modificacion_usuario', " + 
-			"		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + 
-			"FROM producto p, categoria c, usuario u " + 
-			"WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? AND u.id = ?" + 
-			"ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL = "SELECT " + "		p.id AS 'id_producto', "
+			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
+			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
+			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario', " + "		u.nombre 'nombre_usuario', "
+			+ "		u.contrasenia, " + "		u.email AS 'email', " + "		u.imagen AS 'imagen_usuario', "
+			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
+			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
+			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
+			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria"
+			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL_BY_USER = "SELECT " + "		p.id AS 'id_producto', "
+			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
+			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
+			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario', " + "		u.nombre 'nombre_usuario', "
+			+ "		u.contrasenia, " + "		u.email AS 'email', " + "		u.imagen AS 'imagen_usuario', "
+			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
+			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
+			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
+			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id_usuario = ?"
+			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_BY_ID = "SELECT " + "		p.id AS 'id_producto', "
+			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
+			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
+			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario',"
+			+ "		u.nombre AS 'nombre_usuario', " + "		u.contrasenia, " + "		u.email, "
+			+ "		u.imagen AS 'imagen_usuario', " + "		u.fecha_creacion AS 'fecha_creacion_usuario',"
+			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
+			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
+			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? "
+			+ "ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_BY_ID_BY_USER = "SELECT " + "		p.id AS 'id_producto', "
+			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
+			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
+			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario',"
+			+ "		u.nombre AS 'nombre_usuario', " + "		u.contrasenia, " + "		u.email, "
+			+ "		u.imagen AS 'imagen_usuario', " + "		u.fecha_creacion AS 'fecha_creacion_usuario',"
+			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
+			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
+			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? AND u.id = ?"
+			+ "ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_INSERT = "INSERT INTO producto (id, nombre, imagen, precio, descuento, descripcion, fecha_creacion, id_usuario, id_categoria) VALUES ( ? , ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), ?,?);";
 	private static final String SQL_UPDATE = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ?;";
 	private static final String SQL_UPDATE_BY_USER = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ? AND id_usuario = ?;";
@@ -122,7 +78,7 @@ public class ProductoDAO implements IProductoDAO {
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_producto = ?;";
 	private static final String SQL_DELETE_LOGICO = "UPDATE producto SET fecha_eliminacion = CURRENT_TIMESTAMP() WHERE id = ?;";
 	private static final String SQL_DELETE_LOGICO_BY_USER = "UPDATE producto SET fecha_eliminacion = CURRENT_TIMESTAMP() WHERE id = ? AND id_usuario=?;";
-	
+
 	private ProductoDAO() {
 		super();
 	}
@@ -137,15 +93,15 @@ public class ProductoDAO implements IProductoDAO {
 
 		return INSTANCE;
 	}
-	
+
 	private Producto mapper(ResultSet rs) throws SQLException {
-		
+
 		LOG.debug("Entra en el mapper");
 
 		Producto p = new Producto();
 		Usuario u = p.getUsuario();
 		Categoria c = p.getCategoria();
-		
+
 		p.setId(rs.getInt("id_producto"));
 		p.setNombre(rs.getString("nombre_producto"));
 		p.setImagen(rs.getString("imagen_producto"));
@@ -167,19 +123,18 @@ public class ProductoDAO implements IProductoDAO {
 		u.setFechaModificacion(rs.getTimestamp("fecha_modificacion_usuario"));
 		u.setFechaEliminacion(rs.getTimestamp("fecha_eliminacion_usuario"));
 		p.setUsuario(u);
-		
 
 		p = sanitizar(p);
-		
+
 		LOG.debug("Devuelve el producto mapeado: " + p.toString());
-		
+
 		return p;
 	}
 
 	private Producto sanitizar(Producto pojo) {
-		
+
 		LOG.debug("Entra en sanitizar");
-		
+
 		Producto resultado = pojo;
 		Usuario usuario = pojo.getUsuario();
 		Categoria categoria = pojo.getCategoria();
@@ -191,25 +146,27 @@ public class ProductoDAO implements IProductoDAO {
 		resultado.setCategoria(categoria);
 		usuario.setNombre(Jsoup.clean(pojo.getUsuario().getNombre(), Whitelist.none()));
 		usuario.setImagen(Jsoup.clean(pojo.getUsuario().getImagen(), Whitelist.none()));
-		usuario.setEmail(Jsoup.clean(pojo.getUsuario().getEmail(), Whitelist.none()));
+		if (pojo.getUsuario().getEmail() != null) {
+			usuario.setEmail(Jsoup.clean(pojo.getUsuario().getEmail(), Whitelist.none()));
+		}
 		resultado.setUsuario(usuario);
 
 		return resultado;
 	}
 
 	public List<Producto> getAllByUser(int id) {
-		
+
 		LOG.debug("Entra en getAllByUser");
 
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_BY_USER)){
-				
-				pst.setInt(1, id);
-				
-				LOG.debug("Ejecuta la query: " + pst.toString());
-				ResultSet rs = pst.executeQuery();
+				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_BY_USER)) {
+
+			pst.setInt(1, id);
+
+			LOG.debug("Ejecuta la query: " + pst.toString());
+			ResultSet rs = pst.executeQuery();
 
 			while (rs.next()) {
 				Producto p = mapper(rs);
@@ -224,10 +181,10 @@ public class ProductoDAO implements IProductoDAO {
 
 		return lista;
 	}
-	
+
 	@Override
 	public List<Producto> getAll() {
-		
+
 		LOG.debug("Entra en getAll");
 
 		ArrayList<Producto> lista = new ArrayList<Producto>();
@@ -235,7 +192,7 @@ public class ProductoDAO implements IProductoDAO {
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL);
 				ResultSet rs = pst.executeQuery()) {
-			
+
 			LOG.debug("Ejecuta la query: " + pst.toString());
 
 			while (rs.next()) {
@@ -255,9 +212,9 @@ public class ProductoDAO implements IProductoDAO {
 
 	@Override
 	public Producto getById(int id) {
-		
+
 		LOG.debug("Entra en getbyId");
-		
+
 		Producto resul = new Producto();
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -266,7 +223,7 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(1, id);
 
 			LOG.debug("Ejecuta la query: " + pst.toString());
-			
+
 			try (ResultSet rs = pst.executeQuery()) {
 				if (rs.next()) {
 					resul = mapper(rs);
@@ -278,12 +235,12 @@ public class ProductoDAO implements IProductoDAO {
 		}
 		return resul;
 	}
-	
+
 	@Override
 	public Producto getByIdByUser(int idProducto, int idUsuario) throws ProductoException {
-		
+
 		LOG.debug("Entra en getbyIdByUser");
-		
+
 		Producto resul = new Producto();
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -296,7 +253,7 @@ public class ProductoDAO implements IProductoDAO {
 			try (ResultSet rs = pst.executeQuery()) {
 				if (rs.next()) {
 					resul = mapper(rs);
-				}else {
+				} else {
 					throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
 				}
 			}
@@ -311,9 +268,9 @@ public class ProductoDAO implements IProductoDAO {
 
 	@Override
 	public Producto delete(int id) throws Exception {
-		
+
 		LOG.debug("Entra en delete");
-		
+
 		Producto resultado = null;
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -322,11 +279,11 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(1, id);
 
 			LOG.debug("Ejecuta la query: " + pst.toString());
-			
+
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
 				resultado = getById(id);
-			}else {
+			} else {
 				LOG.fatal("El update esta mal, ha afectado a mas de un producto");
 			}
 
@@ -339,9 +296,9 @@ public class ProductoDAO implements IProductoDAO {
 
 	@Override
 	public Producto deleteByUser(int idProducto, int idUsuario) throws ProductoException {
-		
+
 		LOG.debug("Entra en deleteByUser");
-		
+
 		Producto resultado = null;
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -349,15 +306,15 @@ public class ProductoDAO implements IProductoDAO {
 
 			pst.setInt(1, idProducto);
 			pst.setInt(2, idUsuario);
-			
+
 			LOG.debug("Ejecuta la query: " + pst.toString());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
 				resultado = getById(idProducto);
-			}else if(affectedRows == 0){
+			} else if (affectedRows == 0) {
 				throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
-			}else {
+			} else {
 				LOG.fatal("El update esta mal, ha afectado a mas de un producto");
 			}
 
@@ -368,13 +325,13 @@ public class ProductoDAO implements IProductoDAO {
 		}
 
 		return resultado;
-		//throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
+		// throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
 	}
-	
+
 	public Producto deleteFinal(int id) throws Exception {
-		
+
 		LOG.debug("Entra en deleteFinal");
-		
+
 		Producto resultado = null;
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -383,13 +340,13 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(1, id);
 
 			Producto productoBorrar = getById(id);
-			
+
 			LOG.debug("Ejecuta la query: " + pst.toString());
 
 			int affetedRows = pst.executeUpdate();
 			if (affetedRows == 1) {
 				resultado = productoBorrar;
-			}else {
+			} else {
 				LOG.fatal("El delete esta mal, ha eliminado mas de un producto");
 			}
 
@@ -400,11 +357,11 @@ public class ProductoDAO implements IProductoDAO {
 
 		return resultado;
 	}
-	
+
 	public Producto deleteFinalByUser(int idProducto, int idUsuario) throws Exception {
-		
+
 		LOG.debug("Entra en deleteFinalByUser");
-		
+
 		Producto resultado = null;
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -414,13 +371,13 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(2, idUsuario);
 
 			Producto productoBorrar = getById(idProducto);
-			
+
 			LOG.debug("Ejecuta la query: " + pst.toString());
 
 			int affetedRows = pst.executeUpdate();
 			if (affetedRows == 1) {
 				resultado = productoBorrar;
-			}else {
+			} else {
 				LOG.fatal("El delete esta mal, ha eliminado mas de un producto");
 			}
 
@@ -434,14 +391,14 @@ public class ProductoDAO implements IProductoDAO {
 
 	@Override
 	public Producto update(int id, Producto pojo) throws Exception {
-		
+
 		LOG.debug("Entra en update");
-		
+
 		Producto resultado = null;
-		
+
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(SQL_UPDATE)) {
-			
+
 			pojo = sanitizar(pojo);
 
 			pst.setString(1, pojo.getNombre());
@@ -453,27 +410,27 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(7, id);
 
 			LOG.debug("Ejecuta la query: " + pst.toString());
-			
+
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
 				resultado = getById(id);
-			}else {
+			} else {
 				LOG.fatal("El update esta mal, ha afectado a mas de un producto");
 			}
 		}
 		return resultado;
 	}
-	
+
 	@Override
 	public Producto updateByUser(int idProducto, int idUsuario, Producto pojo) throws ProductoException, SQLException {
-		
+
 		LOG.debug("Entra en updateByUser");
 
 		Producto resultado = null;
-		
+
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(SQL_UPDATE_BY_USER)) {
-			
+
 			pojo = sanitizar(pojo);
 
 			pst.setString(1, pojo.getNombre());
@@ -486,26 +443,26 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(8, idUsuario);
 
 			LOG.debug("Ejecuta la query: " + pst.toString());
-			
+
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
 				resultado = getById(idProducto);
-			}else {
+			} else {
 				LOG.fatal("El update esta mal, ha afectado a mas de un producto");
 			}
 		}
-		
+
 		return resultado;
 	}
 
 	@Override
 	public Producto create(Producto pojo) throws SQLException {
-		
+
 		LOG.debug("Entra en create");
-		
+
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-		
+
 			pojo = sanitizar(pojo);
 
 			pst.setInt(1, pojo.getId());
@@ -517,7 +474,7 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(7, pojo.getUsuario().getId());
 
 			LOG.debug("Ejecuta la query: " + pst.toString());
-			
+
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
 				// conseguimos el ID que acabamos de crear
