@@ -62,8 +62,8 @@ public class ProductosController extends HttpServlet {
 		super.init(config);
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
-		factory = Validation.buildDefaultValidatorFactory();
-		validator = factory.getValidator();
+		//factory = Validation.buildDefaultValidatorFactory();
+		//validator = factory.getValidator();
 	}
       
 	@Override

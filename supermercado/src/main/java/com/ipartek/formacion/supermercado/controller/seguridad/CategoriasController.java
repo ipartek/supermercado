@@ -47,8 +47,8 @@ public class CategoriasController extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {		
 		super.init(config);
 		daoCategoria = CategoriaDAO.getInstance();
-		factory = Validation.buildDefaultValidatorFactory();
-		validator = factory.getValidator();
+		//Drfactory = Validation.buildDefaultValidatorFactory();
+		//validator = factory.getValidator();
 	}
       
 	@Override
@@ -118,7 +118,7 @@ public class CategoriasController extends HttpServlet {
 						
 		}
 		
-		request.setAttribute("categoria", categoria);
+		request.setAttribute("categorias", categoria);
 		vistaSeleccionda = VIEW_FORM;
 		
 	}
