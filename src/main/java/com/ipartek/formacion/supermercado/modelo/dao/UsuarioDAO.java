@@ -18,17 +18,21 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	private final static Logger LOG = Logger.getLogger(UsuarioDAO.class);
 
-	private static final String SQL_EXIST = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol' "
+	private static final String SQL_EXIST = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, avatar, r.id 'id_rol', r.nombre 'nombre_rol' "
 			+ " FROM usuario u, rol r " + " WHERE u.id_rol = r.id AND " + " u.nombre = ? AND contrasenia = ? ; ";
 
-	private static final String SQL_GET_ALL = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol' "
+	private static final String SQL_GET_ALL = " SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, avatar, r.id 'id_rol', r.nombre 'nombre_rol' "
 			+ " FROM usuario u, rol r " + " WHERE u.id_rol = r.id " + " ORDER BY u.id DESC LIMIT 500;";
+
+	private static final String SQL_GET_BY_ID = "SELECT u.id as 'id_usuario'," + " u.nombre as 'nombre_usuario',"
+			+ " u.contrasenia, u.avatar," + " r.id as 'id_rol'," + " r.nombre as 'nombre_rol' "
+			+ " FROM usuario u, rol r " + " WHERE u.id_rol = r.id " + " AND u.id = ?; ";
 
 	private static final String SQL_DELETE = "DELETE FROM usuario WHERE id = ? ;";
 
-	private static final String SQL_UPDATE = "UPDATE usuario SET nombre = ?, contrasenia = ? WHERE id = ? ;";
+	private static final String SQL_UPDATE = "UPDATE usuario SET nombre = ?, contrasenia = ?, avatar = ? WHERE id = ? ;";
 
-	private static final String SQL_INSERT = "INSERT INTO usuario (nombre, contrasenia) VALUES (?, ?);";
+	private static final String SQL_INSERT = "INSERT INTO usuario (nombre, contrasenia, avatar, id_rol) VALUES (?, ?, ?, 1);";
 
 	private static UsuarioDAO INSTANCE;
 
@@ -68,8 +72,42 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public Usuario getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Usuario registro = null;
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_GET_BY_ID);) {
+
+			// sustituyo parametros en la SQL, en este caso 1ยบ ? por id
+			pst.setInt(1, id);
+			LOG.debug("PST: " + pst);
+
+			// ejecuto la consulta
+			try (ResultSet rs = pst.executeQuery()) {
+
+				while (rs.next()) {
+
+					registro = new Usuario();
+					registro.setId(rs.getInt("id_usuario"));
+					registro.setNombre(rs.getString("nombre_usuario"));
+					registro.setContrasenia(rs.getString("contrasenia"));
+					registro.setAvatar(rs.getString("avatar"));
+
+					Rol rol = new Rol();
+					rol.setId(rs.getInt("id_rol"));
+					rol.setNombre(rs.getString("nombre_rol"));
+
+					registro.setRol(rol);
+
+				}
+			}
+
+		} catch (SQLException e) {
+			LOG.error(e);
+		}
+
+		return registro;
+
 	}
 
 	@Override
@@ -103,6 +141,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 		u.setId(rs.getInt("id_usuario"));
 		u.setNombre(rs.getString("nombre_usuario"));
 		u.setContrasenia(rs.getString("contrasenia"));
+		u.setAvatar(rs.getString("avatar"));
 
 		Rol r = new Rol();
 		r.setId(rs.getInt("id_rol"));
@@ -142,7 +181,8 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getContrasenia());
-			pst.setInt(3, id);
+			pst.setString(3, pojo.getAvatar());
+			pst.setInt(4, id);
 
 			LOG.debug("PST: " + pst);
 
@@ -165,6 +205,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getContrasenia());
+			pst.setString(3, pojo.getAvatar());
 
 			LOG.debug("PST: " + pst);
 

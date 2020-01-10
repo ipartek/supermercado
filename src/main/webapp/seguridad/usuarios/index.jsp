@@ -12,6 +12,7 @@
 		<thead>
 			<tr>
 				<th>#id</th>
+				<th>Avatar</th>
 				<th>Nombre</th>
 				<th>Password</th>
 				<th>Editar</th>
@@ -21,6 +22,7 @@
 			<c:forEach items="${usuarios}" var="u">
 				<tr>
 					<td>${u.id}</td>
+					<td> <img src="${u.avatar}" width="75" height="75"></td>
 					<td>${u.nombre }</td>
 					<td>${u.contrasenia }</td>
 					

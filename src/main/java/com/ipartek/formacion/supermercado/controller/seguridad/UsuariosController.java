@@ -51,6 +51,7 @@ public class UsuariosController extends HttpServlet {
 	String pId;
 	String pNombre;
 	String pContrasenia;
+	String pAvatar;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -94,6 +95,8 @@ public class UsuariosController extends HttpServlet {
 		pId = request.getParameter("id");
 		pNombre = request.getParameter("nombre");
 		pContrasenia = request.getParameter("contrasenia");
+		pAvatar = request.getParameter("avatar") != null ? request.getParameter("avatar")
+				: "http://www.fmacia.net/images/stories/virtuemart/product/no-imagen.jpg";
 
 		try {
 			switch (pAccion) {
@@ -148,6 +151,8 @@ public class UsuariosController extends HttpServlet {
 		uGuardar.setId(id);
 		uGuardar.setNombre(pNombre);
 		uGuardar.setContrasenia(pContrasenia);
+		uGuardar.setAvatar(
+				pAvatar != null ? pAvatar : "http://www.fmacia.net/images/stories/virtuemart/product/no-imagen.jpg");
 
 		Set<ConstraintViolation<Usuario>> validaciones = validator.validate(uGuardar);
 		if (validaciones.size() > 0) {

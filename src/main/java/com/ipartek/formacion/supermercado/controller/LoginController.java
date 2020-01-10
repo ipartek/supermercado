@@ -1,6 +1,7 @@
 package com.ipartek.formacion.supermercado.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,59 +26,67 @@ public class LoginController extends HttpServlet {
 	private final static Logger LOG = Logger.getLogger(LoginController.class);
 
 	private static UsuarioDAO usuarioDao = UsuarioDAO.getInstance();
-	
-	
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doPost(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String view = "login.jsp";
-		
+
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("contrasenya");
-		
+
 		try {
-			
+
 			Usuario usuario = usuarioDao.exist(nombre, pass);
-			
-			if ( usuario != null ) {
-				
+
+			if (usuario != null) {
+
 				LOG.info("login correcto " + usuario);
 				HttpSession session = request.getSession();
-				session.setAttribute("usuarioLogeado", usuario );
-				session.setMaxInactiveInterval(60*3); // 3min
-				
-				if ( usuario.getRol().getId() == Rol.ROL_ADMIN ) {
-				
-					view = "seguridad/index.jsp";   // accedemos la BACK-OFFICE
-					
-				}else {
-					
-					view = "mipanel/index.jsp";    // accedemos la FRONT-OFFICE
-				}	
-				
-			}else {
-				
-				request.setAttribute("mensajeAlerta", new Alerta( Alerta.TIPO_DANGER, "Credenciales incorrectas, prueba de nuevo"));
-				
+				session.setAttribute("usuarioLogeado", usuario);
+				session.setMaxInactiveInterval(60 * 3); // 3min
+
+				if (usuario.getRol().getId() == Rol.ROL_ADMIN) {
+
+					view = "seguridad/index.jsp"; // accedemos la BACK-OFFICE
+
+				} else {
+
+					Usuario u = (Usuario) request.getSession().getAttribute("usuarioLogeado");
+					usuarioDao.getById(u.getId());
+					request.setAttribute("miUsuario", u);
+					// view = "mipanel/index.jsp"; // accedemos la FRONT-OFFICE
+					// response.sendRedirect(request.getContextPath() + "/mipanel");
+				}
+
+			} else {
+
+				request.setAttribute("mensajeAlerta",
+						new Alerta(Alerta.TIPO_DANGER, "Credenciales incorrectas, prueba de nuevo"));
+
 			}
-		}catch (Exception e) {
-			LOG.error(e);			
-		}finally {
-			
+		} catch (Exception e) {
+			LOG.error(e);
+		} finally {
+
 			request.getRequestDispatcher(view).forward(request, response);
-		}	
-		
-		
-		
+			// response.sendRedirect(request.getContextPath() + "/mipanel/");
+
+		}
+
 	}
 
 }

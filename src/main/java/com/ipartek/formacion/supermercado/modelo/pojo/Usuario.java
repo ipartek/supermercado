@@ -16,6 +16,8 @@ public class Usuario {
 	@Size(min = 2, max = 50)
 	private String contrasenia;
 
+	private String avatar;
+
 	private Rol rol;
 
 	public Usuario() {
@@ -23,6 +25,7 @@ public class Usuario {
 		this.id = 0;
 		this.nombre = "";
 		this.contrasenia = "";
+		this.avatar = "http://www.fmacia.net/images/stories/virtuemart/product/no-imagen.jpg";
 		this.rol = new Rol();
 	}
 
@@ -58,9 +61,18 @@ public class Usuario {
 		this.rol = rol;
 	}
 
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", contrasenia=" + contrasenia + ", rol=" + rol + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", contrasenia=" + contrasenia + ", avatar=" + avatar
+				+ ", rol=" + rol + "]";
 	}
 
 }
