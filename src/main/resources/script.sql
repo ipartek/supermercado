@@ -13,8 +13,8 @@
 
 
 -- Volcando estructura de base de datos para supermercado
-CREATE DATABASE IF NOT EXISTS `supermercado` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `supermercado`;
+CREATE DATABASE IF NOT EXISTS `supermercado_grupo` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `supermercado_grupo`;
 
 -- Volcando estructura para tabla supermercado.categoria
 CREATE TABLE IF NOT EXISTS `categoria` (
