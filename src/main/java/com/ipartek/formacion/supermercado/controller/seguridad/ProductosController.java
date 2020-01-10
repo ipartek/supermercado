@@ -177,23 +177,27 @@ public class ProductosController extends HttpServlet {
 
 	private void guardar(HttpServletRequest request, HttpServletResponse response) {
 		
-		int id = Integer.parseInt(pId);
+		// recibir datos del formulario
+		int pId = Integer.parseInt(request.getParameter("id"));
+		float pPrecioFloat = Float.parseFloat(pPrecio);
+		int pDescuentoInt = Integer.parseInt(pDescuento);
+		int pIdCategoria = Integer.parseInt(request.getParameter("idCategoria"));
 		
-		Producto pGuardar = new Producto();		
-		
-		pGuardar.setId(id);
+		Producto pGuardar = new Producto();
+		pGuardar.setId(pId);
 		pGuardar.setNombre(pNombre);
-		pGuardar.setPrecio( Float.parseFloat(pPrecio));
+		pGuardar.setPrecio(pPrecioFloat);
 		pGuardar.setImagen(pImagen);
 		pGuardar.setDescripcion(pDescripcion);
-		pGuardar.setDescuento( Integer.parseInt(pDescuento));
+		pGuardar.setDescuento(pDescuentoInt);
 		
+		//recogemos el id del usuario para el producto seleccionado:
 		Usuario u = new Usuario();
 		u.setId(Integer.parseInt(pUsuarioId));
 		pGuardar.setUsuario(u);
 		
 		Categoria c = new Categoria();
-		c.setId(Integer.parseInt(pIdCategoria)); 
+		c.setId(pIdCategoria); 
 		pGuardar.setCategoria(c);
 				
 		
@@ -204,11 +208,11 @@ public class ProductosController extends HttpServlet {
 		
 				try {
 				
-					if ( id > 0 ) {  // modificar
+					if ( pId > 0 ) {  // modificar
 						
 						LOG.trace("Modificar datos del producto");
 						
-						daoProducto.update(pGuardar, id);	
+						daoProducto.update(pGuardar, pId);	
 						
 						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Datos del producto modificados correctamente"));
 						
