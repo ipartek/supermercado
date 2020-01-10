@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoException;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
@@ -41,6 +42,7 @@ public class ProductosController extends HttpServlet {
 
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
 
 	public static final String ACCION_LISTAR = "listar";
 	public static final String ACCION_FORM = "formulario";
@@ -254,6 +256,7 @@ public class ProductosController extends HttpServlet {
 			}
 
 			LOG.debug("Pasa el Usuario y los Productos a la request");
+			request.setAttribute("categorias", daoCategoria.getAll());
 			request.setAttribute("usuarios", daoUsuario.getById(idUsuSesion));
 			request.setAttribute("producto", productoForm);
 			vista = destino;

@@ -20,9 +20,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoException;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
@@ -40,6 +42,7 @@ public class ProductosController extends HttpServlet {
 
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
 
 	public static final String ACCION_LISTAR = "listar";
 	public static final String ACCION_FORM = "formulario";
@@ -75,6 +78,7 @@ public class ProductosController extends HttpServlet {
 		super.init();
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
 		// Crear Factoria y Validador
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
@@ -85,6 +89,7 @@ public class ProductosController extends HttpServlet {
 		super.destroy();
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
 		factory = null;
 		validator = null;
 	}
@@ -246,7 +251,9 @@ public class ProductosController extends HttpServlet {
 				}
 			}
 
-			LOG.debug("Pasa el Usuario y los Productos a la request");
+			LOG.debug("Pasa el Usuario, las Categorias y los Productos a la request");
+			
+			request.setAttribute("categorias", daoCategoria.getAll());
 			request.setAttribute("usuarios", daoUsuario.getAll());
 			request.setAttribute("producto", productoForm);
 
@@ -343,6 +350,8 @@ public class ProductosController extends HttpServlet {
 		
 		
 		request.setAttribute("productos", daoProducto.getAll());
+		request.setAttribute("productosInactivos", daoProducto.getAllInactive());
+		request.setAttribute("productosToValidate", daoProducto.getAllToValidate());
 		LOG.debug("Pasa el listado de productos a la request");
 		
 		

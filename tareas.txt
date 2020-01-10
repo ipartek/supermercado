@@ -1,12 +1,14 @@
 Imagen para producto -HECHO
 Producto fecha alta, fecha baja, descripcion  -HECHO
 Borrado lógico del producto  -HECHO
-Backoffice 2 listados Productos (activos, inactivos, por validar)
-Pantalla Inicial (Productos activos + Usuario + Categoria)
+Backoffice 2 listados Productos (activos, inactivos, por validar) - HECHO
+Pantalla Inicial (Productos activos + Usuario + Categoria) -HECHO
 CRUD categorias  -HECHO
 CRUD usuario  -HECHO
 Ponerlo bonito  -HECHO
-Frontoffice Inicio (Datosd el Usuario y número de productos a traves de un controlador + Cambiar Password en el avatar)
-Filtrar por categoria y nombre del producto
+
+Frontoffice Inicio (Datos del Usuario y número de productos a traves de un controlador + Cambiar Password en el avatar)
+Filtrar por categoria y nombre del producto - HECHO
+
 Encriptar las contraseñas MD5
 Validar producto by admin (Tinyint)
