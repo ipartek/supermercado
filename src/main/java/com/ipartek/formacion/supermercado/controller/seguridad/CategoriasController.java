@@ -42,6 +42,7 @@ public class CategoriasController extends HttpServlet {
 	public static final String ACCION_GUARDAR = "guardar"; // crear y modificar
 	public static final String ACCION_ELIMINAR = "eliminar";
 
+	// public static final String ACCION_ELIMINAR = "eliminar";
 	// Crear Factoria y Validador
 	ValidatorFactory factory;
 	Validator validator;
