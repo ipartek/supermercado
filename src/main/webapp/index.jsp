@@ -11,6 +11,7 @@
 						<div class="form-group">
 							<label for="category-select">Selecciona una categoría: </label>
 							<select name="id" class="form-control" id="category-select">
+								<option value="0">todas las categorias</option>
 								<c:forEach items="${categorias}" var="c">
 									<option value="${c.id}">${c.nombre}</option>
 								</c:forEach>

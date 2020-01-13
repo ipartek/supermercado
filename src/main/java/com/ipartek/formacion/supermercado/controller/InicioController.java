@@ -73,15 +73,28 @@ public class InicioController extends HttpServlet {
 		ArrayList<Categoria> categorias = (ArrayList<Categoria>) daoCategoria.getAll();
 		
 		//filtro/buscador:  
-		/*
-		int cId = Integer.parseInt(request.getParameter("id"));
-		String pNombre = request.getParameter("nombre");
-		productos = (ArrayList<Producto>) daoProducto.getAllBuscador(cId, pNombre);
-		*/
 		
+		int cId = ( request.getParameter("id") != null ) ? Integer.parseInt(request.getParameter("id")) : 0;
+		
+		if(cId > 0) {
+			String pNombre = request.getParameter("nombre");
+			productos = (ArrayList<Producto>) daoProducto.getAllBuscador(cId, pNombre);
+			
+			request.setAttribute("productos", productos );		
+			request.setAttribute("categorias", categorias );
+		}
+		
+		
+		if(cId == 0) {
+			
+			request.setAttribute("productos", productos );		
+			request.setAttribute("categorias", categorias );
+		}
+		
+		/*
 		request.setAttribute("productos", productos );		
 		request.setAttribute("categorias", categorias );	
-		
+		*/
 		
 		request.setAttribute("mensajeAlerta", new Alerta( Alerta.TIPO_PRIMARY , "Los últimos productos destacados.") );		
 		

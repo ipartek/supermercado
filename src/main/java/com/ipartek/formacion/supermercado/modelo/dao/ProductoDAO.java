@@ -401,13 +401,22 @@ public class ProductoDAO implements IProductoDAO{
 	}
 	
 	
-	//filtro buscar por categoría y nombre: 
+	/**
+	 * filtro buscar por categoría y nombre:
+	 * @param id_categoria, si pasas un 0 se devuelven todas las categorías, y si no, devuelve la categoría indicada
+	 * @param nombre_producto, si pasas una cadena vacía se devuelven todas coincidencias del nombre del producto, y si no, devuelve los productod que contengan esa cadena en su nombre
+	 * @return listado de productos encontrados según el filtro
+	 */
 	public List<Producto> getAllBuscador(int id_categoria, String nombre_producto) {
-		LOG.trace("buscador categorias y productos");
+		
+		LOG.trace("buscador categorias y productos id_categoria: " + id_categoria + " nombre_producto: " + nombre_producto);
 		List<Producto> registros = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
 				CallableStatement cs = con.prepareCall("{ CALL pa_productos_busqueda(?, ?) }");) {
+			
+			cs.setInt(1, id_categoria);
+			cs.setString(2, nombre_producto);
 
 			LOG.debug(cs);
 
