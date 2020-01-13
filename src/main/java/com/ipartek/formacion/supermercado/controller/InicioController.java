@@ -1,9 +1,6 @@
 package com.ipartek.formacion.supermercado.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -13,13 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
-import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
-import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 
 /**
@@ -28,7 +24,7 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 @WebServlet("/inicio")
 public class InicioController extends HttpServlet {
 
-	private final static Logger LOG = Logger.getLogger(InicioController.class);
+	private final static Logger LOG = LogManager.getLogger(InicioController.class);
 
 	private static final long serialVersionUID = 1L;
 	private static ProductoDAO daoProducto;
@@ -76,21 +72,21 @@ public class InicioController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		/*
 		for (int i = 0; i < 100; i++) {
 			LOG.trace(i);
 			Connection con = ConnectionManager.getConnection();
-			
+
 			try {
 				con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}*/
-		
+
 		// llamar al DAO capa modelo
 
 		// filtro productos
@@ -116,7 +112,7 @@ public class InicioController extends HttpServlet {
 		for (Producto p : productos) {
 			LOG.trace(p);
 		}
-		
+
 		request.setAttribute("categorias", daoCategoria.getAll() );
 
 		request.setAttribute("productos", productos);

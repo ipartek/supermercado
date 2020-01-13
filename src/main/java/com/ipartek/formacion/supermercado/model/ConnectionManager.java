@@ -5,13 +5,12 @@ import java.sql.Connection;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
-
-import com.ipartek.formacion.supermercado.controller.LoginController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ConnectionManager {
 
-	private final static Logger LOG = Logger.getLogger(ConnectionManager.class);
+	private final static Logger LOG = LogManager.getLogger(ConnectionManager.class);
 	private static Connection conn;
 
 	public static Connection getConnection() {

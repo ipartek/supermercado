@@ -12,7 +12,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.controller.Alerta;
 import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
@@ -24,7 +25,7 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 @WebServlet("/seguridad/categorias")
 public class CategoriaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final static Logger LOG = Logger.getLogger(SeguridadBackofficeFilter.class);
+	private final static Logger LOG = LogManager.getLogger(SeguridadBackofficeFilter.class);
 
 	private static final String VIEW_TABLA = "categorias/index.jsp";
 	private static final String VIEW_FORM = "categorias/formulario.jsp";

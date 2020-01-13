@@ -8,17 +8,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
-import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
-import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Rol;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
 public class UsuarioDAO implements IUsuarioDAO {
 
-	private final static Logger LOG = Logger.getLogger(UsuarioDAO.class);
+	private final static Logger LOG = LogManager.getLogger(UsuarioDAO.class);
 
 	private static final String SQL_EXIST = "{CALL pa_user_exist(?,?)}";
 
@@ -96,12 +95,12 @@ public class UsuarioDAO implements IUsuarioDAO {
 		}
 
 		return u;
-		
+
 	}
 
 	@Override
 	public Usuario delete(int id) throws Exception {
-		
+
 		Usuario registro = null;
 		try (Connection con = ConnectionManager.getConnection();
 				CallableStatement pst = con.prepareCall(SQL_GET_DELETE)) {
@@ -127,12 +126,12 @@ public class UsuarioDAO implements IUsuarioDAO {
 		try (Connection con = ConnectionManager.getConnection();
 				CallableStatement cs = con.prepareCall(SQL_GET_UPDATE)) {
 
-			
+
 			cs.setString(1, pojo.getNombre());
 			cs.setString(2, pojo.getContrasenia());
 			cs.setInt(3, pojo.getRol().getId());
 			cs.setInt(4, id);
-			
+
 			LOG.debug(cs);
 
 			int affectedRows = cs.executeUpdate(); // lanza una excepcion si nombre repetido

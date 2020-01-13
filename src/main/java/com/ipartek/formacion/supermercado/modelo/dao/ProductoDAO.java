@@ -2,14 +2,13 @@ package com.ipartek.formacion.supermercado.modelo.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
@@ -18,7 +17,7 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
 public class ProductoDAO implements IProductoDAO {
 
-	private final static Logger LOG = Logger.getLogger(ProductoDAO.class);
+	private final static Logger LOG = LogManager.getLogger(ProductoDAO.class);
 
 
 
@@ -82,7 +81,7 @@ public class ProductoDAO implements IProductoDAO {
 	}
 
 	public List<Producto> getAllFiltered(int idCategoria, String nombre) {
-		
+
 		LOG.trace("idCategoria=" + idCategoria + " nombre=" + nombre);
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 

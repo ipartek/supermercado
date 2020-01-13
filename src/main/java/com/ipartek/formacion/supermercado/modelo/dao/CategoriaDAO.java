@@ -7,14 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 
 public class CategoriaDAO implements ICategoriaDAO {
 
-	private final static Logger LOG = Logger.getLogger(CategoriaDAO.class);
+	private final static Logger LOG = LogManager.getLogger(CategoriaDAO.class);
 
 	private static CategoriaDAO INSTANCE;
 
@@ -97,7 +98,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 
 			cs.executeUpdate();
 
-		} 
+		}
 
 		return registro;
 	}
@@ -118,7 +119,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 			}else {
 				throw new Exception("No se puede modificar registro " + pojo + " por id " + id);
 			}
-		} 
+		}
 
 		return registro;
 	}
