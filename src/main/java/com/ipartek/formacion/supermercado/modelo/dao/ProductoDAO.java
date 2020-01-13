@@ -85,10 +85,10 @@ public class ProductoDAO implements IProductoDAO {
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement pst = con.prepareCall(SQL_GET_ALL_BY_USER);) {
+				CallableStatement pst = con.prepareCall(SQL_GET_ALL_FILTER);) {
 
 			pst.setInt(1, idCategoria);
-			pst.setString(1, nombre);
+			pst.setString(2, nombre);
 			LOG.debug(pst);
 
 			try (ResultSet rs = pst.executeQuery()) {

@@ -261,6 +261,7 @@ public class ProductosController extends HttpServlet {
 
 
 		List<Producto> productos =  daoProducto.getAllFiltered(categoriaId, pNombre);
+
 		request.setAttribute("productos", productos );
 		vistaSeleccionda = VIEW_TABLA;
 
