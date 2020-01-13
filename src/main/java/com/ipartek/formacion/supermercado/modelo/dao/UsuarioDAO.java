@@ -17,21 +17,21 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	private final static Logger LOG = Logger.getLogger(UsuarioDAO.class);
 
-	private static final String SQL_EXIST = "{CALL pa_user_exist()}";
+	private static final String SQL_EXIST = "{CALL pa_user_exist(?,?)}";
 
 	private static final String SQL_GET_ALL ="{CALL pa_usuario_getall()}";
-	
+
 	private static final String SQL_GET_BY_ID = "{CALL pa_usuario_get_byid()}";
-	
+
 	private static final String SQL_GET_INSERT = "{CALL pa_usuario_insert()}";
-	
+
 	private static final String SQL_GET_UPDATE = "{CALL pa_usuario_update()}";
-	
+
 	private static final String SQL_GET_DELETE = "{CALL pa_usuario_delete_logico()}";
-	
-	
-	
-	
+
+
+
+
 	private static UsuarioDAO INSTANCE;
 
 	private UsuarioDAO() {
@@ -62,7 +62,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 				}
 			}//executeQuery
 
-			
+
 		} catch (SQLException e) {
 			LOG.error(e);
 		}
