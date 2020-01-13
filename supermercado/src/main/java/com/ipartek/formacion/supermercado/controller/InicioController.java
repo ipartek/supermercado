@@ -60,6 +60,7 @@ public class InicioController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		visualizarProductos(request, response);
 		doPost(request, response);
 	}
 
@@ -86,5 +87,57 @@ public class InicioController extends HttpServlet {
 		
 		
 	}
+	
+	private void visualizarProductos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		
+		String idCategoria = request.getParameter("");
+		String nombreProducto= request.getParameter("");
+		String accion = request.getParameter("");
+		
+		switch(accion) {
+		
+		case "":
+			
+			break;
+			
+		case "1":
+			
+			break;
+			
+		case "2":
+			
+			break;
+			
+			
+		default: 
+		
+			break;
+		}
+		
+		
+		
+	}
+	//Usar metodos del DAO
+	private void visualizarPorCategoria(int idCategoria) {
+		CategoriaDAO catDao = CategoriaDAO.getInstance();
+		
+		catDao.getById(idCategoria);
+		
+	}
+	
+	
+	
+	private void visualizarPorNombreProducto(String nProducto) {
+		ProductoDAO prodDao = ProductoDAO.getInstance();
+		prodDao.get
+		
+	}
+	
+	
+	private void visualizarPorCategoriayProducto(int idCategoria, String nProducto) {
+		
+		
+	}
+	
 
 }

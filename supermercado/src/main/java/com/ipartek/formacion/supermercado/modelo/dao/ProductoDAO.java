@@ -1,5 +1,6 @@
 package com.ipartek.formacion.supermercado.modelo.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +36,11 @@ public class ProductoDAO implements IProductoDAO {
 			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ? "
 			+ " ORDER BY p.id DESC LIMIT 500;";
 	
-
+	private static final String SQL_GET_BY_NAME = "CALL `pa_producto_busqueda_nombre`(?)";
+	private static final String SQL_GET_BY_CATEGORIA_ID= "CALL `pa_producto_busqueda_id`(?)";
+	private static final String SQL_GET_BY_NAME_AND_CATEGORIA_ID= "CALL `pa_producto_busqueda_id_nombre`(?, ?)";
+	
+	
 	private static final String SQL_GET_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
 	private static final String SQL_GET_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
 	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
@@ -292,12 +297,82 @@ public class ProductoDAO implements IProductoDAO {
 	}
 
 	
+	public Producto getByName(String nombreProducto) {
 
+		Producto p = null;
+		
 
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall(SQL_GET_BY_ID)) {
 
+			// sustituyo parametros en la SQL, en este caso 1º ? por id
+			cs.setString(1, nombreProducto);
 
+			// ejecuto la consulta
+			try (ResultSet rs = cs.executeQuery()) {
 
+				while (rs.next()) {
+					p = mapper(rs);
+				}
+			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return p;
+	}
+
+	public Producto getByIdCategoria(int idCategoria) {
+
+		Producto p = null;
+		
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall(SQL_GET_BY_CATEGORIA_ID) ) {
+
+			// sustituyo parametros en la SQL, en este caso 1º ? por id
+			cs.setInt(1, idCategoria);
+
+			// ejecuto la consulta
+			try (ResultSet rs = cs.executeQuery()) {
+
+				while (rs.next()) {
+					p = mapper(rs);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return p;
+	}
+
+	public Producto getByIdCategoriaAndProducto(int idCategoria, String nProducto) {
+
+		Producto p = null;
+		
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall(SQL_GET_BY_NAME_AND_CATEGORIA_ID) ) {
+
+			// sustituyo parametros en la SQL, en este caso 1º ? por id
+			cs.setInt(1, idCategoria);
+			cs.setString(2, nProducto);
+
+			// ejecuto la consulta
+			try (ResultSet rs = cs.executeQuery()) {
+
+				while (rs.next()) {
+					p = mapper(rs);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return p;
+	}
 	
 	/**
 	 * Utilidad para mapear un ResultSet a un Producto
