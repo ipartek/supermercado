@@ -63,7 +63,9 @@
 				        Usuarios
 				      </a>
 				      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-				        <a class="dropdown-item" href="seguridad/usuarios?accion=listar">Listado usuarios</a>
+				        <a class="dropdown-item" href="seguridad/usuarios?accion=listar_activos">Listado usuarios activos</a>
+				        <a class="dropdown-item" href="seguridad/usuarios?accion=listar_sinvalidar">Listado usuarios sin validar</a>
+				        <a class="dropdown-item" href="seguridad/usuarios?accion=listar_baja">Listado usuarios baja</a>
 				        <a class="dropdown-item" href="seguridad/usuarios?accion=formulario">Nuevo usuario</a>
 				      </div>
 		    		</li>
