@@ -103,6 +103,7 @@
 
 
 				<div class="nav-item dropdown show d-none d-md-inline-block">
+				<!-- TODO imagen -->
 					<a class="nav-link dropdown-toggle" href="#" id="dropdown02"
 						data-toggle="dropdown">${sessionScope.usuarioLogeado.nombre}</a>
 					<div class="dropdown-menu" aria-labelledby="dropdown02">
