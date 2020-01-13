@@ -206,7 +206,7 @@ public class ProductoDAO implements IProductoDAO {
 
 		return lista;
 	}
-	
+
 	public List<Producto> getAllInactive() {
 
 		LOG.debug("Entra en getAllInactive");
@@ -233,7 +233,7 @@ public class ProductoDAO implements IProductoDAO {
 
 		return lista;
 	}
-	
+
 	public List<Producto> getAllToValidate() {
 
 		LOG.debug("Entra en getAllToValidate");
@@ -259,6 +259,35 @@ public class ProductoDAO implements IProductoDAO {
 		}
 
 		return lista;
+	}
+
+	public List<Producto> getAllFiltros(int idCategoria, String nombre) throws Exception {
+		LOG.trace("Buscar con filtros: " + "categoria: " + idCategoria + "Nombre: " + nombre);
+		
+		List<Producto> resultado = new ArrayList<Producto>();
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall( " { CALL pa_productos_busqueda(?,?) } ")) {
+
+			cs.setString(1, nombre);
+
+			cs.setInt(2, idCategoria);
+			
+			LOG.debug("Ejecuta la query: " + cs.toString());
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto c = mapper(rs);
+					resultado.add(c);
+				}
+
+			}
+
+		} catch (SQLException e) {
+			LOG.error(e);
+			e.printStackTrace();
+		}
+		return resultado;
 	}
 
 	@Override
@@ -288,13 +317,13 @@ public class ProductoDAO implements IProductoDAO {
 
 		return lista;
 	}
-	
+
 	public List<Producto> getAllByName(String nombre) {
 		LOG.trace("Recuperar todos los productos por filtro de nombre: " + nombre);
 		List<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall( " { CALL pa_categoria_get_byname(?) } ")) {
+				CallableStatement cs = con.prepareCall(" { CALL pa_categoria_get_byname(?) } ")) {
 			cs.setString(1, nombre);
 
 			LOG.debug("Ejecuta la query: " + cs.toString());

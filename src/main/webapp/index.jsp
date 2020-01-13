@@ -7,16 +7,16 @@
 	<div class="col-md-6">
 		<form action="inicio" method="post" class="mb-5">
 
+<%-- ${(c.id eq producto.categoria.id)?"selected":""} --%>
+
 			<div class="form-group">
-				<label>Filtrar por Categoria:</label> <select name="categoriaId"
+				<label>Filtrar por Categoria:</label> <select name="categoriaIdFiltro"
 					class="custom-select mb-2">
-					<option selected="selected">
-					Seleccionar
-					</option>
+					<option selected="selected" value="0">Seleccionar</option>
 					<c:forEach items="${categorias}" var="c">
 						<option value="${c.id}">${c.nombre}</option>
 					</c:forEach>
-				</select> <label>Filtrar por Nombre:</label> <input type="text" name="nombre"
+				</select> <label>Filtrar por Nombre:</label> <input type="text" name="nombreFiltro"
 					value="${producto.nombre}" class="form-control"
 					placeholder="introduce el nombre del producto">
 			</div>

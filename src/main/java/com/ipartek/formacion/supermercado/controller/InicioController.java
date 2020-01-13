@@ -24,6 +24,9 @@ public class InicioController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static ProductoDAO daoProducto;
 	private static CategoriaDAO daoCategoria;
+	
+	String pNombreProducto = "";
+	int pIdCategoria = 0;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -66,9 +69,27 @@ public class InicioController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		// recoger parametros
+		if (request.getParameter("id") != null) {
+			pIdCategoria = Integer.parseInt(request.getParameter("id"));
+		}else {
+			pIdCategoria = 0;
+		}
+		
+		pNombreProducto = request.getParameter("nombre");
+		
+		
 
 		//llamar al DAO capa modelo
-		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAll();
+		ArrayList<Producto> productos = null;
+		try {
+			productos = (ArrayList<Producto>) daoProducto.getAllFiltros(pIdCategoria, pNombreProducto);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		ArrayList<Categoria> categorias = (ArrayList<Categoria>) daoCategoria.getAll();
 
 		request.setAttribute("productos", productos);
