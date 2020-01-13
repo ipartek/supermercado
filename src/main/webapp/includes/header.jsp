@@ -45,19 +45,27 @@
 			<a class="py-2" href="inicio"> Inicio </a>
 
 			<c:if test="${empty usuarioLogeado }">
-				<div class="nav-item">
-					<select class="form-control">
-						<option value="0">Todas las categorías</option>
+			<form action="inicio" method="POST" class="nav-item form-inline">
+			
+				
+					<select class="form-control mx-1" name="categoriaElegida">
+						<option value="0" selected>Todas las categorías</option>
 						<c:forEach items="${categorias}" var="cat">
 							<option value="${cat.id }">${cat.nombre}</option>
 						</c:forEach>
 					</select>
-				</div>
+			
 
-				<div class="nav-item">
-					<input type="text" class="form-control"
+				
+					<input type="text" 
+							class="form-control mx-1"
+							name="productoElegido"
 						placeholder="Buscar por nombre">
-				</div>
+		
+			
+				<input type="submit" class="btn btn-primary mx-1" value="Buscar">
+			
+			</form>
 
 				<a class="py-2 d-none d-md-inline-block" href="login.jsp">Login</a>
 			</c:if>

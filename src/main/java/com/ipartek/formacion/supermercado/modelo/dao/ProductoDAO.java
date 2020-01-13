@@ -1,5 +1,6 @@
 package com.ipartek.formacion.supermercado.modelo.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -315,4 +316,27 @@ public class ProductoDAO implements IProductoDAO {
 		return p;
 	}
 
+	public List<Producto> buscarPorNombreCategoria(int pIdCategoria, String pNombreProducto) {
+		LOG.trace("filtro con procedimento almacenado");
+		List<Producto> registros = new ArrayList<Producto>();
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{ CALL pa_producto_busqueda(?,?) }");) {
+
+			cs.setInt(1, pIdCategoria);
+			cs.setString(2, pNombreProducto);
+			LOG.debug(cs);
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					registros.add(mapper(rs));
+				}
+			}
+
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+
+		return registros;
+	}
 }
