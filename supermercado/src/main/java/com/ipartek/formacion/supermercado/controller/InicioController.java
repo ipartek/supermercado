@@ -93,7 +93,8 @@ public class InicioController extends HttpServlet {
 			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
 		}else {
 			try {
-				int idParseado = Integer.parseInt(idCategoria);
+				
+				int idParseado = (idCategoria==null)?0:Integer.parseInt(idCategoria);
 
 				// En caso de que no haya ninguna categoría seleccionada y ningún producto en la
 				// búsqueda, se devuelven todos.
@@ -103,18 +104,19 @@ public class InicioController extends HttpServlet {
 				} else {
 					if ("".equalsIgnoreCase(nombreProducto)) {
 						productos = (ArrayList<Producto>) daoProducto.getByIdCategoria(idParseado);
-						request.setAttribute("mensajeAlerta",
-								new Alerta(Alerta.TIPO_PRIMARY, "Productos de la categoría " + daoCategoria.getById(idParseado))
-										+ ".");
+						
+						request.setAttribute("mensajeAlerta",new Alerta(Alerta.TIPO_PRIMARY, "Productos de la categoría " + daoCategoria.getById(idParseado).getNombre() + "."  ));
 					} else {
-						if ("".equalsIgnoreCase(idCategoria)) {
+						if ("".equalsIgnoreCase(idCategoria) || idParseado == 0) {
 							productos = (ArrayList<Producto>) daoProducto.getByName(nombreProducto);
 							request.setAttribute("mensajeAlerta",
 									new Alerta(Alerta.TIPO_PRIMARY, "Estos son los productos que coinciden con su búsqueda:"));
+						}else {
+							productos = (ArrayList<Producto>) daoProducto.getByIdCategoriaAndProducto(idParseado, nombreProducto);
+							request.setAttribute("mensajeAlerta",
+									new Alerta(Alerta.TIPO_PRIMARY, "Estos son los productos que coinciden con su búsqueda:"));
 						}
-						productos = (ArrayList<Producto>) daoProducto.getByIdCategoriaAndProducto(idParseado, nombreProducto);
-						request.setAttribute("mensajeAlerta",
-								new Alerta(Alerta.TIPO_PRIMARY, "Estos son los productos que coinciden con su búsqueda:"));
+						
 					}
 				}
 			} catch (Exception e) {

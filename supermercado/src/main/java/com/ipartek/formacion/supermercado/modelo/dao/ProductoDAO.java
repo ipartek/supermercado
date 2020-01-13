@@ -28,7 +28,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND u.id = ? "
 			+ " ORDER BY p.id DESC LIMIT 500;";
 
-	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
+	private static final String SQL_GET_BY_ID = "CALL `pa_producto_get_by_id`(?)"
 			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? "
 			+ " ORDER BY p.id DESC LIMIT 500;";
 	
@@ -304,11 +304,11 @@ public class ProductoDAO implements IProductoDAO {
 		
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall(SQL_GET_BY_ID)) {
+				CallableStatement cs = con.prepareCall(SQL_GET_BY_NAME)) {
 
 			// sustituyo parametros en la SQL, en este caso 1º ? por id
 			cs.setString(1, nombreProducto);
-
+			LOG.debug(cs);
 			// ejecuto la consulta
 			try (ResultSet rs = cs.executeQuery()) {
 
