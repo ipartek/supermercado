@@ -3,7 +3,7 @@
 <%@ include file="/includes/header.jsp" %>   
     	
 	
-	<a href="seguridad/productos?accion=formulario">Nuevo Producto</a>
+	<a href="seguridad/productos?accion=formulario" class="mt-2 mb-2">Nuevo Producto</a>
 	
 	<table  class="tabla display" style="width:100%">
         <thead>
@@ -11,6 +11,7 @@
                 <th>id</th>                
                 <th>nombre</th>
                 <th>usuario</th>
+                <th>categoria</th>
                 <th>Editar</th>                
             </tr>
         </thead>
@@ -20,6 +21,7 @@
                 	<td>${p.id}</td>
                 	<td>${p.nombre }</td>
                 	<td>${p.usuario.nombre}</td>
+                	<td>${p.categoria.nombre}</td>
                 	<td><a href="seguridad/productos?accion=formulario&id=${p.id}">Editar</a></td>
             	</tr>
             </c:forEach>	

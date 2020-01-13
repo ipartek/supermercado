@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.controller.LoginController;
 
-public class ConnectionManager {
+public class ConnectionManager implements AutoCloseable {
 
 	private final static Logger LOG = Logger.getLogger(ConnectionManager.class);
 	private static Connection conn;
@@ -35,6 +35,14 @@ public class ConnectionManager {
 
 		return conn;
 
+	}
+
+	@Override
+	public void close() throws Exception {
+		
+		conn.close();
+		LOG.debug("cerrada conexion");
+		
 	}
 	
 }

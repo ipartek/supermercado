@@ -3,13 +3,14 @@
 <%@ include file="/includes/header.jsp" %>
 
 	<h1>FORMULARIO</h1>
-
+	<c:if test="${producto.id == 0}">
+		<h3>Nuevo Producto</h3>
+	</c:if>
+	<c:if test="${producto.id > 0}">
+		<h3>Editar Producto</h3>
+	</c:if>
 	<form action="seguridad/productos" method="post" class="mb-4">
-	HOLA?
-	<p>
-	${producto}
-	</p>
-
+	
 		<div class="form-group">
 			<label>Nombre:</label>
 			<input type="text" name="nombre" value="${producto.nombre}" class="form-control" placeholder="mínimo 2 letras, máximo 50">

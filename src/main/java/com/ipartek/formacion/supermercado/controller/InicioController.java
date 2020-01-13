@@ -1,6 +1,8 @@
 package com.ipartek.formacion.supermercado.controller;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +76,21 @@ public class InicioController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
+		/*
+		for (int i = 0; i < 100; i++) {
+			LOG.trace(i);
+			Connection con = ConnectionManager.getConnection();
+			
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}*/
+		
 		// llamar al DAO capa modelo
 
 		// filtro productos

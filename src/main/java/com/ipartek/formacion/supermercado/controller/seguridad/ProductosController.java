@@ -211,8 +211,9 @@ public class ProductosController extends HttpServlet {
 				}
 
 		}
-
+		
 		request.setAttribute("usuarios", daoUsuario.getAll() );
+		request.setAttribute("categorias", daoCategoria.getAll());
 		request.setAttribute("producto", pGuardar);
 		vistaSeleccionda = VIEW_FORM;
 
