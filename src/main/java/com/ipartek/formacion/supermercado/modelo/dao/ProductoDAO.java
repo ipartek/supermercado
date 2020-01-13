@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -21,43 +22,45 @@ public class ProductoDAO implements IProductoDAO{
 	private static ProductoDAO INSTANCE;
 
 	//ctes para la consulta a la base de datos:
-	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario' " + 
-												" FROM producto p, usuario u " + 
-												" WHERE p.id_usuario = u.id " + 
-												" ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' " + 
+											" FROM producto p, usuario u, categoria c " + 
+											" WHERE p.id_usuario = u.id AND p.id_categoria = c.id" + 
+											" ORDER BY p.id DESC LIMIT 500;";
 	
-	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND u.id = ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' " + 
+													" FROM producto p, usuario u, categoria c " + 
+													" WHERE p.id_usuario = u.id AND p.id_categoria = c.id AND id_usuario= ? " + 
+													" ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL_BY_ID_USUARIO = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' " + 
+			" FROM producto p, usuario u, categoria c " + 
+			" WHERE p.id_usuario = u.id AND p.id_categoria = c.id AND id_usuario= ? " + 
+			" ORDER BY p.id DESC LIMIT 500;";
+	// SQL_GET_ALL_BY_ID_USUARIO = SQL_GET_ALL_BY_USER
 	
 	//usamos el alias 'id_producto' para p.id  para distinguirlo del campo id de la tabla usuario
 	
-	private static final String SQL_INSERT = "INSERT INTO `producto` (`nombre`, `precio`, `imagen`, `descripcion`, `descuento`, `id_usuario`) VALUES (?, ?, ?, ?, ?, ?);";
+	private static final String SQL_INSERT = "INSERT INTO `producto` (`nombre`, `precio`, `imagen`, `descripcion`, `descuento`, `id_usuario`, `id_categoria`) VALUES (?, ?, ?, ?, ?, ?, ?);";
 	
-	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario' " + 
-												" FROM producto p, usuario u " + 
-												" WHERE p.id_usuario = u.id AND p.id= ? " + 
+	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' " + 
+												" FROM producto p, usuario u, categoria c " + 
+												" WHERE p.id_usuario = u.id AND p.id_categoria = c.id AND p.id= ? " + 
 												" ORDER BY p.id DESC LIMIT 500;";
 	
 	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ?;";
 	
-	private static final String SQL_UPDATE = "UPDATE `producto` SET `nombre`=?, `precio`=?, `imagen`=?, `descripcion`=?, `descuento`=?, `id_usuario`=? WHERE  `id`=?;";
+	private static final String SQL_UPDATE = "UPDATE `producto` SET `nombre`=?, `precio`=?, `imagen`=?, `descripcion`=?, `descuento`=?, `id_usuario`=?, `id_categoria`=? WHERE  `id`=?;";
 
-	//private static final String SQL_GET_ALL_BY_ID_USUARIO = "SELECT * FROM producto WHERE id_usuario = ? ORDER BY id DESC LIMIT 500;";
-	private static final String SQL_GET_ALL_BY_ID_USUARIO = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario' " + 
-															" FROM producto p, usuario u " + 
-															" WHERE p.id_usuario = u.id AND id_usuario= ? " + 
-															" ORDER BY p.id DESC LIMIT 500;";
 	
 	
-	// 07/01/2020: SQLs para utilizar con la interfaz nueva para ProductoDAO, IProductoDAO:
-	private static final String SQL_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`=?, `precio`=?, `imagen`=?, `descripcion`=?, `descuento`=? WHERE `id`=? AND `id_usuario`=?;";
+	
+	//07/01/2020: SQLs para utilizar con la interfaz nueva para ProductoDAO, IProductoDAO:
+	private static final String SQL_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`=?, `precio`=?, `imagen`=?, `descripcion`=?, `descuento`=?, `id_categoria`=? WHERE `id`=? AND `id_usuario`=?;";
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ?;";
-	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario' " + 
-														" FROM producto p, usuario u " + 
-														" WHERE p.id_usuario = u.id AND p.id= ? AND u.id= ?" + 
+	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' " + 
+														" FROM producto p, usuario u, categoria c " + 
+														" WHERE p.id_usuario = u.id AND p.id_categoria = c.id AND p.id= ? AND u.id= ?" + 
 														" ORDER BY p.id DESC LIMIT 500;";
-	
+												
 	
 	private ProductoDAO() {
 		super();
@@ -90,7 +93,7 @@ public class ProductoDAO implements IProductoDAO{
 			}
 
 		} catch (SQLException e) {
-			LOG.error(e); //e.printStackTrace();
+			LOG.error(e); 
 		}
 
 		return lista;
@@ -131,6 +134,7 @@ public class ProductoDAO implements IProductoDAO{
 			pst.setString(4, pojo.getDescripcion());
 			pst.setInt(5, pojo.getDescuento());
 			pst.setInt(6, pojo.getUsuario().getId() ); //añadimos usuario
+			pst.setInt(7, pojo.getCategoria().getId() ); //añadimos categoria
 			LOG.debug(pst);
 			
 			
@@ -219,7 +223,8 @@ public class ProductoDAO implements IProductoDAO{
 			pst.setString(4, pojo.getDescripcion());
 			pst.setInt(5, pojo.getDescuento());
 			pst.setInt(6, pojo.getUsuario().getId());
-			pst.setInt(7, id);
+			pst.setInt(7, pojo.getCategoria().getId());
+			pst.setInt(8, id);
 			LOG.debug(pst);
 
 			int affetedRows = pst.executeUpdate();
@@ -283,6 +288,11 @@ public class ProductoDAO implements IProductoDAO{
 		u.setNombre(rs.getString("nombre_usuario"));
 		p.setUsuario(u);
 		
+		Categoria c = new Categoria();
+		c.setId(rs.getInt("id_categoria"));
+		c.setNombre(rs.getString("nombre_categoria"));
+		p.setCategoria(c);
+		
 		return p;
 	}
 
@@ -331,8 +341,9 @@ public class ProductoDAO implements IProductoDAO{
 			pst.setString(3, pojo.getImagen());
 			pst.setString(4, pojo.getDescripcion());
 			pst.setInt(5, pojo.getDescuento());
-			pst.setInt(6, id);
-			pst.setInt(7, id_usuario);
+			pst.setInt(6, pojo.getCategoria().getId());
+			pst.setInt(7, id);
+			pst.setInt(8, id_usuario);
 			LOG.debug(pst);
 			
 			int affetedRows = pst.executeUpdate();
@@ -344,11 +355,7 @@ public class ProductoDAO implements IProductoDAO{
 				LOG.debug("No se encontró registro para id = " + id + " con id_usuario = " + id_usuario + ". El objeto no pertenece a ese usuario");
 				throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED); //le pasamos el mensaje que hemos definido como una cte
 			}
-			
-/*		} catch (Exception e) {
-			LOG.error(e); 
-		}
-*/		 
+			 
 		}catch (SQLException e) {
 			
 			LOG.debug("El nombre del producto ya existe en la base de datos, elige otro");
