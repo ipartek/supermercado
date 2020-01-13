@@ -36,13 +36,6 @@ main{
 
 
 
-@media (min-width: 576px) { 
-
-
- }
-
-
-
 /* producto
 *******************************************/
 
@@ -168,3 +161,18 @@ main{
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.search-wrapper button {
+	background-color: transparent;
+    border: 0;
+    font-size: 24px;
+}
+
+
+@media (max-width: 991px) { 
+	
+	.search-wrapper .form-group {
+    	text-align: center;
+	}
+
+ }

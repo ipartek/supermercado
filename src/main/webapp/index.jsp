@@ -5,24 +5,22 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="search-wrapper">
-			<form>
+			<form action="inicio" method="POST">
 				<div class="row">
-					<div class="col-lg-8 text-left">
+					<div class="col-10">
 						<div class="form-group">
-							<label for="category-select">Selecciona una categoría: </label> <select
-								class="form-control" id="category-select">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select> <input class="form-control" type="text" placeholder="Search"
-								aria-label="Search">
-
+							<label for="category-select">Selecciona una categoría: </label>
+							<select name="id" class="form-control" id="category-select">
+								<c:forEach items="${categorias}" var="c">
+									<option value="${c.id}">${c.nombre}</option>
+								</c:forEach>
+							</select>
+							
+							<input name="nombre" class="form-control" type="text" placeholder="Nombre de producto" aria-label="Search">
 						</div>
 					</div>
-					<div class="col-lg-4 text-right">
-						<button type="submit" class="btn btn-primary">B</button>
+					<div class="col-2 text-right">
+						<button type="submit" class="btn btn-primary"><span class="fas fa-search"></span></button>
 					</div>
 				</div>
 			</form>
