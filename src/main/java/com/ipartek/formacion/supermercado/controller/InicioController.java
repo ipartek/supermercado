@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.ipartek.formacion.supermercado.modelo.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
@@ -22,6 +25,7 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 @WebServlet("/inicio")
 public class InicioController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final static Logger LOG = LogManager.getLogger(InicioController.class);
 	private static ProductoDAO daoProducto;
 	private static CategoriaDAO daoCategoria;
 	
@@ -71,13 +75,17 @@ public class InicioController extends HttpServlet {
 			throws ServletException, IOException {
 		
 		// recoger parametros
-		if (request.getParameter("id") != null) {
-			pIdCategoria = Integer.parseInt(request.getParameter("id"));
+		if (request.getParameter("categoriaIdFiltro") != null) {
+			pIdCategoria = Integer.parseInt(request.getParameter("categoriaIdFiltro"));
 		}else {
 			pIdCategoria = 0;
 		}
 		
-		pNombreProducto = request.getParameter("nombre");
+		if (request.getParameter("nombreFiltro") != null) {
+			pNombreProducto = request.getParameter("nombreFiltro");
+		}else {
+			pNombreProducto = "";
+		}
 		
 		
 
@@ -87,7 +95,7 @@ public class InicioController extends HttpServlet {
 			productos = (ArrayList<Producto>) daoProducto.getAllFiltros(pIdCategoria, pNombreProducto);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e);
 		}
 		
 		ArrayList<Categoria> categorias = (ArrayList<Categoria>) daoCategoria.getAll();
