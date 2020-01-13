@@ -10,7 +10,7 @@
 	
 	                <!-- producto -->
 	                <div class="producto">
-	                	<button class="carro">${p.categoria.nombre}</button>
+	                	<button class="categoria">${p.categoria.nombre}</button>
 	                    <span class="descuento">${p.descuento}%</span>
 	                    <img src="${p.imagen}" alt="imagen de ${p.nombre}">
 	
