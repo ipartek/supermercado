@@ -47,6 +47,8 @@ public class LoginController extends HttpServlet {
 			
 			Usuario usuario = usuarioDao.exist(nombre, pass);
 			
+			LOG.debug(usuario.toString());
+			
 			if ( usuario != null ) {
 				
 				LOG.info("login correcto " + usuario);
