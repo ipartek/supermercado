@@ -79,45 +79,50 @@ public class InicioController extends HttpServlet {
 
 		request.setAttribute("categorias", categorias);
 
-		request.getRequestDispatcher("index.jsp").forward(request, response);
-
+		request.getRequestDispatcher("/index.jsp").forward(request, response);
+		LOG.debug("No falla");
 	}
 
 	private void visualizarProductos(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAll();
-
+		
 		String idCategoria = request.getParameter("categoria");
 		String nombreProducto = request.getParameter("textoBuscado");
-		try {
-			int idParseado = Integer.parseInt(idCategoria);
+		if (idCategoria == null && nombreProducto == null) {
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
+		}else {
+			try {
+				int idParseado = Integer.parseInt(idCategoria);
 
-			// En caso de que no haya ninguna categoría seleccionada y ningún producto en la
-			// búsqueda, se devuelven todos.
-			if ("".equalsIgnoreCase(idCategoria) && "".equalsIgnoreCase(nombreProducto)) {
-				
-				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
-			} else {
-				if ("".equalsIgnoreCase(nombreProducto)) {
-					productos = (ArrayList<Producto>) daoProducto.getByIdCategoria(idParseado);
-					request.setAttribute("mensajeAlerta",
-							new Alerta(Alerta.TIPO_PRIMARY, "Productos de la categoría " + daoCategoria.getById(idParseado))
-									+ ".");
+				// En caso de que no haya ninguna categoría seleccionada y ningún producto en la
+				// búsqueda, se devuelven todos.
+				if ("".equalsIgnoreCase(idCategoria) && "".equalsIgnoreCase(nombreProducto)) {
+					
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
 				} else {
-					if ("".equalsIgnoreCase(idCategoria)) {
-						productos = (ArrayList<Producto>) daoProducto.getByName(nombreProducto);
+					if ("".equalsIgnoreCase(nombreProducto)) {
+						productos = (ArrayList<Producto>) daoProducto.getByIdCategoria(idParseado);
+						request.setAttribute("mensajeAlerta",
+								new Alerta(Alerta.TIPO_PRIMARY, "Productos de la categoría " + daoCategoria.getById(idParseado))
+										+ ".");
+					} else {
+						if ("".equalsIgnoreCase(idCategoria)) {
+							productos = (ArrayList<Producto>) daoProducto.getByName(nombreProducto);
+							request.setAttribute("mensajeAlerta",
+									new Alerta(Alerta.TIPO_PRIMARY, "Estos son los productos que coinciden con su búsqueda:"));
+						}
+						productos = (ArrayList<Producto>) daoProducto.getByIdCategoriaAndProducto(idParseado, nombreProducto);
 						request.setAttribute("mensajeAlerta",
 								new Alerta(Alerta.TIPO_PRIMARY, "Estos son los productos que coinciden con su búsqueda:"));
 					}
-					productos = (ArrayList<Producto>) daoProducto.getByIdCategoriaAndProducto(idParseado, nombreProducto);
-					request.setAttribute("mensajeAlerta",
-							new Alerta(Alerta.TIPO_PRIMARY, "Estos son los productos que coinciden con su búsqueda:"));
 				}
+			} catch (Exception e) {
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "No se han encontrado productos"));
+				LOG.error("Error en InicioController " + e);
 			}
-		} catch (Exception e) {
-			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "No se han encontrado productos"));
-			LOG.error("Error en InicioController " + e);
 		}
+		
 		
 		request.setAttribute("productos", productos);
 

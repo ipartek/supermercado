@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -21,8 +22,7 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static ProductoDAO INSTANCE;
 
-	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id " + " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL = "CALL `pa_producto_getall`()";
 
 	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
 			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND u.id = ? "
@@ -69,9 +69,9 @@ public class ProductoDAO implements IProductoDAO {
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL);
-				ResultSet rs = pst.executeQuery()) {
-
+				CallableStatement cs =  con.prepareCall(SQL_GET_ALL);
+				ResultSet rs = cs.executeQuery()) {
+				LOG.debug(cs);
 			while (rs.next()) {
 
 				lista.add(mapper(rs));
@@ -390,10 +390,19 @@ public class ProductoDAO implements IProductoDAO {
 		Producto p = new Producto();
 		p.setId(rs.getInt("id_producto"));
 		p.setNombre(rs.getString("nombre_producto"));
-
+		p.setPrecio(rs.getFloat("precio"));
+		p.setImagen(rs.getString("imagen"));
+		p.setDescripcion(rs.getString("descripcion"));
+		p.setDescuento(rs.getInt("descuento"));
+		
+		Categoria c = new Categoria();
+		c.setId(rs.getInt("id_categoria"));
+		//c.setNombre(rs.getString("nombre_categoria"));
+		p.setCategoria(c);
+		
 		Usuario u = new Usuario();
 		u.setId(rs.getInt("id_usuario"));
-		u.setNombre(rs.getString("nombre_usuario"));
+		//u.setNombre(rs.getString("nombre_usuario"));
 		p.setUsuario(u);
 
 		return p;

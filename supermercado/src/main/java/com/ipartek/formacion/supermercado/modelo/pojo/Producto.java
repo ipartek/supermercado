@@ -32,6 +32,8 @@ public class Producto {
 	
 	private Usuario usuario;
 	
+	private Categoria categoria;
+	
 	public Producto() {
 		super();
 		this.id = 0;
@@ -41,6 +43,7 @@ public class Producto {
 		this.descripcion = "";
 		this.descuento = DESCUENTO_MIN;
 		this.usuario = new Usuario();
+		this.categoria = new Categoria();
 	}
 
 	public int getId() {
@@ -101,6 +104,15 @@ public class Producto {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	@Override

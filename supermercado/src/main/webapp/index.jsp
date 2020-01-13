@@ -14,7 +14,10 @@
 	                <!-- producto -->
 	                <div class="producto">
 	                    <span class="descuento">${p.descuento}%</span>
-	                    <img src="${p.imagen}" alt="imagen de ${p.nombre}">
+	                    <div class="imagen-container">
+	                    	   <img src="${p.imagen}" alt="imagen de ${p.nombre}">
+	                    </div>
+	                 
 	
 	                    <div class="body">
 	                        <p>

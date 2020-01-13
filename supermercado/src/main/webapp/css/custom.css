@@ -55,11 +55,24 @@ main{
     color: #FFF;
     padding: 0 10px;
     border-radius: 20px;
+    z-index: 50;
+}
+
+.imagen-container {
+	position: relative;
+	min-height:200px;
+}
+
+.imagen-container img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
 }
 
 .producto img{
-   width: auto;
-    height: 200px;
+	max-width: 100%;
+    height: auto;
     margin: auto;
     display: block;
 }
