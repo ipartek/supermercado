@@ -22,25 +22,33 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static ProductoDAO INSTANCE;
 
-	private static final String SQL_GET_ALL = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u, categoria c" + " WHERE p.id_usuario = u.id AND p.id_categoria = c.id"
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL = "SELECT p.id'id_producto',p.nombre'nombre_producto',"
+			+ "p.descripcion'descripcion_producto',p.precio'precio_producto',"
+			+ "p.imagen'imagen_producto',p.descuento'descuento_precio',"
+			+ "p.id_categoria 'id_categoria',"
+			+ "p.id_usuario 'id_usuario',"
+			+ "p.fecha_alta'fechaAlta',p.fecha_modificacion'fechaModificada',p.fecha_baja'fechaBaja',"
+			+ "c.nombre'nombre_categoria',u.id'id_usuario',u.nombre'nombre_usuario' "
+			+ " FROM producto p, usuario u, categoria c" + "WHERE p.id_usuario=u.id AND u.id=?"
+			+ " AND p.id_categoria=c.id"
+			+ " ORDER BY p.id ASC LIMIT 500;";
 
-	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.categoria 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u categoria c" + " WHERE p.id_usuario = u.id AND u.id = ?"
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id'id_producto',p.nombre'nombre_producto',p.descripcion'descripcion_producto',p.precio'precio_producto',p.imagen'imagen_producto',p.descuento'descuento_precio',p.id_categoria 'id_categoria', p.fecha_alta'fechaAlta',p.fecha_modificacion 'fechaModificada',p.fecha_baja 'fechaBaja, c.nombre'nombre_categoria',u.id'id_usuario',u.nombre'nombre_usuario'"
+			+ " FROM producto p, usuario u categoria c"
+			+ " WHERE p.id_usuario = u.id AND u.id = ?"
+			+ " ORDER BY p.id ASC LIMIT 500;";
 
-	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.categoria 'id_categoria' c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
+	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria', p.fecha_alta'fechaAlta',p.fecha_modificacion 'fechaModificada',p.fecha_baja'fechaBaja', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
 			+ " FROM producto p, usuario u categoria c"
 			+ " WHERE p.id_usuario = u.id AND p.id= ? AND p.id_categoria = c.id" + " ORDER BY p.id DESC LIMIT 500;";
 
-	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.categoria 'id_categoria' c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
+	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria',p.fecha_alta'fechaAlta',p.fecha_modificacion 'fechaModificada', p.fecha_baja 'fechaBaja', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
 			+ " FROM producto p, usuario u categoria c" + " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ?"
 			+ " ORDER BY p.id DESC LIMIT 500;";
 
-	private static final String SQL_GET_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
-	private static final String SQL_GET_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
-	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
+	private static final String SQL_GET_INSERT = "INSERT INTO 'producto' ( p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria', p.id_usuario 'id_usuario') VALUES (?,?,?,?,?,?);";
+	private static final String SQL_GET_UPDATE = "UPDATE 'producto' SET p.nombre 'nombre'= ? , p.id_usuario 'id_usuario'= ? WHERE 'id'= ?;";
+	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE 'producto' SET p.nombre 'nombre'= ? , p.id_usuario 'id_usuario'= ? WHERE 'id'= ? AND id_usuario = ?;";
 
 	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ? ;";
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ? ;";
@@ -302,6 +310,9 @@ public class ProductoDAO implements IProductoDAO {
 		p.setImagen(rs.getString("imagen_producto"));
 		p.setPrecio(rs.getFloat("precio_producto"));
 		p.setDescuento(rs.getInt("descuento_precio"));
+		p.setFechaAlta(rs.getDate("fechaAlta"));
+		p.setFechaModificada(rs.getDate("fechaModificada"));
+		p.setFechabaja(rs.getDate("fechaBaja"));
 
 		Categoria c = new Categoria();
 		c.setId(rs.getInt("id_categoria"));

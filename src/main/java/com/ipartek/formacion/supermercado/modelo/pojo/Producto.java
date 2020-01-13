@@ -1,7 +1,7 @@
 package com.ipartek.formacion.supermercado.modelo.pojo;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -25,6 +25,9 @@ public class Producto {
 	private String descripcion;
 	@Range(min = 0, max= 100)
 	private int descuento;
+	private Date fechaAlta;
+	private Date fechaModificada;
+	private Date fechabaja;
 	private Usuario usuario;
 	private Categoria categoria;
 	
@@ -36,10 +39,12 @@ public class Producto {
 		this.imagen = "https://image.flaticon.com/icons/png/512/372/372627.png";
 		this.descripcion = "";
 		this.descuento = DESCUENTO_MIN;
+		this.fechaAlta = new Date();
+		this.fechaModificada = new Date();
+		this.fechabaja = new Date();;
 		this.usuario = new Usuario();
 		this.categoria = new Categoria();
 	}
-
 
 	public int getId() {
 		return id;
@@ -93,6 +98,30 @@ public class Producto {
 		return (  (this.precio * ( 100 - this.descuento )) / 100  );
 	}
 
+	public Date getFechaAlta() {
+		return fechaAlta;
+	}
+
+	public void setFechaAlta(Date fechaAlta) {
+		this.fechaAlta = fechaAlta;
+	}
+
+	public Date getFechaModificada() {
+		return fechaModificada;
+	}
+
+	public void setFechaModificada(Date fechaModificada) {
+		this.fechaModificada = fechaModificada;
+	}
+
+	public Date getFechabaja() {
+		return fechabaja;
+	}
+
+	public void setFechabaja(Date fechabaja) {
+		this.fechabaja = fechabaja;
+	}
+
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
@@ -108,14 +137,15 @@ public class Producto {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
-
-
 
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", imagen=" + imagen
-				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", usuario=" + usuario + "]";
+				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", fechaAlta=" + fechaAlta
+				+ ", fechaModificada=" + fechaModificada + ", fechabaja=" + fechabaja + ", usuario=" + usuario
+				+ ", categoria=" + categoria + "]";
 	}
+	
+
 		
 }
