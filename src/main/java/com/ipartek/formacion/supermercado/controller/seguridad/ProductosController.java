@@ -48,6 +48,7 @@ public class ProductosController extends HttpServlet {
 	public static final String ACCION_FORM = "formulario";
 	public static final String ACCION_GUARDAR = "guardar"; // crear y modificar
 	public static final String ACCION_ELIMINAR = "eliminar";
+	public static final String ACCION_REACTIVAR = "reactivar";
 
 	// Crear Factoria y Validador
 	ValidatorFactory factory;
@@ -212,6 +213,10 @@ public class ProductosController extends HttpServlet {
 			case ACCION_ELIMINAR:
 				eliminar(request, response);
 				break;
+				
+			case ACCION_REACTIVAR:
+				reactivar(request, response);
+				break;
 
 			default:
 				listar(request, response);
@@ -281,6 +286,14 @@ public class ProductosController extends HttpServlet {
 		LOG.debug("Entra en eliminar");
 		
 		daoProducto.delete(pProducto.getId());
+		mensajes.clear();
+		vistaSeleccionada = operacionesVista(request, response, VIEW_TABLA);
+	}
+	
+	private void reactivar(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		LOG.debug("Entra en reactivar");
+		
+		daoProducto.reactivate(pProducto.getId());
 		mensajes.clear();
 		vistaSeleccionada = operacionesVista(request, response, VIEW_TABLA);
 	}

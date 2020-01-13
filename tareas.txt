@@ -13,4 +13,4 @@ Filtrar por categoria y nombre del producto - HECHO
 Encriptar las contraseñas MD5
 Validar producto by admin (Tinyint) LOS DEL ADMIN SE DEBEN VALIDAR AL CREARLOS
 
-RESUCITAR PRODUCTOS
+RESUCITAR PRODUCTOS - HECHO
