@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ipartek.formacion</groupId>
-	<artifactId>supermerkado</artifactId>
+	<artifactId>supermerkado_Rantz</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1</version>
-	<name>supermerkado</name>
+	<name>supermerkado_Rantz</name>
 
 
 	<!-- variables comunes para todo el POM -->
@@ -128,6 +128,6 @@
 		</plugins>
 
 
-		<finalName>supermerkado</finalName>
+		<finalName>supermerkado_Rantz</finalName>
 	</build>
 </project>
