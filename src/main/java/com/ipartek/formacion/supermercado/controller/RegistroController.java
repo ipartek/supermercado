@@ -21,7 +21,7 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 /**
  * Servlet implementation class RegistroController
  */
-@WebServlet("/RegistroController")
+@WebServlet("/registro")
 public class RegistroController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,7 +33,7 @@ public class RegistroController extends HttpServlet {
 	Validator validator = factory.getValidator();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("/registro.jsp");
+		response.sendRedirect("registro.jsp");
 	}
 
 	/**
@@ -78,12 +78,12 @@ public class RegistroController extends HttpServlet {
 					
 					request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador.", Alerta.TIPO_DANGER));
 					
-					vistaSeleccionda = "/login.jsp";
+					vistaSeleccionda = "registro.jsp";
 				}
 
 				request.setAttribute("mensajeAlerta", new Alerta("Usuario creado correctamente :)", Alerta.TIPO_PRIMARY));
 				
-				request.getRequestDispatcher("/login.jsp").forward(request, response);
+				request.getRequestDispatcher("login.jsp").forward(request, response);
 
 		}
 		
