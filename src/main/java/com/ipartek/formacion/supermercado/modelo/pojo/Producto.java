@@ -36,8 +36,6 @@ public class Producto {
 	@Range(min = 0, max= 1)
 	private int validado;
 	
-	
-
 	public Producto() {
 		super();
 		this.id = 0;

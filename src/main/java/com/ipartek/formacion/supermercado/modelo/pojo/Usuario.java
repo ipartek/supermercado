@@ -25,6 +25,9 @@ public class Usuario {
 	private int validado;
 	
 	private String imagen;
+	
+	private String fechaAlta;
+	private String fechaBaja;
 
 	public Usuario() {
 		super();
@@ -34,6 +37,8 @@ public class Usuario {
 		this.rol = new Rol();
 		this.validado=0;
 		this.imagen = "https://www.instamatico.io/wp-content/uploads/2019/11/Icon-Real-Profiles.png";
+		this.fechaAlta = "";
+		this.fechaBaja = "";
 	}
 
 	public int getId() {
@@ -83,8 +88,24 @@ public class Usuario {
 
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
-	}
+	}	
 	
+	public String getFechaAlta() {
+		return fechaAlta;
+	}
+
+	public void setFechaAlta(String fechaAlta) {
+		this.fechaAlta = fechaAlta;
+	}
+
+	public String getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(String fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+
 	public String encriptarContrasenia(String nombre, String passwd) throws NoSuchAlgorithmException {
 		
 		String combinacion = nombre+passwd;
@@ -100,7 +121,8 @@ public class Usuario {
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", contrasenia=" + contrasenia + ", rol=" + rol
-				+ ", validado=" + validado + ", imagen=" + imagen + "]";
+				+ ", validado=" + validado + ", imagen=" + imagen + ", fechaAlta=" + fechaAlta + ", fechaBaja="
+				+ fechaBaja + "]";
 	}
 
 
