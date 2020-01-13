@@ -38,9 +38,6 @@ main{
 
 @media (min-width: 576px) { 
 
-    .contenedor-productos > div {
-        width: 20%;
-    }    
 
  }
 
@@ -147,4 +144,16 @@ main{
     border: none;
     padding: 20px;
     width: 100%;
+}
+
+/* Search
+********************/
+
+.search-wrapper form {
+	background-color: #007bffb8;
+    color: #ffffff;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
 }
