@@ -149,6 +149,10 @@ main{
 /* Search
 ********************/
 
+.search-wrapper .form-group {
+    margin-bottom: 0px;
+}
+
 .search-wrapper form {
 	background-color: #007bffb8;
     color: #ffffff;
@@ -156,4 +160,11 @@ main{
     margin-bottom: 1rem;
     border: 1px solid transparent;
     border-radius: .25rem;
+}
+
+.search-wrapper .form-control {
+	max-width: 200px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

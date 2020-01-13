@@ -4,22 +4,29 @@
 
 <div class="row">
 	<div class="col-lg-12">
-	
 		<div class="search-wrapper">
 			<form>
-				<div class="form-group">
-					<label for="category-select">Selecciona una categoría</label>
-					<select class="form-control" id="category-select">
-						<option>1</option>
-						<option>2</option>
-						<option>3</option>
-						<option>4</option>
-						<option>5</option>
-					</select>
+				<div class="row">
+					<div class="col-lg-8 text-left">
+						<div class="form-group">
+							<label for="category-select">Selecciona una categoría: </label> <select
+								class="form-control" id="category-select">
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+							</select> <input class="form-control" type="text" placeholder="Search"
+								aria-label="Search">
+
+						</div>
+					</div>
+					<div class="col-lg-4 text-right">
+						<button type="submit" class="btn btn-primary">B</button>
+					</div>
 				</div>
 			</form>
 		</div>
-		
 	</div>
 </div>
 
