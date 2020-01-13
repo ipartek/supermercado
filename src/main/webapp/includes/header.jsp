@@ -32,32 +32,112 @@
   </head>
   <body id="top">
 	  
-    <nav class="site-header sticky-top py-1">
-        <div class="container d-flex flex-column flex-md-row justify-content-between">
-            <a class="py-2" href="index.html">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mx-auto" role="img" viewBox="0 0 24 24" focusable="false"><title>Product</title><circle cx="12" cy="12" r="10"/><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"/></svg>
-            </a>
-            
-            <c:if test="${empty usuarioLogeado }" >
-            	<a class="py-2 d-none d-md-inline-block" href="login.jsp">Login</a>
-            </c:if>
-            
-            <c:if test="${usuarioLogeado.rol.id eq 2 }" >
-            	<a class="py-2 d-none d-md-inline-block" href="seguridad/productos?accion=listar">Tabla</a>
-            	<a class="py-2 d-none d-md-inline-block" href="seguridad/productos?accion=formulario">Formulario</a>            	
-            </c:if>	            
-            
-            <c:if test="${usuarioLogeado.rol.id eq 1 }" >            	
-            	<a class="py-2 d-none d-md-inline-block" href="mipanel/productos?accion=listar">Mis Producto</a>
-            	<a class="py-2 d-none d-md-inline-block" href="mipanel/productos?accion=formulario">Crear Nuevo</a>            	
-            </c:if>
-            
-            <c:if test="${not empty usuarioLogeado }" >
-            	<a class="py-2 d-none d-md-inline-block" href="logout">Cerrar Sessión</a>
-            </c:if>	
-           
-        </div>
-    </nav>
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="inicio"><i class="fas fa-store-alt"></i></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		  <ul class="navbar-nav">
+		    <li class="nav-item active">
+		      <a class="nav-link" href="inicio">Home </a>
+		    </li>
+		    
+		    <c:if test="${not empty usuarioLogeado}">
+		    
+		    	<c:if test="${usuarioLogeado.rol.id eq 2}">
+		    	
+		    		<li class="nav-item dropdown active">
+				      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				        Productos
+				      </a>
+				      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				        <a class="dropdown-item" href="seguridad/productos?accion=listar">Listado productos</a>
+				        <a class="dropdown-item" href="seguridad/productos?accion=formulario">Nuevo producto</a>
+				      </div>
+				    </li>
+				    <li class="nav-item dropdown active">
+				      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				        Usuarios
+				      </a>
+				      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				        <a class="dropdown-item" href="seguridad/usuarios?accion=listar">Listado usuarios</a>
+				        <a class="dropdown-item" href="seguridad/usuarios?accion=formulario">Nuevo usuario</a>
+				      </div>
+		    		</li>
+		    		<li class="nav-item dropdown active">
+				      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				        Categorias
+				      </a>
+				      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				        <a class="dropdown-item" href="seguridad/categorias?accion=listar">Listado categorias</a>
+				        <a class="dropdown-item" href="seguridad/categorias?accion=formulario">Nueva categoria</a>
+				      </div>
+		    		</li>
+		        
+		   		</c:if> 
+		    	
+	    		<c:if test="${usuarioLogeado.rol.id eq 1}">
+	    	
+		    		<li class="nav-item dropdown active">
+				      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				        Mis Productos
+				      </a>
+				      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				        <a class="dropdown-item" href="mipanel/productos?accion=listar">Mis productos</a>
+				        <a class="dropdown-item" href="mipanel/productos?accion=formulario">Nuevo producto</a>
+				      </div>
+					</li>
+	        
+	   			</c:if> 
+		        
+		    </c:if> 
+		  
+		  <c:if test="${empty usuarioLogeado}">
+
+		  	 <li class="nav-item ml-2">
+			    <a class="btn btn-outline-primary my-2 my-sm-0" href="login.jsp"><i class="fas fa-user mr-1"></i> Login</a>
+		    </li>
+		  
+		  </c:if>
+		  
+		  <c:if test="${not empty usuarioLogeado}">
+		  
+		  	<c:if test="${usuarioLogeado.rol.id eq 2}">
+		  	
+			  	<li class="nav-item dropdown ml-2">
+			      <a class="btn btn-outline-primary my-2 my-sm-0 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			          <i class="fas fa-user mr-1"></i> ${usuarioLogeado.nombre}
+			      </a>
+			      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+			        <a class="dropdown-item" href="seguridad/usuarios?accion=formulario&id=${usuarioLogeado.id}">Perfil</a>
+			        <div class="dropdown-divider"></div>
+	          		<a class="dropdown-item" href="logout">Cerrar sesion</a>
+			      </div>
+			    </li>
+		  	
+		  	</c:if>
+		  	
+		  	<c:if test="${usuarioLogeado.rol.id eq 1}">
+		  	
+			  	<li class="nav-item dropdown ml-2">
+			      <a class="btn btn-outline-primary my-2 my-sm-0 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			        <i class="fas fa-user mr-1"></i> ${usuarioLogeado.nombre}
+			      </a>
+			      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+			        <a class="dropdown-item" href="mipanel/usuarios?accion=formulario&id=${usuarioLogeado.id}">Perfil</a>
+			        <div class="dropdown-divider"></div>
+	          		<a class="dropdown-item" href="logout">Cerrar sesion</a>
+			      </div>
+			    </li>
+		  	
+		  	</c:if>
+		  
+		  </c:if>
+		  
+		  </ul>
+		</div>
+	</nav>
 
     <main class="container">
     
