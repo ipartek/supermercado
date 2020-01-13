@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         192.168.0.89
+-- Host:                         localhost
 -- Versión del servidor:         5.7.24 - MySQL Community Server (GPL)
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             10.3.0.5771
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   `nombre` varchar(100) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla supermercado.categoria: ~9 rows (aproximadamente)
 DELETE FROM `categoria`;
@@ -33,7 +33,7 @@ INSERT INTO `categoria` (`id`, `nombre`) VALUES
 	(14, '0categoria'),
 	(3, 'electrodomesticos'),
 	(8, 'fruteria'),
-	(1, 'mock1578652699186'),
+	(1, 'mock1578903973768'),
 	(2, 'musica'),
 	(4, 'nueva'),
 	(5, 'nueva2'),
@@ -93,22 +93,25 @@ CREATE TABLE IF NOT EXISTS `producto` (
   KEY `FK_categoria` (`id_categoria`),
   CONSTRAINT `FK_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id`),
   CONSTRAINT `FK_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado.producto: ~10 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado.producto: ~13 rows (aproximadamente)
 DELETE FROM `producto`;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
 INSERT INTO `producto` (`id`, `nombre`, `id_categoria`, `id_usuario`, `precio`, `descuento`, `fecha_modificacion`, `fecha_alta`, `fecha_baja`, `imagen`, `descripcion`) VALUES
-	(8, 'uni', 1, 1, 123, 11, '2020-01-10 13:57:49', '2020-01-10 11:35:36', NULL, 'https://image.flaticon.com/icons/png/512/372/372627.png', 'uni'),
+	(8, 'uni', 1, 1, 123, 11, '2020-01-13 10:29:09', '2020-01-10 11:35:36', '2020-01-13 10:29:09', 'https://image.flaticon.com/icons/png/512/372/372627.png', 'uni'),
 	(12, 'hsdfhjkdfhjksdsabor a unicornio', 2, 1, 0, 0, '2020-01-10 12:13:40', '2020-01-10 11:35:36', '2020-01-10 12:13:40', 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
-	(21, 'nuevo3333', 1, 4, 0, 0, '2020-01-10 13:03:36', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
+	(21, 'nuevo33334', 14, 4, 0, 0, '2020-01-13 10:50:52', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
 	(22, 'morcilla', 1, 1, 0, 2, '2020-01-10 09:48:29', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
 	(29, 'morcilla de burgos', 1, 1, 0, 0, '2020-01-10 09:48:29', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
-	(30, 'queso de burgos', 1, 1, 0, 50, '2020-01-10 09:48:29', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
-	(31, 'queso manchego', 1, 1, 0, 100, '2020-01-10 09:48:29', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
-	(36, 'morcillaeeeeee3333', 1, 1, 0, 0, '2020-01-10 09:48:29', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
-	(37, 'not aa', 1, 4, 0, 12, '2020-01-10 13:03:51', '2020-01-10 12:00:30', '2020-01-10 13:03:51', 'https://image.flaticon.com/icons/png/512/372/372627.png', ''),
-	(38, 'procoikopk', 1, 4, 0, 1, '2020-01-10 13:03:29', '2020-01-10 12:41:28', NULL, 'https://image.flaticon.com/icons/png/512/372/372627.png', '');
+	(30, 'queso de burgos', 8, 1, 0, 50, '2020-01-13 08:49:17', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
+	(31, 'queso manchego', 3, 1, 0, 100, '2020-01-13 08:49:42', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
+	(36, 'morcillaeeeeee3333', 3, 1, 0, 0, '2020-01-13 08:49:15', '2020-01-10 11:35:36', NULL, 'https://www.ombushop.com/blog/wp-content/uploads/2015/06/new-product-seal_23-2147503128.jpg', 'un producto sin descripcion'),
+	(37, 'not aa', 14, 4, 0, 12, '2020-01-13 08:49:13', '2020-01-10 12:00:30', '2020-01-10 13:03:51', 'https://image.flaticon.com/icons/png/512/372/372627.png', ''),
+	(38, 'procoikopk', 1, 4, 0, 1, '2020-01-10 13:03:29', '2020-01-10 12:41:28', NULL, 'https://image.flaticon.com/icons/png/512/372/372627.png', ''),
+	(48, 'nuevo producto', 7, 7, 12, 12, '2020-01-13 10:50:41', '2020-01-13 10:50:30', '2020-01-13 10:50:41', 'https://image.flaticon.com/icons/png/512/372/372627.png', 'ddadsasd'),
+	(49, 'cdvdxv', 14, 7, 0, 0, '2020-01-13 11:24:59', '2020-01-13 11:24:59', NULL, 'https://image.flaticon.com/icons/png/512/372/372627.png', ''),
+	(51, 'sasasa', 14, 7, 0, 0, '2020-01-13 11:27:08', '2020-01-13 11:26:49', '2020-01-13 11:27:08', 'https://image.flaticon.com/icons/png/512/372/372627.png', '');
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
 
 -- Volcando estructura para tabla supermercado.rol
@@ -175,7 +178,7 @@ BEGIN
    	-- nuestro primer PA
    	/*  tiene pinta que tambien comentarios de bloque */
     SELECT id, nombre FROM categoria ORDER BY nombre ASC LIMIT 500;
-    
+
     -- desde java executeQuery
     -- retorna ResultSet
 
@@ -206,10 +209,10 @@ BEGIN
 
 	-- crear nuevo registro
 	INSERT INTO categoria ( nombre ) VALUES ( p_nombre );
-	
+
 	-- obtener el ID generado y SETearlo al parametro salida p_id
 	SET p_id = LAST_INSERT_ID();
-	
+
 
 END//
 DELIMITER ;
@@ -225,9 +228,51 @@ BEGIN
 
 
 	UPDATE categoria SET nombre = pNombre WHERE id = pId;
-	
+
 	-- desde java executeUpdate, retorna affectedRows int
 
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento supermercado.pa_productos_busqueda
+DROP PROCEDURE IF EXISTS `pa_productos_busqueda`;
+DELIMITER //
+CREATE PROCEDURE `pa_productos_busqueda`(
+	IN `p_id_categoria` INT,
+	IN `p_nombre` VARCHAR(100)
+)
+BEGIN
+SET p_nombre = TRIM(p_nombre);
+IF p_id_categoria > 0 AND p_nombre <> '' THEN
+	SELECT
+	 p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto', p.descripcion 'descripcion_producto', p.nombre 'nombre_producto',
+	 u.id 'id_usuario', u.nombre 'nombre_usuario',
+	 c.id 'id_categoria', c.nombre 'nombre_categoria'
+	 FROM producto p, usuario u, categoria c
+	 WHERE
+	 p.id_categoria = c.id AND p.id_usuario = u.id AND
+	 p.id_categoria = p_id_categoria AND p.nombre LIKE CONCAT('%', p_nombre ,'%') AND p.fecha_baja IS NULL;
+ELSEIF p_id_categoria > 0 AND p_nombre = '' THEN
+	SELECT
+	 p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto', p.descripcion 'descripcion_producto', p.nombre 'nombre_producto',
+	 u.id 'id_usuario', u.nombre 'nombre_usuario',
+	 c.id 'id_categoria', c.nombre 'nombre_categoria'
+	 FROM producto p, usuario u, categoria c
+	 WHERE
+	 p.id_categoria = c.id AND p.id_usuario = u.id AND
+	 p.id_categoria = p_id_categoria AND p.fecha_baja IS NULL;
+ELSEIF p_id_categoria <= 0 AND p_nombre <> '' THEN
+	SELECT
+	 p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto', p.descripcion 'descripcion_producto', p.nombre 'nombre_producto',
+	 u.id 'id_usuario', u.nombre 'nombre_usuario',
+	 c.id 'id_categoria', c.nombre 'nombre_categoria'
+	 FROM producto p, usuario u, categoria c
+	 WHERE
+	 p.id_categoria = c.id AND p.id_usuario = u.id AND
+	 p.nombre LIKE CONCAT('%', p_nombre ,'%') AND p.fecha_baja IS NULL;
+ELSE
+	CALL pa_producto_getall();
+END IF;
 END//
 DELIMITER ;
 
@@ -266,7 +311,7 @@ BEGIN
 	SELECT p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto', p.descripcion 'descripcion_producto', p.nombre 'nombre_producto',
 	 u.id 'id_usuario', u.nombre 'nombre_usuario',
 	 c.id 'id_categoria', c.nombre 'nombre_categoria'
-	FROM producto p, usuario u, categoria c  
+	FROM producto p, usuario u, categoria c
 	WHERE p.id_categoria = c.id AND p.id_usuario = u.id AND p.fecha_baja IS NULL
 	ORDER BY p.id DESC LIMIT 500;
 END//
@@ -299,13 +344,13 @@ BEGIN
 
 SELECT	p.id 'id_producto',
 			p.imagen 'imagen_producto',
-			p.precio 'precio_producto', 
+			p.precio 'precio_producto',
 			p.descuento 'descuento_producto' ,
-			p.descripcion 'descripcion_producto', 
-			p.nombre 'nombre_producto', 
-			u.id 'id_usuario', 
+			p.descripcion 'descripcion_producto',
+			p.nombre 'nombre_producto',
+			u.id 'id_usuario',
 			u.nombre 'nombre_usuario',
-			c.id 'id_categoria', 
+			c.id 'id_categoria',
 			c.nombre 'nombre_categoria'
 			FROM producto p, usuario u , categoria c
 			WHERE p.id_usuario = u.id AND p.id = pId AND p.id_categoria = c.id AND p.fecha_baja IS NULL
@@ -322,7 +367,7 @@ CREATE PROCEDURE `pa_producto_get_byid_byuser`(
 	IN `p_id_usuario` INT
 )
 BEGIN
-SELECT p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto', p.descripcion 'descripcion_producto', p.nombre 'nombre_producto', 
+SELECT p.id 'id_producto',p.imagen 'imagen_producto', p.precio 'precio_producto', p.descuento 'descuento_producto', p.descripcion 'descripcion_producto', p.nombre 'nombre_producto',
 u.id 'id_usuario', u.nombre 'nombre_usuario',
 c.id 'id_categoria', c.nombre 'nombre_categoria'
 FROM producto p, usuario u, categoria c
@@ -385,7 +430,7 @@ CREATE PROCEDURE `pa_producto_update_byuser`(
 	IN `p_descripcion` VARCHAR(100)
 )
 BEGIN
-	UPDATE producto p SET p.nombre=p_nombre, id_categoria = p_id_categoria, id_usuario = p_id_usuario_propietario, precio = p_precio, descuento = p_descuento, imagen = p_imagen , descripcion = p_descripcion  
+	UPDATE producto p SET p.nombre=p_nombre, id_categoria = p_id_categoria, id_usuario = p_id_usuario_propietario, precio = p_precio, descuento = p_descuento, imagen = p_imagen , descripcion = p_descripcion
 	WHERE  id= p_id AND id_usuario = p_id_usuario;
 END//
 DELIMITER ;
@@ -399,12 +444,12 @@ CREATE PROCEDURE `pa_user_exist`(
 )
 BEGIN
 
-SELECT 	u.id 'id_usuario', 
-			u.nombre 'nombre_usuario', 
-			contrasenia, 
-			r.id 'id_rol', 
-			r.nombre 'nombre_rol' 
-			FROM usuario u, rol r 
+SELECT 	u.id 'id_usuario',
+			u.nombre 'nombre_usuario',
+			contrasenia,
+			r.id 'id_rol',
+			r.nombre 'nombre_rol'
+			FROM usuario u, rol r
 			WHERE u.id_rol = r.id AND u.nombre = p_nombre_usuario AND contrasenia = p_contrasenia ;
 
 END//
@@ -416,12 +461,12 @@ DELIMITER //
 CREATE PROCEDURE `pa_usuario_getall`()
 BEGIN
 
-SELECT 	u.id 'id_usuario', 
-			u.nombre 'nombre_usuario', 
-			contrasenia, r.id 'id_rol', 
-			r.nombre 'nombre_rol' 
-FROM usuario u, rol r 
-WHERE u.id_rol = r.id 
+SELECT 	u.id 'id_usuario',
+			u.nombre 'nombre_usuario',
+			contrasenia, r.id 'id_rol',
+			r.nombre 'nombre_rol'
+FROM usuario u, rol r
+WHERE u.id_rol = r.id
 ORDER BY u.id DESC LIMIT 500;
 
 END//
@@ -435,12 +480,12 @@ CREATE PROCEDURE `pa_usuario_get_byid`(
 )
 BEGIN
 
-SELECT 	u.id 'id_usario', 
-			u.nombre 'nombre_usuario' , 
+SELECT 	u.id 'id_usario',
+			u.nombre 'nombre_usuario' ,
 			u.contrasenia 'contrasenia_usuario' ,
 			r.id 'id_rol',
 			r.nombre 'nombre_rol'
-			
+
 FROM usuario u , rol r
 WHERE u.id_rol = r.id  AND u.id = p_uId;
 
@@ -519,15 +564,15 @@ DELIMITER //
 CREATE TRIGGER `tau_producto_historico` AFTER UPDATE ON `producto` FOR EACH ROW BEGIN
 
 	-- meter un registro en la tabla historico con el precio del producto cambiado
-	
+
 	-- comprobar que inserte solo si cambia el precio
-	
+
 	IF ( NEW.precio <> OLD.precio ) THEN
-	
+
 		INSERT INTO historico (precio, id_producto ) VALUES ( OLD.precio , OLD.id );
-		
+
 	END IF;
-		
+
 
 END//
 DELIMITER ;
@@ -539,19 +584,19 @@ SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTIT
 DELIMITER //
 CREATE TRIGGER `tbi_producto` BEFORE INSERT ON `producto` FOR EACH ROW BEGIN
 
-	/* 
-		comprobar que el descuento sea entre 0 y 100 
+	/*
+		comprobar que el descuento sea entre 0 y 100
 		si descuento < 0 = 0
 		si descuento > 100 = 100
 	*/
 
-	IF NEW.descuento < 0 THEN 
-		SET NEW.descuento = 0; 
+	IF NEW.descuento < 0 THEN
+		SET NEW.descuento = 0;
 	END IF;
-	
-	IF NEW.descuento > 100 THEN 
-		SET NEW.descuento = 100; 
-	END IF;	
+
+	IF NEW.descuento > 100 THEN
+		SET NEW.descuento = 100;
+	END IF;
 
 END//
 DELIMITER ;
@@ -563,14 +608,14 @@ SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_
 DELIMITER //
 CREATE TRIGGER `tbu_producto` BEFORE UPDATE ON `producto` FOR EACH ROW BEGIN
 
-	IF NEW.descuento < 0 THEN 
-		SET NEW.descuento = 0; 
+	IF NEW.descuento < 0 THEN
+		SET NEW.descuento = 0;
 	END IF;
-	
 
-	IF NEW.descuento > 100 THEN 
-		SET NEW.descuento = 100; 
-	END IF;	
+
+	IF NEW.descuento > 100 THEN
+		SET NEW.descuento = 100;
+	END IF;
 
 	SET NEW.fecha_modificacion = CURRENT_TIMESTAMP();
 
