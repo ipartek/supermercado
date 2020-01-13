@@ -76,12 +76,12 @@ public class RegistroController extends HttpServlet {
 					
 					LOG.error("Error al crear el usuario. Datos usuario: " + user.toString() + "\n ERROR: " + e);
 					
-					request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador.", Alerta.TIPO_DANGER));
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador."));
 					
 					vistaSeleccionda = "registro.jsp";
 				}
 
-				request.setAttribute("mensajeAlerta", new Alerta("Usuario creado correctamente :)", Alerta.TIPO_PRIMARY));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Usuario creado correctamente :)"));
 				
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 
@@ -102,7 +102,7 @@ public class RegistroController extends HttpServlet {
 
 		}
 
-		request.setAttribute("mensajeAlerta", new Alerta(mensaje.toString(), Alerta.TIPO_DANGER));
+		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, mensaje.toString()));
 
 	}
 

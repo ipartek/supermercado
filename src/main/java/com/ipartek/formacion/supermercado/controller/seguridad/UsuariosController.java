@@ -29,9 +29,11 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 public class UsuariosController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final static Logger LOG = Logger.getLogger(UsuariosController.class);
-	private static final String VIEW_TABLA = "usuarios/index.jsp";
+	private static final String VIEW_TABLA_ACTIVOS = "usuarios/index.jsp";
+	private static final String VIEW_TABLA_SIN_VALIDAR = "usuarios/listasinvalidar.jsp";
+	private static final String VIEW_TABLA_BAJA = "usuarios/listabaja.jsp";
 	private static final String VIEW_FORM = "usuarios/formulario.jsp";
-	private static String vistaSeleccionda = VIEW_TABLA;
+	private static String vistaSeleccionda = VIEW_TABLA_ACTIVOS;
 	private static UsuarioDAO dao;
 
 	ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -39,7 +41,9 @@ public class UsuariosController extends HttpServlet {
 
 	// Acciones
 
-	private static final String ACCION_LISTAR = "listar";
+	private static final String ACCION_LISTAR_ACTIVOS = "listar_activos";
+	private static final String ACCION_LISTAR_SIN_VALIDAR = "listar_sinvalidar";
+	private static final String ACCION_LISTAR_BAJA = "listar_baja";
 	private static final String ACCION_FORMULARIO = "formulario";
 	private static final String ACCION_GUARDAR = "guardar"; // Crear y modificar
 	private static final String ACCION_ELIMINAR = "eliminar";
@@ -80,8 +84,14 @@ public class UsuariosController extends HttpServlet {
 		try {
 
 			switch (pAccion) {
-			case ACCION_LISTAR:
-				listar(request, response);
+			case ACCION_LISTAR_ACTIVOS:
+				listarActivos(request, response);
+				break;
+			case ACCION_LISTAR_SIN_VALIDAR:
+				listarSinValidar(request, response);
+				break;
+			case ACCION_LISTAR_BAJA:
+				listarBaja(request, response);
 				break;
 			case ACCION_ELIMINAR:
 				eliminar(request, response);
@@ -93,7 +103,7 @@ public class UsuariosController extends HttpServlet {
 				formulario(request, response);
 				break;
 			default:
-				listar(request, response);
+				listarActivos(request, response);
 				break;
 			}
 
@@ -147,11 +157,15 @@ public class UsuariosController extends HttpServlet {
 		String pNombre = request.getParameter("nombre");
 		String pPassword = request.getParameter("password");
 		String pRol = request.getParameter("rolId");
+		String pImagen = request.getParameter("imagen");
+		String pValidado = request.getParameter("validadoId");
 
 		Usuario user = new Usuario();
 		user.setId(Integer.parseInt(pId));
 		user.setNombre(pNombre);
 		user.setContrasenia(pPassword);
+		user.setImagen(pImagen);
+		user.setValidado(Integer.parseInt(pValidado));
 		
 		Rol rol = new Rol();
 		rol.setId(Integer.parseInt(pRol));
@@ -185,8 +199,8 @@ public class UsuariosController extends HttpServlet {
 					LOG.error("Error al crear un nuevo usuario. Datos del usuario: " + user.toString() + "\n ERROR: " + e);
 				}
 
-				request.setAttribute("mensajeAlerta", new Alerta("Producto agregado correctamente :)", Alerta.TIPO_SUCCESS));
-				this.listar(request, response);
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Producto agregado correctamente :)"));
+				this.listarActivos(request, response);
 
 			} else {
 
@@ -200,18 +214,18 @@ public class UsuariosController extends HttpServlet {
 					
 					LOG.error("El ID pasado no es un numero. ERROR: " + e);
 					
-					request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el administrador.", Alerta.TIPO_DANGER));
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el administrador."));
 					
 				} catch (Exception e) {
 					
 					LOG.error("Error al actualizar usuario. Datos usuario: " + user.toString() + "\n ERROR: " + e);
 					
-					request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador.", Alerta.TIPO_DANGER));
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador."));
 				}
 
-				request.setAttribute("mensajeAlerta", new Alerta("Usuario modificado correctamente :)", Alerta.TIPO_SUCCESS));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Usuario modificado correctamente :)"));
 
-				this.listar(request, response);
+				this.listarActivos(request, response);
 
 			}
 
@@ -251,15 +265,15 @@ public class UsuariosController extends HttpServlet {
 				
 			} catch (MySQLIntegrityConstraintViolationException e1) {
 				
-				request.setAttribute("mensajeAlerta", new Alerta("No se puede eliminar un usuario con productos asociados >:(", Alerta.TIPO_DANGER));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede eliminar un usuario con productos asociados >:("));
 				
-				this.listar(request, response);
+				this.listarActivos(request, response);
 				
 			} catch (Exception e) {
 				
 				LOG.error("El ID pasado no es un numero. ERROR: " + e);
 				
-				request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el administrador.", Alerta.TIPO_DANGER));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el administrador."));
 			} 
 			alerta.setTexto("El usuario " + user.toString() + " ha sido eliminado con exito.");
 			alerta.setTipo(Alerta.TIPO_SUCCESS);
@@ -273,14 +287,28 @@ public class UsuariosController extends HttpServlet {
 
 		request.setAttribute("mensajeAlerta", alerta);
 
-		this.listar(request, response);
+		this.listarActivos(request, response);
 
 	}
 
-	private void listar(HttpServletRequest request, HttpServletResponse response) {
+	private void listarActivos(HttpServletRequest request, HttpServletResponse response) {
 
 		request.setAttribute("usuarios", dao.getAll());
-		vistaSeleccionda = VIEW_TABLA;
+		vistaSeleccionda = VIEW_TABLA_ACTIVOS;
+
+	}
+	
+	private void listarSinValidar(HttpServletRequest request, HttpServletResponse response) {
+
+		request.setAttribute("usuarios", dao.getAllInactivos());
+		vistaSeleccionda = VIEW_TABLA_SIN_VALIDAR;
+
+	}
+	
+	private void listarBaja(HttpServletRequest request, HttpServletResponse response) {
+
+		request.setAttribute("usuarios", dao.getAllBaja());
+		vistaSeleccionda = VIEW_TABLA_BAJA;
 
 	}
 
