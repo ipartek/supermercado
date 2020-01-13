@@ -27,6 +27,8 @@ public class LoginController extends HttpServlet {
 
 	private static UsuarioDAO usuarioDao = UsuarioDAO.getInstance();
 
+	private static boolean isRedirect = false;
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -47,10 +49,11 @@ public class LoginController extends HttpServlet {
 
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("contrasenya");
+		Usuario usuario = new Usuario();
 
 		try {
 
-			Usuario usuario = usuarioDao.exist(nombre, pass);
+			usuario = usuarioDao.exist(nombre, pass);
 
 			if (usuario != null) {
 
@@ -60,7 +63,7 @@ public class LoginController extends HttpServlet {
 				session.setMaxInactiveInterval(60 * 3); // 3min
 
 				if (usuario.getRol().getId() == Rol.ROL_ADMIN) {
-
+					isRedirect = false;
 					view = "seguridad/index.jsp"; // accedemos la BACK-OFFICE
 
 				} else {
@@ -68,14 +71,14 @@ public class LoginController extends HttpServlet {
 					Usuario u = (Usuario) request.getSession().getAttribute("usuarioLogeado");
 					usuarioDao.getById(u.getId());
 					request.setAttribute("miUsuario", u);
-					// view = "mipanel/index.jsp"; // accedemos la FRONT-OFFICE
-					// response.sendRedirect(request.getContextPath() + "/mipanel");
+					isRedirect = true;
+					view = "mipanel/index.jsp"; // accedemos la FRONT-OFFICE
+
 				}
 
 			} else {
 
-				request.setAttribute("mensajeAlerta",
-						new Alerta(Alerta.TIPO_DANGER, "Credenciales incorrectas, prueba de nuevo"));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Debe logearse, prueba de nuevo"));
 
 			}
 		} catch (Exception e) {
@@ -83,7 +86,6 @@ public class LoginController extends HttpServlet {
 		} finally {
 
 			request.getRequestDispatcher(view).forward(request, response);
-			// response.sendRedirect(request.getContextPath() + "/mipanel/");
 
 		}
 
