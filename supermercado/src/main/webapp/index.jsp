@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="pagina" value="inicio" scope="request"></c:set>
 
 <%@ include file="includes/header.jsp" %>   
     	

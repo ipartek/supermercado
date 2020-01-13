@@ -31,7 +31,7 @@
 
   </head>
   <body id="top">
-	  
+  
     <nav class="site-header sticky-top py-1">
 		<div class="container d-flex flex-column flex-md-row justify-content-between">
 			<a class="py-2" href="inicio"> 
@@ -93,6 +93,33 @@
 					Sesión</a>
 				<a href="seguridad/" class="py-2 d-none d-md-inline-block"><i class="fas fa-user fa-sm bg-secondary"></i>${usuarioLogeado.nombre}</a>
 			</c:if>
+			<c:if test="${pagina == 'inicio' }">
+				<form action="inicio" method="post">
+				
+					<div class="row">
+						<div class="col-5">
+							<div class="form-group">
+							
+								<select class="browser-default custom-select" name="categoria">
+									<option value="" disabled selected>Selecciona una categoría</option>
+									<c:forEach items="${categorias}" var="c">
+										<option value="${c.id}">${c.nombre}</option>
+									</c:forEach>
+									
+								</select>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="form-group">
+								<input type="text" name="textoBuscado" class="form-control"placeholder="Introduce lo que deseas buscar">				
+							</div>
+						</div>
+						<div class="col-3">
+							<input type="submit" class="btn btn-primary btn-block">
+						</div>
+					</div>
+				</form>
+			</c:if><!-- Cierre if -->
 		</div>
 	</nav>
 

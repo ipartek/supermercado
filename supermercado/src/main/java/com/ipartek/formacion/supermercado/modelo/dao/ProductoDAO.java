@@ -298,8 +298,8 @@ public class ProductoDAO implements IProductoDAO {
 	}
 
 	
-	public Producto getByName(String nombreProducto) {
-
+	public List<Producto> getByName(String nombreProducto) {
+		ArrayList<Producto> listaProductos = new ArrayList<Producto>();
 		Producto p = null;
 		
 
@@ -314,6 +314,7 @@ public class ProductoDAO implements IProductoDAO {
 
 				while (rs.next()) {
 					p = mapper(rs);
+					listaProductos.add(p);
 				}
 			}
 
@@ -321,11 +322,11 @@ public class ProductoDAO implements IProductoDAO {
 			e.printStackTrace();
 		}
 
-		return p;
+		return listaProductos;
 	}
 
-	public Producto getByIdCategoria(int idCategoria) {
-
+	public List<Producto> getByIdCategoria(int idCategoria) {
+		ArrayList<Producto> listaProductos = new ArrayList<Producto>();
 		Producto p = null;
 		
 		try (Connection con = ConnectionManager.getConnection();
@@ -339,6 +340,7 @@ public class ProductoDAO implements IProductoDAO {
 
 				while (rs.next()) {
 					p = mapper(rs);
+					listaProductos.add(p);
 				}
 			}
 
@@ -346,11 +348,11 @@ public class ProductoDAO implements IProductoDAO {
 			e.printStackTrace();
 		}
 
-		return p;
+		return listaProductos ;
 	}
 
-	public Producto getByIdCategoriaAndProducto(int idCategoria, String nProducto) {
-
+	public List<Producto> getByIdCategoriaAndProducto(int idCategoria, String nProducto) {
+		ArrayList<Producto> listaProductos = new ArrayList<Producto>();
 		Producto p = null;
 		
 		try (Connection con = ConnectionManager.getConnection();
@@ -365,6 +367,7 @@ public class ProductoDAO implements IProductoDAO {
 
 				while (rs.next()) {
 					p = mapper(rs);
+					listaProductos.add(p);
 				}
 			}
 
@@ -372,7 +375,7 @@ public class ProductoDAO implements IProductoDAO {
 			e.printStackTrace();
 		}
 
-		return p;
+		return listaProductos;
 	}
 	
 	/**
