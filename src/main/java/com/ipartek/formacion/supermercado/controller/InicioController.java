@@ -68,12 +68,15 @@ public class InicioController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		int cId = Integer.parseInt(request.getParameter("id"));
+		String pNombre = request.getParameter("nombre");
 		
 		//llamar al DAO capa modelo
-		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAll();
+		//ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAll();
 		ArrayList<Categoria> categorias = (ArrayList<Categoria>) daoCategoria.getAll();
 		
-		
+		//filtro/buscador: 
+		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAllBuscador(cId, pNombre);
 		
 		request.setAttribute("productos", productos );		
 		request.setAttribute("categorias", categorias );	
