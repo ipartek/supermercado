@@ -22,6 +22,9 @@ DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE IF NOT EXISTS `categoria` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL DEFAULT '0',
+  `fecha_alta` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_baja` timestamp NULL DEFAULT NULL,
+  `fecha_modificacion` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
@@ -29,16 +32,16 @@ CREATE TABLE IF NOT EXISTS `categoria` (
 -- Volcando datos para la tabla supermercado.categoria: ~9 rows (aproximadamente)
 DELETE FROM `categoria`;
 /*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
-INSERT INTO `categoria` (`id`, `nombre`) VALUES
-	(14, '0categoria'),
-	(3, 'electrodomesticos'),
-	(8, 'fruteria'),
-	(1, 'mock1578903973768'),
-	(2, 'musica'),
-	(4, 'nueva'),
-	(5, 'nueva2'),
-	(6, 'otra'),
-	(7, 'otra333');
+INSERT INTO `categoria` (`id`, `nombre`, `fecha_alta`, `fecha_baja`, `fecha_modificacion`) VALUES
+	(1, 'mock1578903973768', '2020-01-13 12:55:48', NULL, NULL),
+	(2, 'musica', '2020-01-13 12:55:48', NULL, NULL),
+	(3, 'electrodomesticos', '2020-01-13 12:55:48', NULL, NULL),
+	(4, 'nueva', '2020-01-13 12:55:48', NULL, NULL),
+	(5, 'nueva2', '2020-01-13 12:55:48', NULL, NULL),
+	(6, 'otra', '2020-01-13 12:55:48', '2020-01-13 13:19:06', NULL),
+	(7, 'otra333', '2020-01-13 12:55:48', NULL, NULL),
+	(8, 'fruteria', '2020-01-13 12:55:48', NULL, NULL),
+	(14, '0categoria', '2020-01-13 12:55:48', NULL, NULL);
 /*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
 
 -- Volcando estructura para tabla supermercado.historico
@@ -145,15 +148,16 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   UNIQUE KEY `nombre` (`nombre`),
   KEY `FK_rol` (`id_rol`),
   CONSTRAINT `FK_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado.usuario: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado.usuario: ~4 rows (aproximadamente)
 DELETE FROM `usuario`;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT INTO `usuario` (`id`, `nombre`, `contrasenia`, `id_rol`, `fecha_baja`, `fecha_alta`, `fecha_modificacion`) VALUES
 	(1, 'aa', 'aa', 2, NULL, '2020-01-10 13:45:04', '2020-01-10 13:45:04'),
 	(4, 'dd', 'dd', 1, NULL, '2020-01-10 13:45:04', '2020-01-10 13:45:04'),
-	(7, 'ssess', 'sssss', 1, NULL, '2020-01-10 13:50:41', '2020-01-10 13:56:42');
+	(7, 'ssess', 'sssss', 1, NULL, '2020-01-10 13:50:41', '2020-01-10 13:56:42'),
+	(10, 'usuarioBorraado', 'usuarioBorrado', 1, '2020-01-13 13:28:14', '2020-01-13 12:58:42', '2020-01-13 13:28:14');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento supermercado.pa_categoria_delete
@@ -163,8 +167,12 @@ CREATE PROCEDURE `pa_categoria_delete`(
 	IN `pId` INT
 )
 BEGIN
+DECLARE numero_productos INT;
+SET numero_productos = (SELECT COUNT(*) FROM producto p WHERE p.id_categoria = pId);
 
-	DELETE FROM categoria WHERE id = pId;
+IF numero_productos = 0 THEN
+	UPDATE categoria c SET c.fecha_baja = CURRENT_TIMESTAMP() WHERE c.id = pId;
+END IF;
 
 END//
 DELIMITER ;
@@ -177,7 +185,7 @@ BEGIN
 
    	-- nuestro primer PA
    	/*  tiene pinta que tambien comentarios de bloque */
-    SELECT id, nombre FROM categoria ORDER BY nombre ASC LIMIT 500;
+    SELECT id, nombre FROM categoria c WHERE c.fecha_baja IS NULL ORDER BY nombre ASC LIMIT 500;
 
     -- desde java executeQuery
     -- retorna ResultSet
@@ -193,7 +201,7 @@ CREATE PROCEDURE `pa_categoria_get_by_id`(
 )
 BEGIN
 
-	SELECT id, nombre FROM categoria WHERE id = pId;
+	SELECT id, nombre FROM categoria c WHERE c.id = pId AND c.fecha_baja IS NULL ;
 
 END//
 DELIMITER ;
@@ -227,7 +235,7 @@ CREATE PROCEDURE `pa_categoria_update`(
 BEGIN
 
 
-	UPDATE categoria SET nombre = pNombre WHERE id = pId;
+	UPDATE categoria c SET c.nombre = pNombre AND c.fecha_modificacion = CURRENT_TIMESTAMP() WHERE id = pId;
 
 	-- desde java executeUpdate, retorna affectedRows int
 
@@ -451,6 +459,19 @@ SELECT 	u.id 'id_usuario',
 			r.nombre 'nombre_rol'
 			FROM usuario u, rol r
 			WHERE u.id_rol = r.id AND u.nombre = p_nombre_usuario AND contrasenia = p_contrasenia ;
+
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento supermercado.pa_usuario_delete_logico
+DROP PROCEDURE IF EXISTS `pa_usuario_delete_logico`;
+DELIMITER //
+CREATE PROCEDURE `pa_usuario_delete_logico`(
+	IN `p_uId` INT
+)
+BEGIN
+
+UPDATE usuario SET fecha_baja = CURRENT_TIMESTAMP() WHERE  id = p_uId;
 
 END//
 DELIMITER ;
