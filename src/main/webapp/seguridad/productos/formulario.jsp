@@ -76,6 +76,10 @@
 							<button type="button" class="btn btn-warning" data-toggle="modal"
 								data-target="#eliminarModal">Eliminar</button>
 						</c:if>
+						<c:if test="${producto.fechaEliminacion!=null}">
+							<button type="button" class="btn btn-success" data-toggle="modal"
+								data-target="#reactivarModal">Reactivar</button>
+						</c:if>
 					</div>
 					<!-- card-body -->
 				</div>
@@ -84,7 +88,7 @@
 
 		</div>
 
-		<!-- Modal -->
+		<!-- Modal Eliminar-->
 		<div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
@@ -106,8 +110,32 @@
 				</div>
 			</div>
 		</div>
-		<!-- FIn del Modal -->
-
+		<!-- FIn del Modal Eliminar -->
+		
+		<!-- Modal Reactivar-->
+		<div class="modal fade" id="reactivarModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Reactivar</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">¿Seguro que quieres reactivarlo?</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">No</button>
+						<a href="seguridad/productos?accion=reactivar&id=${producto.id}"
+							class="btn btn-warning">Reactivar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- FIn del Modal Reactivar -->
+		
 		<!-- / .col-sm-6 -->
 		<div class="col-sm-5 p-3 bg-register-image card-body shadow bg-white"
 			id="container-img"></div>

@@ -82,7 +82,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		u.imagen AS 'imagen_usuario', " + "		u.fecha_creacion AS 'fecha_creacion_usuario',"
 			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
 			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
-			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? "
+			+ "WHERE p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? "
 			+ "ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_GET_BY_ID_BY_USER = "SELECT " + "		p.id AS 'id_producto', "
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
@@ -103,7 +103,8 @@ public class ProductoDAO implements IProductoDAO {
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_producto = ?;";
 	private static final String SQL_DELETE_LOGICO = "UPDATE producto SET fecha_eliminacion = CURRENT_TIMESTAMP() WHERE id = ?;";
 	private static final String SQL_DELETE_LOGICO_BY_USER = "UPDATE producto SET fecha_eliminacion = CURRENT_TIMESTAMP() WHERE id = ? AND id_usuario=?;";
-
+	private static final String SQL_REACTIVATE = "UPDATE producto SET fecha_eliminacion = NULL WHERE id = ?;";
+	
 	private ProductoDAO() {
 		super();
 	}
@@ -488,6 +489,33 @@ public class ProductoDAO implements IProductoDAO {
 		} catch (Exception e) {
 			LOG.error(e);
 			throw e;
+		}
+
+		return resultado;
+	}
+	
+	public Producto reactivate(int id) throws Exception {
+
+		LOG.debug("Entra en el reactivate");
+
+		Producto resultado = null;
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_REACTIVATE);) {
+
+			pst.setInt(1, id);
+
+			LOG.debug("Ejecuta la query: " + pst.toString());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resultado = getById(id);
+			} else {
+				LOG.fatal("El update esta mal, ha afectado a mas de un producto");
+			}
+
+		} catch (Exception e) {
+			LOG.error(e);
 		}
 
 		return resultado;
