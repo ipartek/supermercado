@@ -181,23 +181,24 @@ public class ProductoDAO implements IProductoDAO {
 		return resultado;
 	}
 
-	public List<Producto> getAllByUser(int id) {
+	public List<Producto> getAllById(int id) throws Exception {
+		LOG.trace("getAll by id: " + id);
 
-		LOG.debug("Entra en getAllByUser");
-
-		ArrayList<Producto> lista = new ArrayList<Producto>();
+		List<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_BY_USER)) {
+				CallableStatement cs = con.prepareCall(" { CALL pa_productos_busqueda(?,?) } ")) {
 
-			pst.setInt(1, id);
 
-			LOG.debug("Ejecuta la query: " + pst.toString());
-			ResultSet rs = pst.executeQuery();
+			cs.setInt(1, id);
 
-			while (rs.next()) {
-				Producto p = mapper(rs);
-				lista.add(p);
+			LOG.debug("Ejecuta la query: " + cs.toString());
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto c = mapper(rs);
+					resultado.add(c);
+				}
 
 			}
 
@@ -205,26 +206,25 @@ public class ProductoDAO implements IProductoDAO {
 			LOG.error(e);
 			e.printStackTrace();
 		}
-
-		return lista;
+		return resultado;
 	}
 
 	public List<Producto> getAllInactive() {
 
-		LOG.debug("Entra en getAllInactive");
+		LOG.debug("Entra en producto getAllToInactive");
 
-		ArrayList<Producto> lista = new ArrayList<Producto>();
+		ArrayList<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_INACTIVE);
-				ResultSet rs = pst.executeQuery()) {
+				CallableStatement cs = con.prepareCall( " { CALL pa_producto_get_all_inactive() } ")) {
 
-			LOG.debug("Ejecuta la query: " + pst.toString());
+			LOG.debug("Ejecuta la query: " + cs.toString());
 
-			while (rs.next()) {
-
-				Producto p = mapper(rs);
-				lista.add(p);
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto p = mapper(rs);
+					resultado.add(p);
+				}
 
 			}
 
@@ -232,26 +232,25 @@ public class ProductoDAO implements IProductoDAO {
 			LOG.error(e);
 			e.printStackTrace();
 		}
-
-		return lista;
+		return resultado;
 	}
 
 	public List<Producto> getAllToValidate() {
 
-		LOG.debug("Entra en getAllToValidate");
+		LOG.debug("Entra en producto getAllToValidate");
 
-		ArrayList<Producto> lista = new ArrayList<Producto>();
+		ArrayList<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_TOVALIDATE);
-				ResultSet rs = pst.executeQuery()) {
+				CallableStatement cs = con.prepareCall( " { CALL pa_producto_get_all_to_validate() } ")) {
 
-			LOG.debug("Ejecuta la query: " + pst.toString());
+			LOG.debug("Ejecuta la query: " + cs.toString());
 
-			while (rs.next()) {
-
-				Producto p = mapper(rs);
-				lista.add(p);
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto p = mapper(rs);
+					resultado.add(p);
+				}
 
 			}
 
@@ -259,8 +258,7 @@ public class ProductoDAO implements IProductoDAO {
 			LOG.error(e);
 			e.printStackTrace();
 		}
-
-		return lista;
+		return resultado;
 	}
 
 	public List<Producto> getAllFiltros(int idCategoria, String nombre) throws Exception {
@@ -295,20 +293,20 @@ public class ProductoDAO implements IProductoDAO {
 	@Override
 	public List<Producto> getAll() {
 
-		LOG.debug("Entra en getAll");
+		LOG.debug("Entra en producto getAll");
 
-		ArrayList<Producto> lista = new ArrayList<Producto>();
+		ArrayList<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL);
-				ResultSet rs = pst.executeQuery()) {
+				CallableStatement cs = con.prepareCall( " { CALL pa_producto_get_all() } ")) {
 
-			LOG.debug("Ejecuta la query: " + pst.toString());
+			LOG.debug("Ejecuta la query: " + cs.toString());
 
-			while (rs.next()) {
-
-				Producto p = mapper(rs);
-				lista.add(p);
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto p = mapper(rs);
+					resultado.add(p);
+				}
 
 			}
 
@@ -316,8 +314,7 @@ public class ProductoDAO implements IProductoDAO {
 			LOG.error(e);
 			e.printStackTrace();
 		}
-
-		return lista;
+		return resultado;
 	}
 
 	public List<Producto> getAllByName(String nombre) {
@@ -696,6 +693,12 @@ public class ProductoDAO implements IProductoDAO {
 		}
 
 		return pojo;
+	}
+
+	@Override
+	public List<Producto> getAllByUser(int idProducto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
