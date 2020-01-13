@@ -6,24 +6,29 @@
 		
 			<form class="col d-flex flex-row" action="inicio?accion=buscar" method="post">
 	
-					<div class="form-group d-flex flex-row pl-5">		
-						<label class="mr-3 py-1"> Categoria</label>
+					<div class="form-group d-flex flex-row select-busqueda">		
 						<select name="categoriaId" class="custom-select">
+							<option value="0"> Seleccione una categoria </option>
 							<c:forEach items="${categorias}" var="c">
 								<option value="${c.id}">${c.nombre}</option>	
 							</c:forEach>
 						</select>
 					</div>
-					
-					 <div class="form-group col">
-                           <input type="text" 
-                                  class="form-control"
-                                  name="producto"
-                                  id="producto" 
-                                  value=""
-                                  placeholder="Nombre del producto..."
-                                  aria-describedby="nombreHelp">
-                       </div>
+                       
+                    <div class="container">
+					<div class="input-group">
+						<input type="text" 
+							   class="form-control" 
+							   name="producto"
+                               id="producto" 
+                               value=""
+							   placeholder="Buscar por..."
+							   aria-describedby="productoHelp">
+					      <span class="input-group-btn">
+					        <button class="btn btn-search" type="submit"><i class="fa fa-search fa-fw"></i> Buscar </button>
+					      </span>
+					</div>
+					</div>
 					
 			</form>
 	

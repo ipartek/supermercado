@@ -94,7 +94,7 @@
 						
 						<div class="form-group">		
 							<label>Validado</label>
-							<select name="categoriaId" class="custom-select">
+							<select name="validadoId" class="custom-select">
 								<option value="0"  ${(producto.validado eq 0)?"selected":""} >NO</option>
 								<option value="1"  ${(producto.validado eq 1)?"selected":""} >SI</option>
 							</select>
