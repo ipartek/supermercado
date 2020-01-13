@@ -1,5 +1,6 @@
 package com.ipartek.formacion.supermercado.modelo.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
+import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Rol;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -21,13 +24,13 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	private static final String SQL_GET_ALL ="{CALL pa_usuario_getall()}";
 
-	private static final String SQL_GET_BY_ID = "{CALL pa_usuario_get_byid()}";
+	private static final String SQL_GET_BY_ID = "{CALL pa_usuario_get_byid(?)}";
 
-	private static final String SQL_GET_INSERT = "{CALL pa_usuario_insert()}";
+	private static final String SQL_GET_INSERT = "{CALL pa_usuario_insert(? , ? , ? , ?)}";
 
-	private static final String SQL_GET_UPDATE = "{CALL pa_usuario_update()}";
+	private static final String SQL_GET_UPDATE = "{CALL pa_usuario_update(? , ? , ? , ?)}";
 
-	private static final String SQL_GET_DELETE = "{CALL pa_usuario_delete_logico()}";
+	private static final String SQL_GET_DELETE = "{CALL pa_usuario_delete_logico(?)}";
 
 
 
@@ -71,26 +74,100 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public Usuario getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario u = null;
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement pst = con.prepareCall(SQL_GET_BY_ID);) {
+
+			// sustituyo parametros en la SQL, en este caso 1º ? por id
+			pst.setInt(1, id);
+			LOG.debug(pst);
+
+			// ejecuto la consulta
+			try (ResultSet rs = pst.executeQuery()) {
+
+				while (rs.next()) {
+					u = mapper(rs);
+				}
+			}
+
+		} catch (SQLException e) {
+			LOG.error(e);
+		}
+
+		return u;
+		
 	}
 
 	@Override
 	public Usuario delete(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Usuario registro = null;
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement pst = con.prepareCall(SQL_GET_DELETE)) {
+
+			pst.setInt(1, id);
+
+			LOG.debug(pst);
+
+			registro = this.getById(id); // recuperar
+
+			int affectedRows = pst.executeUpdate(); // eliminar
+			if (affectedRows != 1) {
+				registro = null;
+				throw new Exception("No se puede eliminar " + registro);
+			}
+
+		}
+		return registro;
 	}
 
 	@Override
 	public Usuario update(int id, Usuario pojo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall(SQL_GET_UPDATE)) {
+
+			
+			cs.setString(1, pojo.getNombre());
+			cs.setString(2, pojo.getContrasenia());
+			cs.setInt(3, pojo.getRol().getId());
+			cs.setInt(4, id);
+			
+			LOG.debug(cs);
+
+			int affectedRows = cs.executeUpdate(); // lanza una excepcion si nombre repetido
+			if (affectedRows == 1) {
+				pojo.setId(id);
+			} else {
+				throw new Exception("No se encontro registro o el registro tiene productos relacionados id =" + id);
+			}
+
+		}
+		return pojo;
 	}
 
 	@Override
 	public Usuario create(Usuario pojo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall(SQL_GET_INSERT)) {
+
+			cs.setString(1, pojo.getNombre());
+			cs.setString(2, pojo.getContrasenia());
+			cs.setInt(3, pojo.getRol().getId());
+
+
+			// registro el paremetro de salida 2º ?
+			cs.registerOutParameter(8, java.sql.Types.INTEGER);
+
+			LOG.debug(cs);
+			int affectedRows = cs.executeUpdate();
+			if (affectedRows == 1) {
+				pojo.setId(cs.getInt(4));
+			}
+
+		}
+
+		return pojo;
 	}
 
 	@Override
