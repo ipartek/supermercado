@@ -22,20 +22,17 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static ProductoDAO INSTANCE;
 
-	private static final String SQL_GET_ALL = "SELECT p.id'id_producto',p.nombre'nombre_producto',"
-			+ "p.descripcion'descripcion_producto',p.precio'precio_producto',"
-			+ "p.imagen'imagen_producto',p.descuento'descuento_precio',"
-			+ "p.id_categoria 'id_categoria',"
-			+ "p.id_usuario 'id_usuario',"
-			+ "p.fecha_alta'fechaAlta',p.fecha_modificacion'fechaModificada',p.fecha_baja'fechaBaja',"
-			+ "c.nombre'nombre_categoria',u.id'id_usuario',u.nombre'nombre_usuario' "
-			+ " FROM producto p, usuario u, categoria c" + "WHERE p.id_usuario=u.id AND u.id=?"
-			+ " AND p.id_categoria=c.id"
-			+ " ORDER BY p.id ASC LIMIT 500;";
+	private static final String SQL_GET_ALL = "SELECT p.id as 'id_producto',  p.nombre as 'nombre_producto',\r\n"
+			+ "			p.descripcion as 'descripcion_producto',p.precio as 'precio_producto',\r\n"
+			+ "			p.imagen as 'imagen_producto',p.descuento as 'descuento_precio',p.id_categoria 'id_categoria',\r\n"
+			+ "			p.id_usuario 'id_usuario',p.fecha_alta as 'fechaAlta',\r\n"
+			+ "			p.fecha_modificacion as 'fechaModificada',p.fecha_baja as 'fechaBaja',\r\n"
+			+ "			c.nombre as'nombre_categoria', u.nombre as 'nombre_usuario' \r\n"
+			+ "			FROM producto p, usuario u, categoria c WHERE p.id_usuario=u.id AND p.id_categoria=c.id\r\n"
+			+ "			ORDER BY p.id ASC LIMIT 500;";
 
 	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id'id_producto',p.nombre'nombre_producto',p.descripcion'descripcion_producto',p.precio'precio_producto',p.imagen'imagen_producto',p.descuento'descuento_precio',p.id_categoria 'id_categoria', p.fecha_alta'fechaAlta',p.fecha_modificacion 'fechaModificada',p.fecha_baja 'fechaBaja, c.nombre'nombre_categoria',u.id'id_usuario',u.nombre'nombre_usuario'"
-			+ " FROM producto p, usuario u categoria c"
-			+ " WHERE p.id_usuario = u.id AND u.id = ?"
+			+ " FROM producto p, usuario u categoria c" + " WHERE p.id_usuario = u.id AND u.id = ?"
 			+ " ORDER BY p.id ASC LIMIT 500;";
 
 	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria', p.fecha_alta'fechaAlta',p.fecha_modificacion 'fechaModificada',p.fecha_baja'fechaBaja', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
@@ -75,6 +72,7 @@ public class ProductoDAO implements IProductoDAO {
 				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL);
 				ResultSet rs = pst.executeQuery()) {
 
+			LOG.debug(pst);
 			while (rs.next()) {
 
 				lista.add(mapper(rs));
