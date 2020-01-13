@@ -213,7 +213,7 @@ public class ProductosController extends HttpServlet {
 			mensaje.append("</p>");
 			
 		}
-		
+		  
 		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, mensaje.toString() ));
 		
 	}

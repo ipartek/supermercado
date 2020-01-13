@@ -46,6 +46,7 @@ public class ProductoDAO implements IProductoDAO {
 	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
 	
 	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ? ;";
+	private static final String SQL_DELETE_LOGICO = "UPDATE producto SET fecha_baja = NOW() WHERE id = ? ;";
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ? ;";
 	
 
@@ -170,7 +171,7 @@ public class ProductoDAO implements IProductoDAO {
 
 		Producto registro = null;
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DELETE)) {
+				PreparedStatement pst = con.prepareStatement(SQL_DELETE_LOGICO)) {
 
 			pst.setInt(1, id);
 
