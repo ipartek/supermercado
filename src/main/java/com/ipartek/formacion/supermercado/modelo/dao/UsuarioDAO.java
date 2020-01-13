@@ -181,7 +181,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 		return resul;
 	}
-
+  
 	private Usuario mapper(ResultSet rs) throws SQLException {
 
 		Usuario u = new Usuario();
