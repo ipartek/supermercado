@@ -26,6 +26,15 @@
 	</div>
 
 	
-
+	<script src ="/js/md5.js"> </script>
+	
+	<script>
+			$.post(
+			  'login.jsp', 
+			  { user: nombre, pass: CryptoJS.MD5(contrasenya) },
+			  onLogin, 
+			  'json' );
+	
+	</script>
 
 <%@ include file="includes/footer.jsp" %> 
