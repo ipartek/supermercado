@@ -32,7 +32,6 @@ public class InicioController extends HttpServlet {
 	private static ProductoDAO daoProducto;
 	private static CategoriaDAO daoCategoria;
 
-
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -40,7 +39,6 @@ public class InicioController extends HttpServlet {
 		daoCategoria = CategoriaDAO.getInstance();
 
 	}
-
 
 	@Override
 	public void destroy() {
@@ -52,64 +50,64 @@ public class InicioController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		if ( null == ConnectionManager.getConnection() ) {
-			resp.sendRedirect( req.getContextPath() + "/error.jsp");
-		}else {
+		if (null == ConnectionManager.getConnection()) {
+			resp.sendRedirect(req.getContextPath() + "/error.jsp");
+		} else {
 
 			// llama a GET o POST
 			super.service(req, resp);
 		}
 	}
 
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doPost(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-		//llamar al DAO capa modelo
+		// llamar al DAO capa modelo
 
-		ArrayList<Categoria> categorias = (ArrayList<Categoria>) daoCategoria.getAll();
-
-		request.setAttribute("categorias", categorias );
-
-		//filtro productos
+		// filtro productos
 		LOG.trace("Empezando parte de filtro...");
 		String pNombre = request.getParameter("nombre");
 		String pCategoriaId = request.getParameter("categoriaId");
 
 		int categoriaId = 0;
 
-		if(pCategoriaId != null && pCategoriaId.length() > 0 && pCategoriaId.matches("\\d+") ) {
+		if (pCategoriaId != null && pCategoriaId.length() > 0 && pCategoriaId.matches("\\d+")) {
 			categoriaId = Integer.parseInt(pCategoriaId);
 		}
 
-		if(pNombre == null) {
+		if (pNombre == null) {
 			pNombre = "";
 		}
 
 		LOG.trace("Limpiados los parametros de filtrado...");
 
-		List<Producto> productos =  daoProducto.getAllFiltered(categoriaId, pNombre);
+		List<Producto> productos = daoProducto.getAllFiltered(categoriaId, pNombre);
 
 		LOG.trace("Obtenidos los productos filtrados");
 		for (Producto p : productos) {
 			LOG.trace(p);
 		}
+		
+		request.setAttribute("categorias", daoCategoria.getAll() );
 
-		request.setAttribute("productos", productos );
+		request.setAttribute("productos", productos);
 
-		request.setAttribute("mensajeAlerta", new Alerta( Alerta.TIPO_PRIMARY , "Los últimos productos destacados.") );
+		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
 
 		request.getRequestDispatcher("index.jsp").forward(request, response);
-
 
 	}
 

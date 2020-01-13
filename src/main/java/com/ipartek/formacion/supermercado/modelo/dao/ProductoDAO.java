@@ -82,6 +82,8 @@ public class ProductoDAO implements IProductoDAO {
 	}
 
 	public List<Producto> getAllFiltered(int idCategoria, String nombre) {
+		
+		LOG.trace("idCategoria=" + idCategoria + " nombre=" + nombre);
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -353,9 +355,10 @@ public class ProductoDAO implements IProductoDAO {
 		u.setNombre(rs.getString("nombre_usuario"));
 		p.setUsuario(u);
 
-		Categoria c = p.getCategoria();
+		Categoria c = new Categoria();
 		c.setId(rs.getInt("id_categoria"));
 		c.setNombre(rs.getString("nombre_categoria"));
+		p.setCategoria(c);
 
 		return p;
 	}
