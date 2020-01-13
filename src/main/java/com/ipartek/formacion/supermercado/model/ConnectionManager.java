@@ -36,6 +36,8 @@ public class ConnectionManager {
 				throw new Exception("Data source no encontrado!");
 			}
 
+
+
 			conn = ds.getConnection();
 			conlist.add(conn);
 		} catch (Exception e) {
