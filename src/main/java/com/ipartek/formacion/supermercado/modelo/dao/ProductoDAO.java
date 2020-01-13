@@ -50,6 +50,7 @@ public class ProductoDAO implements IProductoDAO {
 
 			try (ResultSet rs = cs.executeQuery()) {
 				while (rs.next()) {
+					
 					lista.add(mapper(rs));
 				}
 			}
@@ -83,14 +84,12 @@ public class ProductoDAO implements IProductoDAO {
 		return lista;
 	}
 	
-	public List<Producto> getAllInactivos(int validacion){
+	public List<Producto> getAllInactivos(){
 		LOG.trace("Recuperar todos los Productos que estan Inactivos");
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 		
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall("{CALL pa_producto_getallinactivos(?)}");) {
-
-			cs.setInt(1, validacion);
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_getallinactivos()}");) {
 			LOG.debug(cs);
 
 			try (ResultSet rs = cs.executeQuery()) {
@@ -230,16 +229,18 @@ public class ProductoDAO implements IProductoDAO {
 
 		try (Connection con = ConnectionManager.getConnection();
 				CallableStatement cs = con.prepareCall("{CALL pa_producto_update(?,?,?,?,?,?,?,?,?)}");) {
-
-			cs.setString(1, pojo.getNombre());
-			cs.setInt(2, pojo.getCategoria().getId());
-			cs.setInt(3, pojo.getUsuario().getId());
-			cs.setString(4, pojo.getDescripcion());
-			cs.setFloat(5, pojo.getPrecio());
-			cs.setInt(6, pojo.getDescuento());
-			cs.setString(7, pojo.getImagen());
-			cs.setInt(8, pojo.getValidado());
-			cs.setInt(9, id);
+			
+			cs.setInt(1, id);
+			cs.setInt(2, pojo.getUsuario().getId());
+			cs.setInt(3, pojo.getCategoria().getId());
+			cs.setString(4, pojo.getNombre());
+			cs.setString(5, pojo.getDescripcion());
+			cs.setFloat(6, pojo.getPrecio());
+			cs.setInt(7, pojo.getDescuento());
+			cs.setString(8, pojo.getImagen());
+			cs.setInt(9, pojo.getValidado());
+			
+			LOG.debug(cs);
 
 			int affectedRows = cs.executeUpdate(); // lanza una excepcion si nombre repetido
 			if (affectedRows == 1) {
@@ -300,6 +301,9 @@ public class ProductoDAO implements IProductoDAO {
 			cs.setInt(6, pojo.getDescuento());
 			cs.setInt(7, pojo.getValidado());
 
+			
+			LOG.debug(cs);
+			
 			int affectedRows = cs.executeUpdate();
 			if (affectedRows == 1) {
 				// conseguimos el ID que acabamos de crear
@@ -328,8 +332,18 @@ public class ProductoDAO implements IProductoDAO {
 		p.setImagen(rs.getString("imagen"));
 		p.setDescripcion(rs.getString("descripcion"));
 		p.setDescuento(rs.getInt("descuento"));
-		p.setFechaAlta(rs.getString("fecha_alta"));
-		p.setFechaBaja(rs.getString("fecha_baja"));
+		p.setFechaAlta(rs.getTimestamp("fecha_alta").toString());
+		
+		if(rs.getTimestamp("fecha_baja") != null) {
+			
+			p.setFechaBaja(rs.getTimestamp("fecha_baja").toString());
+			
+		} else {
+			
+			p.setFechaBaja("");
+			
+		}
+		
 		p.setValidado(rs.getInt("validado"));
 
 		Usuario u = new Usuario();
@@ -341,8 +355,36 @@ public class ProductoDAO implements IProductoDAO {
 		c.setId(rs.getInt("id_categoria"));
 		c.setNombre(rs.getString("nombre_categoria"));
 		p.setCategoria(c);
+		
+		LOG.debug(p.toString());
 
 		return p;
+	}
+
+	@Override
+	public List<Producto> busqueda(int idCategoria, String searchParam) throws SQLException {
+		LOG.trace("Recuperar todos los Productos que estan Activos");
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+		
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_producto_busqueda(?,?)}");) {
+
+			LOG.debug(cs);
+			
+			cs.setInt(1, idCategoria);
+			cs.setString(2, searchParam);
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					lista.add(mapper(rs));
+				}
+			}
+			
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+		
+		return lista;
 	}
 
 }

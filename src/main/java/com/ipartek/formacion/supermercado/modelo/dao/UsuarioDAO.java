@@ -41,7 +41,27 @@ public class UsuarioDAO implements IUsuarioDAO {
 		LOG.trace("Recuperar todos los Usuarios");
 		List<Usuario> registros = new ArrayList<Usuario>();
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall("{CALL pa_usuario_getall()}");) {
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_getallactivos()}");) {
+
+			LOG.debug(cs);
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					registros.add(mapper(rs));
+				}
+			}
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+		return registros;
+	}
+	
+	@Override
+	public List<Usuario> getAllInactivos() {
+		LOG.trace("Recuperar todos los Usuarios");
+		List<Usuario> registros = new ArrayList<Usuario>();
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_getallinactivos()}");) {
 
 			LOG.debug(cs);
 
@@ -163,7 +183,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 		Usuario resul = null;
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall("{CALL pa_usuario_existe()}");) {
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_exist(?,?)}");) {
 
 			cs.setString(1, nombre);
 			cs.setString(2, contrasenia);

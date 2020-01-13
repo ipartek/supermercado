@@ -48,4 +48,16 @@ public interface IProductoDAO extends IDAO<Producto> {
 	 */
 	public Producto deleteByUser(int idProducto, int idUsuario ) throws SQLException, ProductoException;
 	
+	
+	/**
+	 * Realiza una busqueda de todos los @class Producto que coincidan con el parametro de busqueda o pertenecen a la
+	 * categoria indicada
+	 * @param idCategoria
+	 * @param searchParam
+	 * @return Devuelve una lista con todos los porductos encontrados
+	 * @throws SQLException
+	 */
+	
+	public List<Producto> busqueda(int idCategoria, String searchParam) throws SQLException;
+	
 }
