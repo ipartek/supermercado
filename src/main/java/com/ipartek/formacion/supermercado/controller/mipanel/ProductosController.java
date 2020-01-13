@@ -198,6 +198,9 @@ public class ProductosController extends HttpServlet {
 		Producto pGuardar = new Producto();		
 		pGuardar.setId(id);
 		pGuardar.setNombre(pNombre);
+		pGuardar.setPrecio( Integer.parseInt(pPrecio));
+		pGuardar.setImagen(pImagen);
+		pGuardar.setDescripcion(pDescripcion);		
 		pGuardar.setDescuento( Integer.parseInt(pDescuento));
 		int pIdCategoria = Integer.parseInt(request.getParameter("idCategoria"));
 		
