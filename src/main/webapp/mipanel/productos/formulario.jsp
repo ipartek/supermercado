@@ -3,47 +3,100 @@
 <%@ include file="/includes/header.jsp" %>   
     	
 	<h1>FORMULARIO</h1>
+			
+	<!-- FORMULARIO -->
+	<form action="mipanel/productos" method="post">
 	
-	<form action="mipanel/productos" method="post" class="mb-4">
+		<div class="form-group">
+	        <label for="nombre">Producto</label>
+	        <input type="text" 
+	               class="form-control" 
+	               name="nombre" id="nombre" 
+	               required
+	               value = "${producto.nombre}"
+	               placeholder="Mínimo 2 Máximo 150 caracteres"
+	               aria-describedby="nombreHelp">
+	        <small id="nombreHelp" class="form-text text-muted">Nombre del producto</small>
+	    </div>	   
+	    <!-- 
+	    	quitamos pattern=".{2,150}" para controlarlo en el controlador con las funciones de validación
+	     -->
+
+
+		<div class="form-group">
+	        <label for="precio">Precio</label>
+	        <input type="number" 
+	               class="form-control" 
+	               name="precio" id="precio" 
+	               required
+	               value = "${producto.precio}"
+	               placeholder="Precio en euros sin descuento"
+	               pattern="[0-9]"
+	               min="0" max="100"
+	               step="0.1"
+	               aria-describedby="precioHelp">
+	        <small id="precioHelp" class="form-text text-muted">Precio en euros sin descuento</small>
+		</div>
 		
 		<div class="form-group">
-			<label>Nombre:</label>
-			<input type="text" name="nombre" value="${producto.nombre}" class="form-control" placeholder="mínimo 2 letras, máximo 50">
+	        <label for="imagen">Imagen</label>
+	        <input type="text" 
+	               class="form-control" 
+	               name="imagen" id="imagen" 
+	               required
+	               value = "${producto.imagen}"
+	               placeholder="Escribe aquí la url completa de la imagen"
+	               aria-describedby="imagenHelp">
+	    </div>
+	    
+	    <div class="form-group">
+	        <label for="descripcion">Descripcion</label>
+	        <input type="text" 
+	               class="form-control" 
+	               name="descripcion" id="descripcion" 
+	               required
+	               value = "${producto.descripcion}"
+	               placeholder="Mínimo 2 Máximo 150 caracteres"
+	               pattern=".{2,150}"
+	               aria-describedby="descripcionHelp">
+	    </div>
+	    
+	    <div class="form-group">
+	        <label for="descuento">Descuento %</label>
+	        <input type="number" 
+	               class="form-control" 
+	               name="descuento" id="descuento" 
+	               value = "${producto.descuento}"
+	               placeholder="Descuento en %"
+	               pattern="[0-9]"
+	               min="0" max="100"
+	               aria-describedby="descuentoHelp">
 		</div>
 		
-		<div class="form-group">				
-			<label>Precio:</label>
-			<input type="number" min="0" max="100" name="precio" value="${producto.precio}" class="form-control" placeholder="Precio en euros sin descuento">
-		</div>
 		
 		<div class="form-group">
-			<label>Imagen:</label>
-			<input type="text" name="imagen" value="${producto.imagen}" class="form-control" placeholder="url completa de la imagen">
+	        <label for="idUsuario">ID Usuario</label>
+	        <input type="number" 
+	               class="form-control" 
+	               name="idUsuario" id="idUsuario" 
+	               required
+	               readonly
+	               value = "${producto.usuario.id}"
+	               placeholder="Identificador del usuario del producto"
+	               pattern="[0-9]"
+	               min="0" max="100"
+	               aria-describedby="idUsuarioHelp">
 		</div>
 		
-		<div class="form-group">
-			<label>Descripción:</label>
-			<input type="text" name="descripcion" value="${producto.descripcion}" class="form-control" placeholder="Mínimo 2 Máximo 150 caracteres">
-		</div>
-		
-		<div class="form-group">				
-			<label>Descuento:</label>
-			<input type="number" min="0" max="100" name="descuento" value="${producto.descuento}" class="form-control" placeholder="Descuento en %">
-		</div>	
-		
-		<div class="form-group">				
-			<label>ID Usuario:</label>
-			<input type="number" name="idUsuario" readonly value = "${producto.usuario.id}" class="form-control" placeholder="Descuento en %">
-		</div>
-		
-		<div class="form-group">		
-			<label>Categoría:</label>
+	    
+	    <div class="form-group">		
+			<label>Categoría del producto</label>
 			<select name="idCategoria" class="custom-select">
 				<c:forEach items="${categorias}" var="c">
 					<option value="${c.id}"  ${(c.id eq producto.categoria.id)?"selected":""} >${c.nombre}</option>	
 				</c:forEach>
 			</select>
-		</div>
+		</div>	
 		
 		
 		<input type="hidden" name="id" value="${producto.id}">

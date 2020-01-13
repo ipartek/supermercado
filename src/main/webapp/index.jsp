@@ -28,7 +28,7 @@
 	</div>
 </div>
 
-${categorias}
+<!-- ${categorias} -->
 
 <div class="row contenedor-productos">
 

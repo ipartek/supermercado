@@ -23,6 +23,7 @@ import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoException;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -66,6 +67,8 @@ public class ProductosController extends HttpServlet {
 	String pDescripcion;
 	String pDescuento;
 	
+	String pIdCategoria;
+	
 	
 	
 	@Override
@@ -73,6 +76,8 @@ public class ProductosController extends HttpServlet {
 		super.init(config);
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
+		
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
 	}
@@ -82,6 +87,8 @@ public class ProductosController extends HttpServlet {
 		super.destroy();
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
+		
 		factory = null;
 		validator = null;
 	}
@@ -118,6 +125,8 @@ public class ProductosController extends HttpServlet {
 			
 			//TODO agujero de seguridad, comprobar que el usuario de session sea el propietario del Producto
 			
+			pIdCategoria = request.getParameter("idCategoria");
+			
 			try {
 				
 				switch (pAccion) {
@@ -141,13 +150,13 @@ public class ProductosController extends HttpServlet {
 				
 			}catch (ProductoException e) {
 				
-				LOG.warn(e);
+				LOG.warn("Problema al visualizar el producto" + e);
 				isRedirect = true;
 							
 				
 			}catch (Exception e) {
 				
-				LOG.error(e);
+				LOG.warn("Ha habido algún problema" + e);
 				
 			}finally {
 				if ( isRedirect) {
@@ -176,7 +185,7 @@ public class ProductosController extends HttpServlet {
 			
 		}
 		
-		request.setAttribute("usuarios", daoUsuario.getAll() );
+		request.setAttribute("categorias", daoCategoria.getAll() );
 		request.setAttribute("producto", pEditar );
 		vistaSeleccionda = VIEW_FORM;
 		
@@ -190,10 +199,15 @@ public class ProductosController extends HttpServlet {
 		pGuardar.setId(id);
 		pGuardar.setNombre(pNombre);
 		pGuardar.setDescuento( Integer.parseInt(pDescuento));
+		int pIdCategoria = Integer.parseInt(request.getParameter("idCategoria"));
 		
 		Usuario u = new Usuario();
 		u.setId(uLogeado.getId()); //Evitar que se envie el parametro desde el formulario
 		pGuardar.setUsuario(u);
+		
+		Categoria c = new Categoria();
+		c.setId(pIdCategoria); 
+		pGuardar.setCategoria(c);
 				
 		
 		Set<ConstraintViolation<Producto>> validaciones = validator.validate(pGuardar);
@@ -204,24 +218,27 @@ public class ProductosController extends HttpServlet {
 				try {
 				
 					if ( id > 0 ) {  // modificar
-						
-						daoProducto.updateByUser(id, uLogeado.getId(), pGuardar);		
+						LOG.trace("Modificar datos del producto");
+						daoProducto.updateByUser(id, uLogeado.getId(), pGuardar);	
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los datos del producto se han modificado correctamente"));
 						
 					}else {            // crear
+						LOG.trace("Crear un registro un producto nuevo");
 						daoProducto.create(pGuardar);
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Producto nuevo añadido"));
 					}
 				
 				}catch (ProductoException e) {
-					throw e;
+					LOG.error(e);
 					
 				}catch (Exception e) {  // validacion a nivel de base datos
-					
+					LOG.fatal(e);
 					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "El nombre ya existe, selecciona otro"));
 				}					
 			
 		}	
 		
-		request.setAttribute("usuarios", daoUsuario.getAll() );
+		request.setAttribute("categorias", daoCategoria.getAll() );
 		request.setAttribute("producto", pGuardar);
 		vistaSeleccionda = VIEW_FORM;
 	
