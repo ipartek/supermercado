@@ -4,7 +4,7 @@
 
 <div class="container">
 	<!-- Page Heading -->
-	<h1 class="text-center mb-4 mt-2 text-gray-800">Usuarios</h1>
+	<h1 class="text-center mb-4 mt-2 text-gray-800">${titulo}</h1>
 
 	<!-- Begin Page Content -->
 	<div class="row justify-content-center h-75">

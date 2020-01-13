@@ -49,7 +49,7 @@ public class ProductosController extends HttpServlet {
 	public static final String ACCION_GUARDAR = "guardar"; // crear y modificar
 	public static final String ACCION_ELIMINAR = "eliminar";
 	public static final String ACCION_REACTIVAR = "reactivar";
-
+	
 	// Crear Factoria y Validador
 	ValidatorFactory factory;
 	Validator validator;
@@ -58,7 +58,7 @@ public class ProductosController extends HttpServlet {
 	ArrayList<Alerta> mensajes = new ArrayList<Alerta>();
 
 	String pAccion = "";
-
+	
 	int pId = 0;
 	String pNombre = "";
 	float pPrecio = 0;
@@ -244,6 +244,7 @@ public class ProductosController extends HttpServlet {
 		LOG.debug("Entra en operacionVista");
 		
 		String vista = "";
+		
 		if (destino.equals(VIEW_FORM)) {
 			Producto productoForm = null;
 			try {
@@ -268,6 +269,7 @@ public class ProductosController extends HttpServlet {
 			request.setAttribute("categorias", daoCategoria.getAll());
 			request.setAttribute("usuarios", daoUsuario.getAll());
 			request.setAttribute("producto", productoForm);
+			
 
 			vista = destino;
 		}

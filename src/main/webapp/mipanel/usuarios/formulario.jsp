@@ -4,7 +4,7 @@
 
 <div class="container">
 	<!-- Page Heading -->
-	<h1 class="text-center mb-4 mt-2 text-gray-800">Usuarios</h1>
+	<h1 class="text-center mb-4 mt-2 text-gray-800">${titulo}</h1>
 
 	<!-- Begin Page Content -->
 	<div class="row justify-content-center h-75">
@@ -19,7 +19,7 @@
 						<label for="nombre">Nombre</label>
 						<input type="text" name="nombre" placeholder="Nombre"
 							value="${usuario.nombre}" required="required" pattern="{1,100}"
-							class="form-control mb-2 p-2" />
+							class="form-control mb-2 p-2" readonly  />
 						<label for="contrasenia">Contraseña</label>
 						<input type="text" name="contrasenia" placeholder="Contraseña"
 							value="${usuario.contrasenia}" required="required"
@@ -27,7 +27,7 @@
 						<label for="email">Email</label>
 						<input type="text" name="email" placeholder="Email"
 							value="${usuario.email}" required="required" 
-							class="form-control mb-2 p-2" />
+							class="form-control mb-2 p-2" readonly  />
 						<label for="imagen">Imagen</label>
 						<input type="text" id="imagen" name="imagen" placeholder="URL de la imagen"
 							value="${usuario.imagen}" required="required"
