@@ -4,6 +4,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
+	
 		<div class="search-wrapper">
 			<form>
 				<div class="form-group">
@@ -18,6 +19,7 @@
 				</div>
 			</form>
 		</div>
+		
 	</div>
 </div>
 
