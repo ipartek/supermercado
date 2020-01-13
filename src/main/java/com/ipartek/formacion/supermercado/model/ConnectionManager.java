@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.controller.LoginController;
 
-public class ConnectionManager implements AutoCloseable {
+public class ConnectionManager {
 
 	private final static Logger LOG = Logger.getLogger(ConnectionManager.class);
 	private static Connection conn;
@@ -21,7 +21,6 @@ public class ConnectionManager implements AutoCloseable {
 		try {
 			InitialContext ctx = new InitialContext();
 			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/mydb");
-
 			if (ds == null) {
 				throw new Exception("Data source no encontrado!");
 			}
@@ -37,12 +36,4 @@ public class ConnectionManager implements AutoCloseable {
 
 	}
 
-	@Override
-	public void close() throws Exception {
-		
-		conn.close();
-		LOG.debug("cerrada conexion");
-		
-	}
-	
 }
