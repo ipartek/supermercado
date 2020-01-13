@@ -27,7 +27,7 @@
 				<tr>
 				    <th scope="row">${u.id}</th>
 				    <td>${u.nombre}</td>
-				    <td>${u.password}</td>
+				    <td>${u.contrasenia}</td>
 				    <td><a href="seguridad/usuarios?accion=formulario&id=${u.id}"> Editar </a></td>
 			  	</tr>
 			</c:forEach>

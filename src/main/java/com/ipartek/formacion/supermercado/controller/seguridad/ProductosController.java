@@ -16,7 +16,10 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
@@ -28,15 +31,22 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 @WebServlet("/seguridad/productos")
 public class ProductosController extends HttpServlet {
 	
+	private final static Logger LOG = Logger.getLogger(ProductosController.class);
+	
 	private static final long serialVersionUID = 1L;
-	private static final String VIEW_TABLA = "productos/index.jsp";
+	private static final String VIEW_TABLA_ACTIVOS = "productos/index.jsp";
+	private static final String VIEW_TABLA_BAJA = "productos/listabaja.jsp";
+	private static final String VIEW_TABLA_INACTIVOS = "productos/listainactivos.jsp";
 	private static final String VIEW_FORM = "productos/formulario.jsp";
-	private static String vistaSeleccionda = VIEW_TABLA;
+	private static String vistaSeleccionda = VIEW_TABLA_ACTIVOS;
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
 	
 	//acciones
-	public static final String ACCION_LISTAR = "listar";
+	public static final String ACCION_LISTAR_ACTIVOS = "listar";
+	public static final String ACCION_LISTAR_BAJA = "listar_baja";
+	public static final String ACCION_LISTAR_INACTIVOS = "listar_inactivos";
 	public static final String ACCION_IR_FORMULARIO = "formulario";
 	public static final String ACCION_GUARDAR = "guardar";   // crear y modificar
 	public static final String ACCION_ELIMINAR = "eliminar";
@@ -55,6 +65,8 @@ public class ProductosController extends HttpServlet {
 	String pDescripcion;
 	String pDescuento;
 	String pUsuarioId;
+	String pCategoria;
+	String pValidado;
 	
 	
 	@Override
@@ -62,6 +74,7 @@ public class ProductosController extends HttpServlet {
 		super.init(config);
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
 	}
@@ -102,13 +115,21 @@ public class ProductosController extends HttpServlet {
 			pDescripcion = request.getParameter("descripcion");
 			pDescuento = request.getParameter("descuento");
 			pUsuarioId = request.getParameter("usuarioId");
+			pCategoria = request.getParameter("categoriaId");
+			pValidado = request.getParameter("validadoId");
 			
 			
 			try {
 				
 				switch (pAccion) {
-				case ACCION_LISTAR:
-					listar(request, response);
+				case ACCION_LISTAR_ACTIVOS:
+					listarActivos(request, response);
+					break;
+				case ACCION_LISTAR_BAJA:
+					listarBaja(request, response);
+					break;
+				case ACCION_LISTAR_INACTIVOS:
+					listarInactivos(request, response);
 					break;
 				case ACCION_ELIMINAR:	
 					eliminar(request, response);
@@ -120,12 +141,9 @@ public class ProductosController extends HttpServlet {
 					irFormulario(request, response);
 					break;
 				default:
-					listar(request, response);
+					listarActivos(request, response);
 					break;
 				}
-				
-				
-				
 				
 			}catch (Exception e) {
 				// TODO log
@@ -134,10 +152,7 @@ public class ProductosController extends HttpServlet {
 			}finally {
 				
 				request.getRequestDispatcher(vistaSeleccionda).forward(request, response);
-			}
-			
-			
-		
+			}		
 		
 	}
 
@@ -153,6 +168,7 @@ public class ProductosController extends HttpServlet {
 			
 		}
 		
+		request.setAttribute("categorias", daoCategoria.getAll());
 		request.setAttribute("usuarios", daoUsuario.getAll() );
 		request.setAttribute("producto", pEditar );
 		vistaSeleccionda = VIEW_FORM;
@@ -166,39 +182,48 @@ public class ProductosController extends HttpServlet {
 		Producto pGuardar = new Producto();		
 		pGuardar.setId(id);
 		pGuardar.setNombre(pNombre);
+		pGuardar.setDescripcion(pDescripcion);
+		pGuardar.setImagen(pImagen);
 		pGuardar.setDescuento( Integer.parseInt(pDescuento));
+		pGuardar.setPrecio(Float.parseFloat(pPrecio));
+		pGuardar.setCategoria(daoCategoria.getById(Integer.parseInt(pCategoria)));
+		pGuardar.setValidado(Integer.parseInt(pValidado));
 		
 		Usuario u = new Usuario();
 		u.setId(Integer.parseInt(pUsuarioId));
 		pGuardar.setUsuario(u);
-				
 		
 		Set<ConstraintViolation<Producto>> validaciones = validator.validate(pGuardar);
-		if( validaciones.size() > 0 ) {			
+		if( validaciones.size() > 0 ) {		
+			
 			mensajeValidacion(request, validaciones);
+			
 		}else {	
-		
+			
 				try {
-				
+					
 					if ( id > 0 ) {  // modificar
+	
+						daoProducto.update(id, pGuardar);	
 						
-						daoProducto.update(id, pGuardar);		
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Producto modificado correctamente :)"));
 						
-					}else {            // crear
+					} else {            // crear
+						
+					
 						daoProducto.create(pGuardar);
+						
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Producto creado correctamente :)"));
 					}
 					
 				}catch (Exception e) {  // validacion a nivel de base datos
 					
 					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "El nombre ya existe, selecciona otro"));
-				}					
+				}
+				
+				this.listarActivos(request, response);
 			
-		}	
-		
-		request.setAttribute("usuarios", daoUsuario.getAll() );
-		request.setAttribute("producto", pGuardar);
-		vistaSeleccionda = VIEW_FORM;
-	
+		}		
 		
 	}
 
@@ -223,24 +248,38 @@ public class ProductosController extends HttpServlet {
 		int id = Integer.parseInt(pId);
 		try {
 			Producto pEliminado = daoProducto.delete(id);
-			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Eliminado " + pEliminado.getNombre() ));
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Producto eliminado " + pEliminado.getNombre() ));
 		} catch (Exception e) {
 			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede Eliminar el producto"));
 			
 		}
 		
-		listar(request, response);
+		listarActivos(request, response);
 		
 	}
 
-	private void listar(HttpServletRequest request, HttpServletResponse response) {
+	private void listarActivos(HttpServletRequest request, HttpServletResponse response) {
 		
-		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAll();
+		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAllActivos();
 		request.setAttribute("productos", productos );
-		vistaSeleccionda = VIEW_TABLA;
+		vistaSeleccionda = VIEW_TABLA_ACTIVOS;
 		
 	}
 	
+	private void listarInactivos(HttpServletRequest request, HttpServletResponse response) {
+		
+		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAllInactivos();
+		request.setAttribute("productos", productos );
+		vistaSeleccionda = VIEW_TABLA_INACTIVOS;
+		
+	}
 	
+	private void listarBaja(HttpServletRequest request, HttpServletResponse response) {
+		
+		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAllBaja();
+		request.setAttribute("productos", productos );
+		vistaSeleccionda = VIEW_TABLA_BAJA;
+		
+	}
 
 }

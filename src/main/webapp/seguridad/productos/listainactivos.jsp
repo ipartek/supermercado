@@ -6,7 +6,7 @@
 	
 	<div class="row flex-row mt-4 mb-4">
 		<div class="col-4">
-			<h2> Listado de productos sin validar</h2>
+			<h2> Listado de productos inactivos</h2>
 		</div>
 		<div class="col-3">
 			<a href="seguridad/productos?accion=formulario" class="btn btn-primary"> Añadir nuevo producto </a>

@@ -30,7 +30,7 @@
                                    class="form-control"
                                    name="password"
                                    id="password" 
-                                   value="${usuario.password}"     
+                                   value="${usuario.contrasenia}"     
                                    placeholder="Mínimo 2 Máximo 150"
                                    aria-describedby="nombreHelp">
                             <small id="nombreHelp" class="form-text text-muted">Contraseña del usuario</small>

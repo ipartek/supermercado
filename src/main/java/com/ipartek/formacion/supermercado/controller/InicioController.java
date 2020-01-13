@@ -1,6 +1,7 @@
 package com.ipartek.formacion.supermercado.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletConfig;
@@ -9,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.model.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
@@ -22,6 +25,7 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 @WebServlet("/inicio")
 public class InicioController extends HttpServlet {
 	
+	private final static Logger LOG = Logger.getLogger(InicioController.class);
 	private static final long serialVersionUID = 1L;
 	private static ProductoDAO daoProducto;
 	private static CategoriaDAO daoCategoria;
@@ -68,35 +72,43 @@ public class InicioController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		String pCategoria = request.getParameter("categoriaId");
+		String pProducto = request.getParameter("producto");
+		String pAccion = request.getParameter("accion");
 		
-		//TODO guaramente creamos una categoria, esto deberia probarse en otro sitio
-				try {
-					Categoria c = new Categoria();
-					c.setNombre("mock" + System.currentTimeMillis() );
-					daoCategoria.create(c);
-					
-					daoCategoria.delete(c.getId());
-					
-					daoCategoria.update(1, c);
-					
-					daoCategoria.getById(1) ;
-					
-				}catch (Exception e) {
-					e.printStackTrace();
-				}	
-		
-		//llamar al DAO capa modelo
-		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAll();
+		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAllActivos();
 		ArrayList<Categoria> categorias = (ArrayList<Categoria>) daoCategoria.getAll();
 		
+		Alerta alerta = new Alerta();
 		
+		alerta.setTexto("Los últimos productos destacados.");
+		alerta.setTipo(Alerta.TIPO_PRIMARY);
 		
+		if(pAccion != null) {   			// Si la variable pAccion no es null llama al procedure de busqueda de la base de datos 
+			
+			try {
+				
+				int numCategoria = Integer.parseInt(pCategoria);
+				
+				productos = (ArrayList<Producto>) daoProducto.busqueda(numCategoria, pProducto);
+								
+				
+			} catch (NumberFormatException e) {
+				
+				LOG.error(e);
+				
+				alerta.setTipo(Alerta.TIPO_DANGER);
+				alerta.setTexto("Ha ocurrido una error a la hora de procesar su solicitud.");
+				
+			} catch (SQLException e) {
+				LOG.error(e);
+			}
+			
+		}
+
 		request.setAttribute("productos", productos );		
 		request.setAttribute("categorias", categorias );	
-		
-		
-		request.setAttribute("mensajeAlerta", new Alerta( Alerta.TIPO_PRIMARY , "Los últimos productos destacados.") );		
-		
+		request.setAttribute("mensajeAlerta", alerta);				
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 		
 		

@@ -52,7 +52,9 @@
 				        Productos
 				      </a>
 				      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-				        <a class="dropdown-item" href="seguridad/productos?accion=listar">Listado productos</a>
+				        <a class="dropdown-item" href="seguridad/productos?accion=listar">Listado productos activos</a>
+				        <a class="dropdown-item" href="seguridad/productos?accion=listar_inactivos">Listado productos inactivos</a>
+				        <a class="dropdown-item" href="seguridad/productos?accion=listar_baja">Listado productos baja</a>
 				        <a class="dropdown-item" href="seguridad/productos?accion=formulario">Nuevo producto</a>
 				      </div>
 				    </li>
@@ -94,7 +96,10 @@
 		    </c:if> 
 		  
 		  <c:if test="${empty usuarioLogeado}">
-
+		  
+			 <li class="nav-item ml-2">
+			    <a class="nav-link" href="registro"> Registrase </a>
+		    </li>
 		  	 <li class="nav-item ml-2">
 			    <a class="btn btn-outline-primary my-2 my-sm-0" href="login.jsp"><i class="fas fa-user mr-1"></i> Login</a>
 		    </li>
