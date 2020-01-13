@@ -246,8 +246,6 @@ public class ProductosController extends HttpServlet {
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
 
-		List<Producto> listaProductos = new ArrayList<Producto>();
-
 		String pNombre = request.getParameter("nombre");
 		String pCategoriaId = request.getParameter("categoriaId");
 
@@ -262,7 +260,7 @@ public class ProductosController extends HttpServlet {
 		}
 
 
-		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAllFiltered(categoriaId, pNombre);
+		List<Producto> productos =  daoProducto.getAllFiltered(categoriaId, pNombre);
 		request.setAttribute("productos", productos );
 		vistaSeleccionda = VIEW_TABLA;
 

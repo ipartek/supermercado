@@ -2,6 +2,7 @@ package com.ipartek.formacion.supermercado.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -67,33 +68,30 @@ public class InicioController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
-		//TODO guaramente creamos una categoria, esto deberia probarse en otro sitio
-				try {
-					Categoria c = new Categoria();
-					c.setNombre("mock" + System.currentTimeMillis() );
-					daoCategoria.create(c);
-					
-					daoCategoria.delete(c.getId());
-					
-					daoCategoria.update(1, c);
-					
-					daoCategoria.getById(1) ;
-					
-				}catch (Exception e) {
-					e.printStackTrace();
-				}	
-		
+				
 		//llamar al DAO capa modelo
-		ArrayList<Producto> productos = (ArrayList<Producto>) daoProducto.getAll();
+		
 		ArrayList<Categoria> categorias = (ArrayList<Categoria>) daoCategoria.getAll();
-		
-		
-		
-		request.setAttribute("productos", productos );		
+			
 		request.setAttribute("categorias", categorias );	
 		
+		//filtro productos
+		String pNombre = request.getParameter("nombre");
+		String pCategoriaId = request.getParameter("categoriaId");
+
+		int categoriaId = 0;
+
+		if(pCategoriaId != null && pCategoriaId.length() > 0 && pCategoriaId.matches("\\d+") ) {
+			categoriaId = Integer.parseInt(pCategoriaId);
+		}
+
+		if(pNombre == null) {
+			pNombre = "";
+		}
+
+
+		List<Producto> productos =  daoProducto.getAllFiltered(categoriaId, pNombre);
+		request.setAttribute("productos", productos );
 		
 		request.setAttribute("mensajeAlerta", new Alerta( Alerta.TIPO_PRIMARY , "Los últimos productos destacados.") );		
 		

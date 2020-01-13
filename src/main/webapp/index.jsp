@@ -2,9 +2,27 @@
 
 <%@ include file="includes/header.jsp" %>   
     	
-    	
-    	${categorias}
-
+		<div class="row">
+			<div class="col-12 mt-3">
+				<form action="inicio" method="post" class=" form-inline mb-4">
+					<label class="mr-2">Filtro categoria : </label>
+					<select name="categoriaId" class="custom-select filtroCategori">
+						<option value="0" selected>Ninguna categoria</option>
+						<c:forEach items="${categorias}" var="c">
+						    <!-- ${(c.id eq producto.usuario.id)?"selected":""} -->
+							<option value="${c.id}">${c.nombre}</option>	
+						</c:forEach>
+					</select>
+					
+					<label class="mx-2">Filtro nombre : </label>
+					<div class="form-group">
+					<input type="text" name="nombre" value="${producto.nombre}" class="form-control" placeholder="mínimo 2 letras, máximo 50">
+					
+					<input type="hidden" nombre="accion" value="listar">
+					<input type="submit" value="Buscar" class="btn btn-primary ml-3">
+				</form>	
+			</div>	
+		</div>
         <div class="row contenedor-productos">
         
         	<c:forEach items="${productos}" var="p">
