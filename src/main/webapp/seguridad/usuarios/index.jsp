@@ -19,6 +19,7 @@
 	            <th scope="col">#ID</th>
 			    <th scope="col">Nombre</th>
 			    <th scope="col">Contraseña</th>
+			    <th scope="col">Fecha alta</th>
 			    <th scope="col"></th>
             </tr>
         </thead>
@@ -28,6 +29,7 @@
 				    <th scope="row">${u.id}</th>
 				    <td>${u.nombre}</td>
 				    <td>${u.contrasenia}</td>
+				    <td>${u.fechaAlta}</td>
 				    <td><a href="seguridad/usuarios?accion=formulario&id=${u.id}"> Editar </a></td>
 			  	</tr>
 			</c:forEach>
@@ -37,6 +39,7 @@
                 <th scope="col">#ID</th>
 			    <th scope="col">Nombre</th>
 			    <th scope="col">Contraseña</th>
+			    <th scope="col">Fecha alta</th>
 			    <th scope="col"></th>
             </tr>
         </tfoot>

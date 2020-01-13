@@ -36,11 +36,31 @@
                             <small id="nombreHelp" class="form-text text-muted">Contraseña del usuario</small>
                         </div>
                         
+                        <div class="form-group">
+                            <label for="imagen"> Avatar</label>
+                            <input type="url" 
+                                   class="form-control"
+                                   name="imagen"
+                                   id="imagen" 
+                                   value="${producto.imagen}"
+                                   placeholder="URL (.JPG, .JPEG, .PNG)"
+                                   aria-describedby="nombreHelp">
+                            <small id="nombreHelp" class="form-text text-muted">Avatar de usuario</small>
+                        </div>
+                        
                          <div class="form-group">		
 							<label>Rol</label>
 							<select name="rolId" class="custom-select">
-								<option value="1"  ${(1 eq usuario.rol.id)?"selected":""} >ADMIN</option>
-								<option value="2"  ${(2 eq usuario.rol.id)?"selected":""} >USUARIO</option>
+								<option value="2"  ${(2 eq usuario.rol.id)?"selected":""} >ADMIN</option>
+								<option value="1"  ${(1 eq usuario.rol.id)?"selected":""} >USUARIO</option>
+							</select>
+						</div>
+						
+						<div class="form-group">		
+							<label>Validado</label>
+							<select name="validadoId" class="custom-select">
+								<option value="0"  ${(usuario.validado eq 0)?"selected":""} >NO</option>
+								<option value="1"  ${(usuario.validado eq 1)?"selected":""} >SI</option>
 							</select>
 						</div>
                         
