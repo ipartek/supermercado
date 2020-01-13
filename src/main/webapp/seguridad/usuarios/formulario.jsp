@@ -2,7 +2,7 @@
 
 <%@ include file="/includes/header.jsp" %>
 
-<h1> Formulario </h1>
+<h1> Formulario usuario</h1>
 	
 	  <div class="row justify-content-center mb-5">
             <div class="col-6">
@@ -42,7 +42,7 @@
                                    class="form-control"
                                    name="imagen"
                                    id="imagen" 
-                                   value="${producto.imagen}"
+                                   value="${usuario.imagen}"
                                    placeholder="URL (.JPG, .JPEG, .PNG)"
                                    aria-describedby="nombreHelp">
                             <small id="nombreHelp" class="form-text text-muted">Avatar de usuario</small>

@@ -2,7 +2,7 @@
 
 <%@ include file="/includes/header.jsp" %>   
     	
-	<h1> Formulario de alta de un producto </h1>
+	<h1> Formulario productos </h1>
 	
 	  <div class="row justify-content-center mb-5">
             <div class="col-6">
