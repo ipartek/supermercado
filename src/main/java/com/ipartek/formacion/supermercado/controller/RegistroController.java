@@ -70,7 +70,7 @@ public class RegistroController extends HttpServlet {
 
 				try {
 					
-					usuarioDao.create(user);
+					usuarioDao.registro(user);
 					
 				} catch (Exception e) {
 					
