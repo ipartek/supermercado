@@ -7,7 +7,7 @@ CRUD categorias  -HECHO
 CRUD usuario  -HECHO
 Ponerlo bonito  -HECHO
 
-Frontoffice Inicio (Datos del Usuario y número de productos a traves de un controlador + Cambiar Password en el avatar)
+Frontoffice Inicio (Datos del Usuario y número de productos a traves de un controlador + Cambiar Password en el avatar) -HECHO
 Filtrar por categoria y nombre del producto - HECHO
 
 Encriptar las contraseñas MD5

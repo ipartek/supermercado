@@ -36,9 +36,15 @@ public class UsuariosController extends HttpServlet {
 
 	private static final String VIEW_TABLA = "usuarios/index.jsp";
 	private static final String VIEW_FORM = "usuarios/formulario.jsp";
+	
+	public static final String TITULO_PERFIL = "Mi Perfil";
+	public static final String TITULO_USUARIO = "Usuario";
+	public static final String TITULO_NUEVO = "Nuevo Usuario";
 
 	private static UsuarioDAO dao;
 	private static RolDAO daoRol;
+	
+	String pTitulo = "";
 
 	public static final String ACCION_LISTAR = "listar";
 	public static final String ACCION_FORM = "formulario";
@@ -122,6 +128,8 @@ public class UsuariosController extends HttpServlet {
 		
 		pUsuario = mapper(req, resp);
 		pAccion = req.getParameter("accion");
+		
+		pTitulo = req.getParameter("titulo");
 		LOG.debug("accion " + pAccion);
 
 		super.service(req, resp);
@@ -217,6 +225,7 @@ public class UsuariosController extends HttpServlet {
 		LOG.debug("Entra en operacionVista");
 		
 		String vista = "";
+		String titulo = "";
 		if (destino.equals(VIEW_FORM)) {
 			int id;
 			Usuario usuarioForm = null;
@@ -238,10 +247,19 @@ public class UsuariosController extends HttpServlet {
 					usuarioForm = new Usuario();
 				}
 			}
+			
+			if (pId == usuarioSesion.getId()) {
+				titulo = TITULO_PERFIL;
+			}else if (pId == 0){
+				titulo = TITULO_NUEVO;
+			}else if (pId != usuarioSesion.getId()) {
+				titulo = TITULO_USUARIO;
+			}
 
 			LOG.debug("Pasa el Usuario a la request");
 			request.setAttribute("usuario", usuarioForm);
 			request.setAttribute("roles", daoRol.getAll());
+			request.setAttribute("titulo", titulo);
 
 			vista = destino;
 		}

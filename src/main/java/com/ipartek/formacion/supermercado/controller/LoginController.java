@@ -61,7 +61,7 @@ public class LoginController extends HttpServlet {
 					
 				}else {
 					
-					view = "mipanel/index.jsp";    // accedemos la FRONT-OFFICE
+					view = "mipanel/usuarios?accion=formulario&id=" + usuario.getId() +"";    // accedemos la FRONT-OFFICE
 				}	
 				
 			}else {

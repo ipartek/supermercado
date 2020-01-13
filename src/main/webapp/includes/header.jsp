@@ -81,7 +81,7 @@
 						aria-haspopup="true" aria-expanded="false"> Usuarios </a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<a class="dropdown-item" href="seguridad/usuarios?accion=listar">Todos</a> <a
-								class="dropdown-item" href="seguridad/usuarios?accion=formulario">Nuevo</a>
+								class="dropdown-item" href="seguridad/usuarios?accion=formulario&id=0">Nuevo</a>
 						</div></li>
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle text-primary" href="#"
