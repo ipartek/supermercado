@@ -58,10 +58,31 @@ public class UsuarioDAO implements IUsuarioDAO {
 	
 	@Override
 	public List<Usuario> getAllInactivos() {
-		LOG.trace("Recuperar todos los Usuarios");
+		LOG.trace("Recuperar todos los Usuarios inactivos");
 		List<Usuario> registros = new ArrayList<Usuario>();
 		try (Connection con = ConnectionManager.getConnection();
 				CallableStatement cs = con.prepareCall("{CALL pa_usuario_getallinactivos()}");) {
+
+			LOG.debug(cs);
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					registros.add(mapper(rs));
+				}
+			}
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+		return registros;
+	}
+	
+
+	@Override
+	public List<Usuario> getAllBaja() {
+		LOG.trace("Recuperar todos los Usuarios dados de baja");
+		List<Usuario> registros = new ArrayList<Usuario>();
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_getallbaja()}");) {
 
 			LOG.debug(cs);
 
@@ -134,10 +155,14 @@ public class UsuarioDAO implements IUsuarioDAO {
 		LOG.trace("Modificar Usuario por id " + id + " " + pojo );
 		Usuario registro = pojo;
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall("{CALL pa_usuario_update(?,?)}");) {
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_update(?,?,?,?,?,?)}");) {
 
 			cs.setInt(1, id);
 			cs.setString(2, pojo.getNombre());
+			cs.setString(3, pojo.getContrasenia());
+			cs.setString(4, pojo.getImagen());
+			cs.setInt(5, pojo.getRol().getId());
+			cs.setInt(6, pojo.getValidado());
 			
 			LOG.debug(cs);
 
@@ -156,13 +181,12 @@ public class UsuarioDAO implements IUsuarioDAO {
 		LOG.trace("Inserta nuevo Usuario " + pojo);
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall("{CALL usuario_insert(?,?,?,?,?)}");) { 
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_registrobyadmin(?,?,?,?)}");) { 
 
 			cs.setString(1, pojo.getNombre());
 			cs.setString(2, pojo.getContrasenia());
 			cs.setString(3, pojo.getImagen());
 			cs.setInt(4, pojo.getRol().getId());
-			cs.setInt(5, pojo.getValidado());
 
 			LOG.debug(cs);
 
@@ -210,6 +234,18 @@ public class UsuarioDAO implements IUsuarioDAO {
 		u.setContrasenia(rs.getString("contrasenia"));
 		u.setValidado(rs.getInt("validado"));
 		u.setImagen(rs.getString("imagen"));
+		
+		u.setFechaAlta(rs.getTimestamp("fecha_alta").toString());
+		
+		if(rs.getTimestamp("fecha_baja") != null) {
+			
+			u.setFechaBaja(rs.getTimestamp("fecha_baja").toString());
+			
+		} else {
+			
+			u.setFechaBaja("");
+			
+		}
 
 		Rol r = new Rol();
 		r.setId(rs.getInt("id_rol"));
@@ -235,6 +271,31 @@ public class UsuarioDAO implements IUsuarioDAO {
 		}
 		
 		return resul;
+	}
+
+	@Override
+	public Usuario registro(Usuario pojo) throws SQLException {
+		LOG.trace("Inserta nuevo Usuario " + pojo);
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{CALL pa_usuario_registro(?,?,?)}");) { 
+
+			cs.setString(1, pojo.getNombre());
+			cs.setString(2, pojo.getContrasenia());
+			cs.setString(3, pojo.getImagen());
+
+			LOG.debug(cs);
+
+			int affectedRows = cs.executeUpdate();
+			if (affectedRows == 1) {
+				// conseguimos el ID que acabamos de crear
+				ResultSet rs = cs.getGeneratedKeys();
+				if (rs.next()) {
+					pojo.setId(rs.getInt(1));
+				}
+			}
+		}
+		return pojo;
 	}
 
 }
