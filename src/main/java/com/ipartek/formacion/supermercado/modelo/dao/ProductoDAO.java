@@ -82,8 +82,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		u.imagen AS 'imagen_usuario', " + "		u.fecha_creacion AS 'fecha_creacion_usuario',"
 			+ "		u.fecha_modificacion AS 'fecha_modificacion_usuario', "
 			+ "		u.fecha_eliminacion AS 'fecha_eliminacion_usuario' " + "FROM producto p, categoria c, usuario u "
-			+ "WHERE p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? "
-			+ "ORDER BY p.id DESC LIMIT 500;";
+			+ "WHERE p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? " + "ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_GET_BY_ID_BY_USER = "SELECT " + "		p.id AS 'id_producto', "
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
 			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
@@ -98,13 +97,15 @@ public class ProductoDAO implements IProductoDAO {
 			+ "ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_INSERT = "INSERT INTO producto (id, nombre, imagen, precio, descuento, descripcion, fecha_creacion, id_usuario, id_categoria) VALUES ( ? , ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), ?,?);";
 	private static final String SQL_UPDATE = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ?;";
+	private static final String SQL_ACTIVATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=1 WHERE id = ?;";
+	private static final String SQL_DESACTIVATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=0 WHERE id = ?;";
 	private static final String SQL_UPDATE_BY_USER = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ? AND id_usuario = ?;";
 	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ?;";
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_producto = ?;";
 	private static final String SQL_DELETE_LOGICO = "UPDATE producto SET fecha_eliminacion = CURRENT_TIMESTAMP() WHERE id = ?;";
 	private static final String SQL_DELETE_LOGICO_BY_USER = "UPDATE producto SET fecha_eliminacion = CURRENT_TIMESTAMP() WHERE id = ? AND id_usuario=?;";
 	private static final String SQL_REACTIVATE = "UPDATE producto SET fecha_eliminacion = NULL WHERE id = ?;";
-	
+
 	private ProductoDAO() {
 		super();
 	}
@@ -264,16 +265,16 @@ public class ProductoDAO implements IProductoDAO {
 
 	public List<Producto> getAllFiltros(int idCategoria, String nombre) throws Exception {
 		LOG.trace("Buscar con filtros: " + "categoria: " + idCategoria + "Nombre: " + nombre);
-		
+
 		List<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall( " { CALL pa_productos_busqueda(?,?) } ")) {
+				CallableStatement cs = con.prepareCall(" { CALL pa_productos_busqueda(?,?) } ")) {
 
 			cs.setString(1, nombre);
 
 			cs.setInt(2, idCategoria);
-			
+
 			LOG.debug("Ejecuta la query: " + cs.toString());
 
 			try (ResultSet rs = cs.executeQuery()) {
@@ -522,7 +523,7 @@ public class ProductoDAO implements IProductoDAO {
 
 		return resultado;
 	}
-	
+
 	public Producto reactivate(int id) throws Exception {
 
 		LOG.debug("Entra en el reactivate");
@@ -577,6 +578,52 @@ public class ProductoDAO implements IProductoDAO {
 				resultado = getById(id);
 			} else {
 				LOG.fatal("El update esta mal, ha afectado a mas de un producto");
+			}
+		}
+		return resultado;
+	}
+
+	public Producto validate(int id) throws Exception {
+
+		LOG.debug("Entra en activate");
+
+		Producto resultado = null;
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_ACTIVATE)) {
+
+			pst.setInt(1, id);
+
+			LOG.debug("Ejecuta la query: " + pst.toString());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resultado = getById(id);
+			} else {
+				LOG.fatal("El activate esta mal, ha afectado a mas de un producto");
+			}
+		}
+		return resultado;
+	}
+
+	public Producto unvalidate(int id) throws Exception {
+
+		LOG.debug("Entra en desactivate");
+
+		Producto resultado = null;
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_DESACTIVATE)) {
+
+			pst.setInt(1, id);
+
+			LOG.debug("Ejecuta la query: " + pst.toString());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resultado = getById(id);
+			} else {
+				LOG.fatal("El desactivate esta mal");
 			}
 		}
 		return resultado;

@@ -12,9 +12,9 @@
 			<div class="form-group">
 				<label>Filtrar por Categoria:</label> <select name="categoriaIdFiltro"
 					class="custom-select mb-2">
-					<option selected="selected" value="0">Seleccionar</option>
+					<option value="0">Seleccionar</option>
 					<c:forEach items="${categorias}" var="c">
-						<option value="${c.id}">${c.nombre}</option>
+						<option value="${c.id}" ${(c.id eq categoriaId)?"selected":""}>${c.nombre}</option>
 					</c:forEach>
 				</select> <label>Filtrar por Nombre:</label> <input type="text" name="nombreFiltro"
 					value="${producto.nombre}" class="form-control"

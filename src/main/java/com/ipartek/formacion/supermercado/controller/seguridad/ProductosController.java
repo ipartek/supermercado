@@ -49,6 +49,8 @@ public class ProductosController extends HttpServlet {
 	public static final String ACCION_GUARDAR = "guardar"; // crear y modificar
 	public static final String ACCION_ELIMINAR = "eliminar";
 	public static final String ACCION_REACTIVAR = "reactivar";
+	public static final String ACCION_VALIDAR = "activar";
+	public static final String ACCION_DESVALIDAR = "desactivar";
 
 	// Crear Factoria y Validador
 	ValidatorFactory factory;
@@ -217,6 +219,14 @@ public class ProductosController extends HttpServlet {
 			case ACCION_REACTIVAR:
 				reactivar(request, response);
 				break;
+				
+			case ACCION_VALIDAR:
+				validar(request, response);
+				break;
+				
+			case ACCION_DESVALIDAR:
+				desvalidar(request, response);
+				break;
 
 			default:
 				listar(request, response);
@@ -297,6 +307,22 @@ public class ProductosController extends HttpServlet {
 		mensajes.clear();
 		vistaSeleccionada = operacionesVista(request, response, VIEW_TABLA);
 	}
+	
+	private void validar(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		LOG.debug("Entra en activar");
+		
+		daoProducto.validate(pProducto.getId());
+		mensajes.clear();
+		vistaSeleccionada = operacionesVista(request, response, VIEW_TABLA);
+	}
+	
+	private void desvalidar(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		LOG.debug("Entra en desactivar");
+		
+		daoProducto.unvalidate(pProducto.getId());
+		mensajes.clear();
+		vistaSeleccionada = operacionesVista(request, response, VIEW_TABLA);
+	}
 
 	private void guardar(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -336,7 +362,14 @@ public class ProductosController extends HttpServlet {
 				pojo = pProducto;
 				pojo.setUsuario(daoUsuario.getById(usuarioId));
 				LOG.debug("Crea un Producto nuevo");
-				daoProducto.create(pojo);
+				pojo = daoProducto.create(pojo);
+				
+				// si lo crea el admin validar el producto
+				if(pojo.getUsuario().getRol().getId() == 2) {
+					daoProducto.validate(pojo.getId());
+				}
+				
+				
 			} else {
 				LOG.debug("Itera para encontrar el Producto correcto");
 				for (Producto producto : listado) {

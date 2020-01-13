@@ -77,6 +77,7 @@ public class InicioController extends HttpServlet {
 		// recoger parametros
 		if (request.getParameter("categoriaIdFiltro") != null) {
 			pIdCategoria = Integer.parseInt(request.getParameter("categoriaIdFiltro"));
+			request.setAttribute("categoriaId", pIdCategoria);
 		}else {
 			pIdCategoria = 0;
 		}

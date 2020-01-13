@@ -82,7 +82,7 @@
 							inactivos</a> <a class="nav-item nav-link" id="nav-contact-tab"
 							data-toggle="tab" href="#nav-contact" role="tab"
 							aria-controls="nav-contact" aria-selected="false">Productos
-							por activar</a>
+							por validar</a>
 					</div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
@@ -133,6 +133,8 @@
 										<td>${p.usuario.nombre}</td>
 										<td><a
 											href="seguridad/productos?accion=formulario&id=${p.id}">Editar</a></td>
+										<td><a
+											href="seguridad/productos?accion=desactivar&id=${p.id}">Desvalidar</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -232,6 +234,8 @@
 										<td>${pV.usuario.nombre}</td>
 										<td><a
 											href="seguridad/productos?accion=formulario&id=${pV.id}">Editar</a></td>
+										<td><a
+											href="seguridad/productos?accion=activar&id=${pV.id}">Validar</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>
