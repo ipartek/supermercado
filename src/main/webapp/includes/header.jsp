@@ -103,7 +103,10 @@
 	             	
 					<!-- USUARIO NORMAL -->	
 					<c:if test="${usuarioLogeado.rol.id eq 1 }" >
-						<a class="py-2 d-none d-md-inline-block text-white" href="mipanel/index.jsp">Mi panel</a>
+						<!-- <a class="py-2 d-none d-md-inline-block text-white" href="mipanel/index.jsp">Mi panel</a>  -->	
+						<li class="nav-item">
+				            <a class="py-2 d-none d-md-inline-block text-white" href="mipanel/personal?accion=listar">Mi panel</a>
+			            </li>
 						
 						<li class="nav-item">
 							<div class="dropdown">
@@ -117,6 +120,7 @@
 							</div>
 						</li>
 						
+						<!--
 						<li class="nav-item">
 							<div class="dropdown">
 							  <button class="btn dropdown-toggle bg-primary text-white" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Usuario </button>
@@ -127,6 +131,7 @@
 							  </div>
 							</div>
 						</li>
+						-->	
 					</c:if>
 					
 					

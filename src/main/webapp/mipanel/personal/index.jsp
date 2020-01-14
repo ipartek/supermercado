@@ -3,7 +3,7 @@
 <%@include file="/includes/header.jsp" %>
 
  
-	<h1 id="top">Mi panel</h1>
+	<h1 class="text-info" id="top">Mi panel</h1>
 		
 		
 	<!-- DATATABLES -->
@@ -11,6 +11,13 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css"/>
         
 	<!-- JAVASCRIPT los incluimos en el pie-->
+	
+	<br>
+	<h4>Bienvenido a tu panel, ${usuario.nombre}</h1>
+	<br>
+	
+	
+	
 	
     <!-- TABLA -->
     <table class="tabla reponsive display">
