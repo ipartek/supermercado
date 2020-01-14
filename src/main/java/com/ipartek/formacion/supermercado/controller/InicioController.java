@@ -48,13 +48,16 @@ public class InicioController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		if (null == ConnectionManager.getConnection()) {
+		ConnectionManager con = (ConnectionManager) ConnectionManager.getConnection();
+		if (null == con) {
 			resp.sendRedirect(req.getContextPath() + "/error.jsp");
 		} else {
 
 			// llama a GET o POST
 			super.service(req, resp);
+			con = null;
 		}
+
 	}
 
 	/**

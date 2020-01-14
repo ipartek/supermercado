@@ -52,7 +52,8 @@ public class ProductoDAO implements IProductoDAO {
 			+ " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ? and p.id_categoria = c.id"
 			+ " ORDER BY p.id DESC LIMIT 500;";
 
-	private static final String SQL_GET_INSERT = "INSERT INTO 'producto' ( p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria', p.id_usuario 'id_usuario') VALUES (?,?,?,?,?,?);";
+	private static final String SQL_GET_INSERT = "INSERT INTO 'producto' "
+			+ "( p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria', p.id_usuario 'id_usuario') VALUES (?,?,?,?,?,?);";
 	private static final String SQL_GET_UPDATE = "UPDATE 'producto' SET p.nombre 'nombre'= ? , p.id_usuario 'id_usuario'= ? WHERE 'id'= ?;";
 	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE 'producto' SET p.nombre 'nombre'= ? , p.id_usuario 'id_usuario'= ? WHERE 'id'= ? AND id_usuario = ?;";
 
