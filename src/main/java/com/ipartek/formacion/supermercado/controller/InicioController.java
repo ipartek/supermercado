@@ -1,6 +1,8 @@
 package com.ipartek.formacion.supermercado.controller;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletConfig;
@@ -29,6 +31,8 @@ public class InicioController extends HttpServlet {
 	private static ProductoDAO daoProducto;
 	private static CategoriaDAO daoCategoria;
 	
+	ArrayList<Alerta> mensajes = new ArrayList<Alerta>();
+	
 	String pNombreProducto = "";
 	int pIdCategoria = 0;
 
@@ -47,16 +51,27 @@ public class InicioController extends HttpServlet {
 	}
 
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		if (null == ConnectionManager.getConnection()) {
-			resp.sendRedirect(req.getContextPath() + "/error.jsp");
-		} else {
+        Connection con = ConnectionManager.getConnection();
 
-			// llama a GET o POST
-			super.service(req, resp);
-		}
-	}
+        /**
+         * Solución al bug de las 7 conexiones el 13/01/2020
+         * @author Joseba Merino
+         */
+        if (null == con) {
+            resp.sendRedirect(req.getContextPath() + "/error.jsp");
+        } else {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // llama a GET o POST
+            super.service(req, resp);
+        }
+
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -104,8 +119,11 @@ public class InicioController extends HttpServlet {
 		request.setAttribute("productos", productos);
 		request.setAttribute("categorias", categorias);
 
-		//request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Bienvenido al Supermercado. Seleccione los mejores productos"));
-
+		if(productos.size() == 0) {
+			mensajes.add(new Alerta("No se han encontrado productos", Alerta.TIPO_WARNING));
+			request.setAttribute("mensajesAlerta", mensajes);
+		}
+			
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 
 	}

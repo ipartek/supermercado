@@ -22,7 +22,7 @@
 <link
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	rel="stylesheet">
-	
+
 <!-- font awesome -->
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -30,7 +30,8 @@
 	crossorigin="anonymous">
 
 <!-- nuestro css -->
-<link rel="stylesheet" href="css/custom.css?time=<%=System.currentTimeMillis()%>">
+<link rel="stylesheet"
+	href="css/custom.css?time=<%=System.currentTimeMillis()%>">
 
 
 </head>
@@ -45,12 +46,15 @@
 			aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
 		</button>
-		
+
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav container d-flex flex-column flex-md-row justify-content-between">
+			<ul
+				class="navbar-nav container d-flex flex-column flex-md-row justify-content-between">
 				<li class="nav-item"><a class="navbar-brand text-primary"
-					href="inicio"><!-- <img src="https://img.icons8.com/nolan/64/home-page.png"> -->
-									<i class="fas fa-home"></i></a></li>
+					href="inicio">
+						<!-- <img src="https://img.icons8.com/nolan/64/home-page.png"> -->
+						<i class="fas fa-home"></i>
+				</a></li>
 
 				<c:if test="${empty usuarioLogeado}">
 					<li class="nav-item"><a class="py-2 d-none d-md-inline-block"
@@ -62,8 +66,9 @@
 						id="navbarDropdown" role="button" data-toggle="dropdown"
 						aria-haspopup="true" aria-expanded="false">Categorías</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="seguridad/categorias?accion=listar">Todas</a>
 							<a class="dropdown-item"
+								href="seguridad/categorias?accion=listar">Todas</a> <a
+								class="dropdown-item"
 								href="seguridad/categorias?accion=formulario">Nueva</a>
 						</div></li>
 					<li class="nav-item dropdown"><a
@@ -80,16 +85,20 @@
 						id="navbarDropdown" role="button" data-toggle="dropdown"
 						aria-haspopup="true" aria-expanded="false"> Usuarios </a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="seguridad/usuarios?accion=listar">Todos</a> <a
-								class="dropdown-item" href="seguridad/usuarios?accion=formulario&id=0">Nuevo</a>
+							<a class="dropdown-item" href="seguridad/usuarios?accion=listar">Todos</a>
+							<a class="dropdown-item"
+								href="seguridad/usuarios?accion=formulario&id=0">Nuevo</a>
 						</div></li>
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle text-primary" href="#"
 						id="navbarDropdown" role="button" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false"><!-- <img class="" src="${usuarioLogeado.getImagen()}" alt="Imagen de Perfil de ${usuarioLogeado.getNombre()}"></img> --></a>
+						aria-haspopup="true" aria-expanded="false">
+							<!-- <img class="" src="${usuarioLogeado.getImagen()}" alt="Imagen de Perfil de ${usuarioLogeado.getNombre()}"></img> -->
+					</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="seguridad/usuarios?accion=formulario&id=${usuarioLogeado.id}">${usuarioLogeado.getNombre()}</a> <a
-								class="dropdown-item" href="" data-toggle="modal"
+							<a class="dropdown-item"
+								href="seguridad/usuarios?accion=formulario&id=${usuarioLogeado.id}">${usuarioLogeado.getNombre()}</a>
+							<a class="dropdown-item" href="" data-toggle="modal"
 								data-target="#cerrarSesionModal">Logout <i
 								class="fas fa-sign-out-alt"></i></a>
 						</div></li>
@@ -107,10 +116,13 @@
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle text-primary" href="#"
 						id="navbarDropdown" role="button" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false"><!-- <img class="" src="${usuarioLogeado.getImagen()}" alt="Imagen de Perfil de ${usuarioLogeado.getNombre()}"></img> --></a>
+						aria-haspopup="true" aria-expanded="false">
+							<!-- <img class="" src="${usuarioLogeado.getImagen()}" alt="Imagen de Perfil de ${usuarioLogeado.getNombre()}"></img> -->
+					</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="mipanel/usuarios?accion=formulario&id=${usuarioLogeado.id}">${usuarioLogeado.getNombre()}</a> <a
-								class="dropdown-item" href="" data-toggle="modal"
+							<a class="dropdown-item"
+								href="mipanel/usuarios?accion=formulario&id=${usuarioLogeado.id}">${usuarioLogeado.getNombre()}</a>
+							<a class="dropdown-item" href="" data-toggle="modal"
 								data-target="#cerrarSesionModal">Logout <i
 								class="fas fa-sign-out-alt"></i></a>
 						</div></li>
