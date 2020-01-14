@@ -42,7 +42,7 @@
   	<nav class="navbar navbar-dark bg-primary navbar-expand-lg">
 	    <div class="container"> <!-- lo metemos dentro de un container para que se centre el contenido -->
 	        
-	        <a class="navbar-brand active py-2 fas fa-shopping-cart" href="/supermerkado/"></a> 
+	        <a class="navbar-brand active py-2 fas fa-shopping-cart" href="${pageContext.request.contextPath}/"></a> 
 	        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	            <span class="navbar-toggler-icon"></span>
 	        </button>
