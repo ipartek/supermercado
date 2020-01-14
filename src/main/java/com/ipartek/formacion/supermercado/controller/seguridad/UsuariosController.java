@@ -15,6 +15,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -28,7 +29,9 @@ public class UsuariosController extends HttpServlet {
 	private static final String VIEW_TABLA = "usuarios/index.jsp";
 	private static final String VIEW_FORM = "usuarios/formulario.jsp";
 	private static String vistaSeleccionda = VIEW_TABLA;
+	
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
 
 	// acciones
 	public static final String ACCION_LISTAR = "listar";
@@ -53,6 +56,7 @@ public class UsuariosController extends HttpServlet {
 		super.init(config);
 		
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
 		
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();

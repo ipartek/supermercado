@@ -46,7 +46,8 @@
                                    class="form-control" 
                                    name="contrasenia" 
                                    required
-                                   placeholder="precio del producto">
+                                   placeholder="Mínimo 2 Máximo 50"
+                                   pattern=".{2,50}">
                         </div>
                         
                         <input type="text" hidden name="accion" value="guardar">

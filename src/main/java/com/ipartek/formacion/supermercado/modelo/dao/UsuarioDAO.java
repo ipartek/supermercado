@@ -32,8 +32,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 	private static final String SQL_GET_DELETE = "{CALL pa_usuario_delete_logico(?)}";
 
 
-
-
+	
 	private static UsuarioDAO INSTANCE;
 
 	private UsuarioDAO() {
@@ -156,7 +155,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 
 			// registro el paremetro de salida 2º ?
-			cs.registerOutParameter(8, java.sql.Types.INTEGER);
+			cs.registerOutParameter(4, java.sql.Types.INTEGER);
 
 			LOG.debug(cs);
 			int affectedRows = cs.executeUpdate();
