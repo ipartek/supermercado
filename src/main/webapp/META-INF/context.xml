@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
 <!-- PRODUCCION --> 
-<!-- 
+ 
  
 <Resource auth="Container" 
 	    driverClassName="com.mysql.jdbc.Driver"
@@ -15,10 +15,11 @@
 		password="root" 
 		/>
 		
--->
+
 
 
 <!--  DESARROLLO  -->
+<!--	
 	<Resource auth="Container" 
 	    driverClassName="com.mysql.jdbc.Driver"
 		maxActive="100" 
@@ -30,4 +31,5 @@
 		username="erozki"
 		password="erozki" 
 		/>
+		-->
 </Context>	
