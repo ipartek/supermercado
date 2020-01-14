@@ -103,7 +103,6 @@ public class CategoriasController extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		LOG.debug("Entra en el Service");
 		
-		
 		HttpSession session = req.getSession();
 		usuarioSesion = (Usuario) session.getAttribute("usuarioLogeado");
 		LOG.debug("Carga la sesión del Usuario");

@@ -9,7 +9,7 @@
 	<!-- Begin Page Content -->
 	<div class="row justify-content-center h-75">
 		<div class="col-sm-7">
-			<form action="seguridad/productos" class="user" method="post">
+			<form action="mipanel/productos" class="user" method="post">
 				<div id="formulario" class="card w-100">
 					<div class="form-group card-body shadow">
 						<label for="id">ID</label> 
@@ -40,15 +40,13 @@
 							value="${producto.descripcion}" required="required"
 							class="form-control mb-2 p-2" />
 						<label for="descripcion">Categoría</label>
-						<select name="categoria_id" class="form-control mb-2 p-2 custom-select">
+						<select name="selectCategoriaId" class="form-control mb-2 p-2 custom-select">
 							<c:forEach items="${categorias}" var="c">
 								<option value="${c.id}" ${(c.id eq producto.categoria.id)?"selected":""}>${c.nombre}</option>
 							</c:forEach>
 						</select>
-						<input type="hidden" name="usuarioId" value="${producto.usuario.nombre}" />
-						<input type="text" name="usuario_id"
-							placeholder="ID" value="${producto.id}" required="required"
-							readonly class="form-control mb-2 p-2" />
+						<input type="hidden" name="usuarioId" value="${producto.usuario.id}" />
+						<input type="hidden" name="validado" value="${producto.validado}" />
 						<c:if test="${producto.fechaCreacion!=null}">
 							<label for="fecha_creacion">Fecha de Creación</label>
 							<input type="text" name="fecha_creacion" placeholder="Fecha de creación del usuario"

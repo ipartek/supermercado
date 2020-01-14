@@ -53,6 +53,8 @@ public class Producto {
 	@NotNull
 	private Categoria categoria;
 	
+	private int validado;
+	
 	public Producto() {
 		super();
 		this.id = 0;
@@ -66,11 +68,12 @@ public class Producto {
 		fechaEliminacion = null;
 		this.usuario = new Usuario();
 		this.categoria = new Categoria();
+		this.validado = 0;
 	}
 
 	public Producto(int id, String nombre, float precio, String imagen, String descripcion, int descuento,
 			Timestamp fechaCreacion, Timestamp fechaModificacion, Timestamp fechaEliminacion, Usuario usuario, 
-			Categoria categoria) {
+			Categoria categoria, int validado) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -83,10 +86,11 @@ public class Producto {
 		this.fechaEliminacion = fechaEliminacion;
 		this.usuario = usuario;
 		this.categoria = categoria;
+		this.validado = validado;
 	}
 
 	public Producto(String nombre, float precio, String imagen, String descripcion, int descuento,
-			Timestamp fechaCreacion, Timestamp fechaModificacion, Timestamp fechaEliminacion, Usuario usuario) {
+			Timestamp fechaCreacion, Timestamp fechaModificacion, Timestamp fechaEliminacion, Usuario usuario, Categoria categoria, int validado) {
 		super();
 		this.id = 0;
 		this.nombre = nombre;
@@ -98,6 +102,8 @@ public class Producto {
 		this.fechaModificacion = fechaModificacion;
 		this.fechaEliminacion = fechaEliminacion;
 		this.usuario = usuario;
+		this.categoria = categoria;
+		this.validado = validado;
 	}
 
 	public int getId() {
@@ -187,6 +193,14 @@ public class Producto {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
+	
+	public int getValidado() {
+		return validado;
+	}
+
+	public void setValidado(int validado) {
+		this.validado = validado;
+	}
 
 	public float getPrecioDescuento() {
 
@@ -200,7 +214,7 @@ public class Producto {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", imagen=" + imagen
 				+ ", descripcion=" + descripcion + ", descuento=" + descuento + ", fechaCreacion=" + fechaCreacion
 				+ ", fechaModificacion=" + fechaModificacion + ", fechaEliminacion=" + fechaEliminacion + ", usuario="
-				+ usuario + ", categoria=" + categoria + "]";
+				+ usuario + ", categoria=" + categoria + ", validado=" + validado + "]";
 	}
 
 }

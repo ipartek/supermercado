@@ -40,13 +40,13 @@
 							value="${producto.descripcion}" required="required"
 							class="form-control mb-2 p-2" />
 						<label for="descripcion">Categoría</label>
-						<select name="categoria_id" class="form-control mb-2 p-2 custom-select">
+						<select name="selectCategoriaId" class="form-control mb-2 p-2 custom-select">
 							<c:forEach items="${categorias}" var="c">
 								<option value="${c.id}" ${(c.id eq producto.categoria.id)?"selected":""}>${c.nombre}</option>
 							</c:forEach>
 						</select>
 						<label>Usuario</label>
-						<select name="usuario_id" class="form-control mb-2 p-2 custom-select">
+						<select name="selectUsuarioId" class="form-control mb-2 p-2 custom-select">
 							<c:forEach items="${usuarios}" var="u">
 								<option value="${u.id}" ${(u.id eq producto.usuario.id)?"selected":""}>${u.nombre}</option>
 							</c:forEach>
@@ -70,6 +70,7 @@
 								readonly  class="form-control mb-2 p-2" />
 						</c:if>
 						<input type="hidden" name="idUsuario" value="${producto.usuario.id}" />
+						<input type="hidden" name="validado" value="${producto.validado}" />
 						<input type="hidden" name="accion" value="guardar" />
 						<input class="btn btn-primary" type="submit" value="Inscribir">
 						<c:if test="${producto.id!=0}">
@@ -79,6 +80,10 @@
 						<c:if test="${producto.fechaEliminacion!=null}">
 							<button type="button" class="btn btn-success" data-toggle="modal"
 								data-target="#reactivarModal">Reactivar</button>
+						</c:if>
+						<c:if test="${producto.validado==1}">
+							<button type="button" class="btn btn-secondary" data-toggle="modal"
+								data-target="#desvalidarModal">Desvalidar</button>
 						</c:if>
 					</div>
 					<!-- card-body -->
@@ -135,6 +140,30 @@
 			</div>
 		</div>
 		<!-- FIn del Modal Reactivar -->
+		
+		<!-- Modal Desvalidar-->
+		<div class="modal fade" id="reactivarModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Desvalidar</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">¿Seguro que quieres desvalidarlo?</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">No</button>
+						<a href="seguridad/productos?accion=desvalidar&id=${producto.id}"
+							class="btn btn-warning">Desvalidar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- FIn del Modal Desvalidar -->
 		
 		<!-- / .col-sm-6 -->
 		<div class="col-sm-5 p-3 bg-register-image card-body shadow bg-white"

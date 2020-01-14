@@ -72,17 +72,20 @@ public class ProductosController extends HttpServlet {
 	Categoria pCategoria = null;
 
 	Producto pProducto = null;
-	
+
 	Usuario usuarioSesion = null;
+
+	int pValidado = 0;
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		
+
 		LOG.debug("Entra en el init");
-		
+
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
 		// Crear Factoria y Validador
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
@@ -91,11 +94,12 @@ public class ProductosController extends HttpServlet {
 	@Override
 	public void destroy() {
 		super.destroy();
-		
+
 		LOG.debug("Entra en el destroy");
-		
+
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
 		factory = null;
 		validator = null;
 	}
@@ -121,23 +125,22 @@ public class ProductosController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		LOG.debug("Entra en el Service");
-		
-		
+
 		HttpSession session = req.getSession();
 		usuarioSesion = (Usuario) session.getAttribute("usuarioLogeado");
 		LOG.debug("Carga la sesión del Usuario");
-		
+
 		pProducto = mapper(req, resp);
-		
+
 		pAccion = req.getParameter("accion");
 		LOG.debug("accion: " + pAccion);
-		
+
 		super.service(req, resp);
 	}
 
 	private Producto mapper(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Entra en el mapper");
-		
+
 		if (request.getParameter("id") != null) {
 			pId = Integer.parseInt(request.getParameter("id"));
 		}
@@ -173,24 +176,32 @@ public class ProductosController extends HttpServlet {
 			pFechaEliminacion = Timestamp.valueOf(fechaEliminacion);
 		}
 
-		if (request.getParameter("usuario") == null) {
+		if (request.getParameter("idusuario") == null) {
 			if (request.getParameter("idUsuario") != null) {
 				pUsuario = daoUsuario.getById(Integer.parseInt(request.getParameter("idUsuario")));
 			}
 		}
 
+		if (request.getParameter("selectCategoriaId") != null) {
+			pCategoria = daoCategoria.getById(Integer.parseInt(request.getParameter("selectCategoriaId")));
+		}
+
+		if (request.getParameter("validado") != null) {
+			pValidado = Integer.parseInt(request.getParameter("validado"));
+		}
+
 		Producto resultado = new Producto(pId, pNombre, pPrecio, pImagen, pDescripcion, pDescuento, pFechaCreacion,
-				pFechaModificacion, pFechaEliminacion, pUsuario, pCategoria);
+				pFechaModificacion, pFechaEliminacion, pUsuario, pCategoria, pValidado);
 
 		LOG.debug("Devuelve el Producto mapeado");
 		return resultado;
 	}
-	
+
 	private void doAction(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		LOG.debug("Entra en el doAction; accion: " + pAccion);
-		
+
 		try {
 			switch (pAccion) {
 			case ACCION_LISTAR:
@@ -228,22 +239,23 @@ public class ProductosController extends HttpServlet {
 		}
 	}
 
-	private String operacionesVista(HttpServletRequest request, HttpServletResponse response, String destino) throws ProductoException {
+	private String operacionesVista(HttpServletRequest request, HttpServletResponse response, String destino)
+			throws ProductoException {
 
 		LOG.debug("Entra en operacionVista");
 		int idUsuSesion = usuarioSesion.getId();
 
 		String vista = "";
-		
+
 		if (destino.equals(VIEW_FORM)) {
-			
+
 			Producto productoForm = null;
-			
+
 			try {
 
 				if (pId != 0) {
 					LOG.debug("Recupera el Producto por su Id");
-					productoForm = daoProducto.getByIdByUser(pId,usuarioSesion.getId());
+					productoForm = daoProducto.getByIdByUser(pId, usuarioSesion.getId());
 				}
 
 				if (productoForm == null) {
@@ -274,16 +286,17 @@ public class ProductosController extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		LOG.debug("Entra en eliminar");
-		
+
 		daoProducto.deleteByUser(pProducto.getId(), usuarioSesion.getId());
 		mensajes.clear();
 		vistaSeleccionada = operacionesVista(request, response, VIEW_TABLA);
 	}
 
-	private void guardar(HttpServletRequest request, HttpServletResponse response) throws ProductoException, SQLException {
+	private void guardar(HttpServletRequest request, HttpServletResponse response)
+			throws ProductoException, SQLException {
 
 		LOG.debug("entra en guardar");
-		
+
 		validator.validate(pProducto);
 
 		// Obtener las ConstrainViolation
@@ -304,12 +317,12 @@ public class ProductosController extends HttpServlet {
 
 			vistaSeleccionada = operacionesVista(request, response, VIEW_FORM);
 		} else {
-			
+
 			LOG.debug("Validaciones correctas");
-			
+
 			Producto pojo = null;
 			List<Producto> listado = daoProducto.getAllByUser(usuarioSesion.getId());
-			
+
 			if (pProducto.getId() == 0) {
 				LOG.debug("Crea un Producto nuevo");
 				pojo = pProducto;
@@ -325,6 +338,8 @@ public class ProductosController extends HttpServlet {
 						producto.setDescuento(pProducto.getDescuento());
 						producto.setPrecio(pProducto.getPrecio());
 						producto.setFechaModificacion(new Timestamp(System.currentTimeMillis()));
+						producto.setCategoria(pProducto.getCategoria());
+						producto.setValidado(pProducto.getValidado());
 						LOG.debug("Modifica el producto");
 						daoProducto.updateByUser(producto.getId(), usuarioSesion.getId(), producto);
 					}
@@ -344,13 +359,14 @@ public class ProductosController extends HttpServlet {
 		vistaSeleccionada = operacionesVista(request, response, VIEW_FORM);
 	}
 
-	private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ProductoException {
-		
+	private void listar(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ProductoException {
+
 		LOG.debug("Entra en listar");
-		
+
 		request.setAttribute("productos", daoProducto.getAllByUser(usuarioSesion.getId()));
 		LOG.debug("Pasa el listado de productos a la request");
-		
+
 		mensajes.clear();
 		vistaSeleccionada = operacionesVista(request, response, VIEW_TABLA);
 	}

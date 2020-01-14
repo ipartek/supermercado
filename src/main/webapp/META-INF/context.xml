@@ -7,8 +7,11 @@
 		maxWait="10000" 
 		name="jdbc/mydb"	 
 		type="javax.sql.DataSource"
-		url="jdbc:mysql://192.168.0.1:3306/supermercado" 
-		username="erozki"
-		password="erozki1" 
+		url="jdbc:mysql://192.168.0.58:3306/supermerkado_Rantz"
+		username="root"
+		password="root"
 		/>
+		<!--url="jdbc:mysql://192.168.0.1:3306/supermercado"
+		username="erozki"
+		password="erozki1" -->
 </Context>	
