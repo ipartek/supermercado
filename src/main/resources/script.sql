@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
+-- Host:                         192.168.0.92
 -- Versión del servidor:         5.1.72-community - MySQL Community Server (GPL)
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             10.3.0.5771
@@ -12,8 +12,8 @@
 
 
 -- Volcando estructura de base de datos para supermerkado
-CREATE DATABASE IF NOT EXISTS `supermerkado` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `supermerkado`;
+CREATE DATABASE IF NOT EXISTS `supermercado_aiken` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `supermercado_aiken`;
 
 -- Volcando estructura para tabla supermerkado.categoria
 CREATE TABLE IF NOT EXISTS `categoria` (
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   `nombre` varchar(100) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla supermerkado.categoria: ~9 rows (aproximadamente)
 DELETE FROM `categoria`;
@@ -30,7 +30,7 @@ INSERT INTO `categoria` (`id`, `nombre`) VALUES
 	(14, '0categoria'),
 	(3, 'electrodomesticos'),
 	(8, 'fruteria'),
-	(1, 'mock1578658677040'),
+	(1, 'mock1578986086289'),
 	(2, 'musica'),
 	(4, 'nueva'),
 	(5, 'nueva2'),
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `producto` (
   `descripcion` mediumtext,
   `precio` float NOT NULL DEFAULT '0',
   `descuento` int(11) DEFAULT '0' COMMENT 'porcentaje descuento de 0 a 100',
-  `imagen` varchar(255) DEFAULT NULL,
+  `imagen` varchar(255) DEFAULT 'https://image.flaticon.com/icons/png/512/372/372627.png',
   `validado` tinyint(4) NOT NULL DEFAULT '0',
   `fecha_baja` timestamp NULL DEFAULT NULL,
   `fecha_alta` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -85,20 +85,21 @@ CREATE TABLE IF NOT EXISTS `producto` (
   KEY `FK_categoria` (`id_categoria`),
   CONSTRAINT `FK_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id`),
   CONSTRAINT `FK_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermerkado.producto: ~8 rows (aproximadamente)
+-- Volcando datos para la tabla supermerkado.producto: ~9 rows (aproximadamente)
 DELETE FROM `producto`;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
 INSERT INTO `producto` (`id`, `nombre`, `id_categoria`, `id_usuario`, `descripcion`, `precio`, `descuento`, `imagen`, `validado`, `fecha_baja`, `fecha_alta`, `fecha_modificacion`) VALUES
-	(8, 'unicoeeeernioeeeeeee', 1, 1, NULL, 2, 0, NULL, 1, '2020-01-10 10:54:57', '0000-00-00 00:00:00', '2020-01-10 08:24:12'),
-	(12, 'hsdfhjkdfhjksdsabor a unicornio', 2, 1, NULL, 0, 0, NULL, 1, NULL, '0000-00-00 00:00:00', '2020-01-09 12:56:42'),
-	(21, 'nuevo33333', 1, 4, NULL, 0, 0, NULL, 1, NULL, '0000-00-00 00:00:00', '2020-01-09 13:03:52'),
-	(22, 'morcilla', 1, 1, NULL, 0, 2, NULL, 1, NULL, '0000-00-00 00:00:00', '2020-01-09 13:04:17'),
-	(29, 'morcilla de burgos', 1, 1, NULL, 0, 0, NULL, 1, NULL, '0000-00-00 00:00:00', '2020-01-09 12:56:42'),
-	(30, 'queso de burgos', 1, 1, NULL, 0, 50, NULL, 1, NULL, '0000-00-00 00:00:00', '2020-01-09 12:56:42'),
-	(31, 'queso manchego', 1, 1, NULL, 0, 100, NULL, 1, NULL, '0000-00-00 00:00:00', '2020-01-09 12:56:42'),
-	(36, 'morcillaeeeeee3333', 1, 1, NULL, 0, 0, NULL, 1, NULL, '0000-00-00 00:00:00', '2020-01-09 13:03:57');
+	(8, 'unicoeeeernioeeeeeee', 1, 1, NULL, 2, 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', 1, '2020-01-10 10:54:57', '2020-01-13 09:01:39', '2020-01-10 08:24:12'),
+	(12, 'hsdfhjkdfhjksdsabor a unicornio', 2, 1, NULL, 0, 20, 'https://image.flaticon.com/icons/png/512/372/372627.png', 1, NULL, '2020-01-13 09:01:39', '2020-01-09 12:56:42'),
+	(21, 'nuevo33333', 1, 4, NULL, 0, 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', 0, NULL, '2020-01-13 09:01:39', '2020-01-09 13:03:52'),
+	(22, 'morcilla', 1, 1, NULL, 0, 2, 'https://image.flaticon.com/icons/png/512/372/372627.png', 1, NULL, '2020-01-13 09:01:39', '2020-01-09 13:04:17'),
+	(29, 'morcilla de burgos', 1, 1, NULL, 0, 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', 0, NULL, '2020-01-13 09:01:39', '2020-01-09 12:56:42'),
+	(30, 'queso de burgos', 1, 1, NULL, 0, 50, 'https://image.flaticon.com/icons/png/512/372/372627.png', 1, NULL, '2020-01-13 09:01:39', '2020-01-09 12:56:42'),
+	(31, 'queso manchegoa', 1, 1, '', 0, 100, 'https://image.flaticon.com/icons/png/512/372/372627.png', 1, NULL, '2020-01-13 09:01:39', '2020-01-09 12:56:42'),
+	(36, 'morcillaeeeeee3333a', 1, 1, '', 0, 0, 'https://image.flaticon.com/icons/png/512/372/372627.png', 0, NULL, '2020-01-13 09:01:39', '2020-01-09 13:03:57'),
+	(37, 'aaaaaaaa', 3, 4, 'aaaaaaaa', 20, 10, 'https://image.flaticon.com/icons/png/512/372/372627.png', 1, '2020-01-13 12:07:01', '2020-01-13 12:01:26', NULL);
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
 
 -- Volcando estructura para tabla supermerkado.rol
@@ -125,18 +126,24 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `imagen` varchar(255) DEFAULT 'https://www.instamatico.io/wp-content/uploads/2019/11/Icon-Real-Profiles.png',
   `id_rol` int(11) DEFAULT '0',
   `validado` tinyint(4) NOT NULL DEFAULT '0',
+  `fecha_baja` timestamp NULL DEFAULT NULL,
+  `fecha_alta` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre` (`nombre`),
   KEY `FK_rol` (`id_rol`),
   CONSTRAINT `FK_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermerkado.usuario: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla supermerkado.usuario: ~6 rows (aproximadamente)
 DELETE FROM `usuario`;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` (`id`, `nombre`, `contrasenia`, `imagen`, `id_rol`, `validado`) VALUES
-	(1, 'admin', 'admin', NULL, 2, 0),
-	(4, 'Dolores', '123456', NULL, 1, 0);
+INSERT INTO `usuario` (`id`, `nombre`, `contrasenia`, `imagen`, `id_rol`, `validado`, `fecha_baja`, `fecha_alta`) VALUES
+	(1, 'admin', 'admin', NULL, 2, 1, NULL, '2020-01-13 13:08:22'),
+	(4, 'Dolores', '123456', NULL, 1, 1, NULL, '2020-01-13 13:08:22'),
+	(5, 'prueba2', 'prueba2', '', 1, 1, '2020-01-13 13:39:16', '2020-01-13 13:08:22'),
+	(7, 'prueba455', 'prueba4', '', 1, 1, NULL, '2020-01-13 13:08:22'),
+	(8, 'prueba666', 'prueba666', 'https://i.pinimg.com/originals/a1/30/86/a130864e6d6db6899ca996b0691113f8.jpg', 1, 1, NULL, '2020-01-13 13:47:49'),
+	(9, 'aang', 'aang', 'https://i.pinimg.com/originals/a1/30/86/a130864e6d6db6899ca996b0691113f8.jpg', 1, 1, '2020-01-13 13:57:58', '2020-01-13 13:54:58');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento supermerkado.pa_categoria_delete
@@ -212,6 +219,53 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento supermerkado.pa_producto_busqueda
+DELIMITER //
+CREATE PROCEDURE `pa_producto_busqueda`(
+	IN `p_idcategoria` INT,
+	IN `p_nombreproducto` VARCHAR(50)
+)
+BEGIN
+	IF STRCMP(p_nombreproducto, "")=0 && p_idcategoria<=0  THEN
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado'
+		FROM producto p
+		JOIN usuario u  
+		ON p.id_usuario = u.id
+		JOIN categoria c
+		ON p.id_categoria = c.id
+		WHERE p.fecha_baja IS NULL
+		ORDER BY p.id DESC LIMIT 500;	
+	ELSEIF STRCMP(p_nombreproducto, "")=0 && p_idcategoria>0 THEN
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado'
+		FROM producto p
+		JOIN usuario u  
+		ON p.id_usuario = u.id
+		JOIN categoria c
+		ON p.id_categoria = c.id
+		WHERE p.fecha_baja IS NULL AND c.id = p_idcategoria
+		ORDER BY p.id DESC LIMIT 500;	
+	ELSEIF STRCMP(p_nombreproducto, "")!=0 && p_idcategoria>0 THEN
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado'
+		FROM producto p
+		JOIN usuario u  
+		ON p.id_usuario = u.id
+		JOIN categoria c
+		ON p.id_categoria = c.id
+		WHERE p.fecha_baja IS NULL AND c.id = p_idcategoria AND p.nombre LIKE CONCAT('%',p_nombreproducto,'%')
+		ORDER BY p.id DESC LIMIT 500;
+	ELSEIF STRCMP(p_nombreproducto, "")!=0 && p_idcategoria<=0 THEN
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado'
+		FROM producto p
+		JOIN usuario u  
+		ON p.id_usuario = u.id
+		JOIN categoria c
+		ON p.id_categoria = c.id
+		WHERE p.fecha_baja IS NULL AND p.nombre LIKE CONCAT('%',p_nombreproducto,'%')
+		ORDER BY p.id DESC LIMIT 500;
+	END IF;
+END//
+DELIMITER ;
+
 -- Volcando estructura para procedimiento supermerkado.pa_producto_deletebyuserlogico
 DELIMITER //
 CREATE PROCEDURE `pa_producto_deletebyuserlogico`(
@@ -237,13 +291,13 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE `pa_producto_getallactivos`()
 BEGIN
-	SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', fecha_alta, fecha_baja, validado 
+	SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado' 
 	FROM producto p
 	JOIN usuario u  
 	ON p.id_usuario = u.id
 	JOIN categoria c
 	ON p.id_categoria = c.id
-	WHERE fecha_baja IS NULL
+	WHERE p.fecha_baja IS NULL AND p.validado=1
 	ORDER BY p.id DESC LIMIT 500;
 END//
 DELIMITER ;
@@ -252,13 +306,13 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE `pa_producto_getallbaja`()
 BEGIN
-		SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', fecha_alta, fecha_baja, validado
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado'
 		FROM producto p
 		JOIN usuario u  
 		ON p.id_usuario = u.id
 		JOIN categoria c
 		ON p.id_categoria = c.id
-		WHERE fecha_baja IS NOT NULL
+		WHERE p.fecha_baja IS NOT NULL
 		ORDER BY p.id DESC LIMIT 500;
 END//
 DELIMITER ;
@@ -269,11 +323,11 @@ CREATE PROCEDURE `pa_producto_getallbyuser`(
 	IN `p_id_usuario` INT
 )
 BEGIN
-	SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', fecha_alta, fecha_baja, validado 
+	SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado' 
 	FROM producto p
 	JOIN usuario u  
 	ON p.id_usuario = u.id 
-	WHERE  fecha_baja IS NULL AND p.validado = 1 AND p.id_usuario = p_id_usuario
+	WHERE  p.fecha_baja IS NULL AND p.validado = 1 AND p.id_usuario = p_id_usuario
 	ORDER BY p.id DESC LIMIT 500;
 END//
 DELIMITER ;
@@ -282,7 +336,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE `pa_producto_getallinactivos`()
 BEGIN
-		SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', fecha_alta, fecha_baja, validado 
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado' 
 		FROM producto p
 		JOIN usuario u  
 		ON p.id_usuario = u.id
@@ -299,10 +353,12 @@ CREATE PROCEDURE `pa_producto_getbyid`(
 	IN `p_id` INT
 )
 BEGIN
-	 SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', fecha_alta, fecha_baja, validado
+	 SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado'
 	 FROM producto p
 	 JOIN usuario u 
 	 ON p.id_usuario = u.id
+	 JOIN categoria c
+	 ON c.id = p.id_categoria
 	 WHERE p.id = p_id
 	 ORDER BY p.id DESC LIMIT 500;
 END//
@@ -315,9 +371,14 @@ CREATE PROCEDURE `pa_producto_getbyidbyuser`(
 	IN `p_id_usuario` INT
 )
 BEGIN
-	SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', fecha_alta, fecha_baja, validado
-			FROM producto p, usuario u WHERE p.id_usuario = u.id AND p.id= p_id_producto AND u.id = p_id_usuario
-			ORDER BY p.id DESC LIMIT 500;
+	SELECT p.id 'id_producto', p.nombre 'nombre_producto', c.id 'id_categoria', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario', descripcion, precio, descuento, p.imagen 'imagen', p.fecha_alta 'fecha_alta', p.fecha_baja 'fecha_baja', p.validado 'validado'
+	FROM producto p
+	JOIN usuario u 
+	ON p.id_usuario = u.id 
+	JOIN categoria c
+	ON c.id = p.id_categoria
+	WHERE p.id= p_id_producto AND u.id = p_id_usuario
+	ORDER BY p.id DESC LIMIT 500;
 END//
 DELIMITER ;
 
@@ -373,6 +434,16 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento supermerkado.pa_usuario_deletelogico
+DELIMITER //
+CREATE PROCEDURE `pa_usuario_deletelogico`(
+	IN `p_id` INT
+)
+BEGIN
+	UPDATE usuario SET fecha_baja = CURRENT_TIMESTAMP() WHERE id=p_id;
+END//
+DELIMITER ;
+
 -- Volcando estructura para procedimiento supermerkado.pa_usuario_exist
 DELIMITER //
 CREATE PROCEDURE `pa_usuario_exist`(
@@ -380,7 +451,7 @@ CREATE PROCEDURE `pa_usuario_exist`(
 	IN `p_contrasenia` VARCHAR(255)
 )
 BEGIN
-	SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol' 
+	SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', contrasenia, r.id 'id_rol', r.nombre 'nombre_rol', imagen, validado, fecha_baja, fecha_alta 
 	FROM usuario u
 	JOIN rol r
 	ON u.id_rol = r.id 
@@ -392,40 +463,89 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE `pa_usuario_getallactivos`()
 BEGIN
-	SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', r.id 'id_rol', r.nombre 'nombre_rol', contrasenia, imagen, validado 
+	SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', r.id 'id_rol', r.nombre 'nombre_rol', contrasenia, imagen, validado, fecha_baja, fecha_alta 
 	FROM usuario u
 	JOIN rol r
 	ON u.id_rol = r.id
-	WHERE validado = 1;
+	WHERE validado = 1 AND fecha_baja IS NULL;
 END//
 DELIMITER ;
 
--- Volcando estructura para función supermerkado.HELLO_WORLD
+-- Volcando estructura para procedimiento supermerkado.pa_usuario_getallbaja
 DELIMITER //
-CREATE FUNCTION `HELLO_WORLD`() RETURNS varchar(100) CHARSET utf8
+CREATE PROCEDURE `pa_usuario_getallbaja`()
 BEGIN
-
-	RETURN "hola mundo";
-
+	SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', r.id 'id_rol', r.nombre 'nombre_rol', contrasenia, imagen, validado, fecha_baja, fecha_alta 
+	FROM usuario u
+	JOIN rol r
+	ON u.id_rol = r.id
+	WHERE validado = 1 AND fecha_baja IS NOT NULL;
 END//
 DELIMITER ;
 
--- Volcando estructura para función supermerkado.HELLO_WORLD2
+-- Volcando estructura para procedimiento supermerkado.pa_usuario_getallinactivos
 DELIMITER //
-CREATE FUNCTION `HELLO_WORLD2`(
-	`pNombre` VARCHAR(50)
-) RETURNS varchar(100) CHARSET utf8
+CREATE PROCEDURE `pa_usuario_getallinactivos`()
 BEGIN
+	SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', r.id 'id_rol', r.nombre 'nombre_rol', contrasenia, imagen, validado, fecha_baja, fecha_alta 
+	FROM usuario u
+	JOIN rol r
+	ON u.id_rol = r.id
+	WHERE validado = 0;
+END//
+DELIMITER ;
 
-	DECLARE nombre VARCHAR(100) DEFAULT 'anonimo';
+-- Volcando estructura para procedimiento supermerkado.pa_usuario_getbyid
+DELIMITER //
+CREATE PROCEDURE `pa_usuario_getbyid`(
+	IN `p_id_usuario` INT
+)
+BEGIN
+	SELECT u.id 'id_usuario', u.nombre 'nombre_usuario', r.id 'id_rol', r.nombre 'nombre_rol', contrasenia, imagen, validado, fecha_baja, fecha_alta 
+	FROM usuario u
+	JOIN rol r
+	ON u.id_rol = r.id
+	WHERE u.id=p_id_usuario;
+END//
+DELIMITER ;
 
-   IF( TRIM(pNombre) != '' ) THEN
-   	SET nombre = TRIM(pNombre);
-   END IF;
+-- Volcando estructura para procedimiento supermerkado.pa_usuario_registro
+DELIMITER //
+CREATE PROCEDURE `pa_usuario_registro`(
+	IN `p_nombre` VARCHAR(50),
+	IN `p_contrasenia` VARCHAR(255),
+	IN `p_imagen` VARCHAR(255)
+)
+BEGIN
+	INSERT INTO usuario (nombre, contrasenia, imagen, id_rol, validado) VALUES (p_nombre, p_contrasenia, p_imagen, 1, 0);
+END//
+DELIMITER ;
 
-	--	RETURN "Hello" +  pNombre;
-	RETURN CONCAT("hello"," ",nombre);
+-- Volcando estructura para procedimiento supermerkado.pa_usuario_registrobyadmin
+DELIMITER //
+CREATE PROCEDURE `pa_usuario_registrobyadmin`(
+	IN `p_nombre` VARCHAR(50),
+	IN `p_contrasenia` VARCHAR(255),
+	IN `p_imagen` VARCHAR(255),
+	IN `p_id_rol` INT
+)
+BEGIN
+	INSERT INTO usuario (nombre, contrasenia, imagen, id_rol, validado) VALUES (p_nombre, p_contrasenia, p_imagen, p_id_rol, 1);
+END//
+DELIMITER ;
 
+-- Volcando estructura para procedimiento supermerkado.pa_usuario_update
+DELIMITER //
+CREATE PROCEDURE `pa_usuario_update`(
+	IN `p_id_usuario` INT,
+	IN `p_nombre` VARCHAR(50),
+	IN `p_contrasenia` VARCHAR(255),
+	IN `p_imagen` VARCHAR(255),
+	IN `p_id_rol` INT,
+	IN `p_validado` TINYINT
+)
+BEGIN
+	UPDATE usuario SET nombre=p_nombre, contrasenia=p_contrasenia, imagen=p_imagen, id_rol=p_id_rol, validado=p_validado WHERE id=p_id_usuario;
 END//
 DELIMITER ;
 
