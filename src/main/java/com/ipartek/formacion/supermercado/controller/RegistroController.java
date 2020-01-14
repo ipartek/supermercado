@@ -65,12 +65,20 @@ public class RegistroController extends HttpServlet {
 			mensajeValidacion(request, validaciones);
 
 			request.setAttribute("usuario", user);
+			
+			LOG.debug("validaciones");
+			
+			vistaSeleccionda = "registro.jsp";
 
 		} else {
 
 				try {
 					
 					usuarioDao.registro(user);
+					
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Usuario creado correctamente :)"));
+					
+					vistaSeleccionda = "login.jsp";
 					
 				} catch (Exception e) {
 					
@@ -81,11 +89,9 @@ public class RegistroController extends HttpServlet {
 					vistaSeleccionda = "registro.jsp";
 				}
 
-				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Usuario creado correctamente :)"));
-				
-				request.getRequestDispatcher("login.jsp").forward(request, response);
-
 		}
+		
+		request.getRequestDispatcher(vistaSeleccionda).forward(request, response);
 		
 	}
 	
