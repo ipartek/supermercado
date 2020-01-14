@@ -17,8 +17,10 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -34,6 +36,7 @@ public class ProductosController extends HttpServlet {
 	private static String vistaSeleccionda = VIEW_TABLA;
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
 	
 	//acciones
 	public static final String ACCION_LISTAR = "listar";
@@ -55,6 +58,7 @@ public class ProductosController extends HttpServlet {
 	String pDescripcion;
 	String pDescuento;
 	String pUsuarioId;
+	String pCategoriaId;
 	
 	
 	@Override
@@ -62,8 +66,9 @@ public class ProductosController extends HttpServlet {
 		super.init(config);
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
-		//factory = Validation.buildDefaultValidatorFactory();
-		//validator = factory.getValidator();
+		daoCategoria = CategoriaDAO.getInstance();
+		factory = Validation.buildDefaultValidatorFactory();
+		validator = factory.getValidator();
 	}
       
 	@Override
@@ -71,6 +76,7 @@ public class ProductosController extends HttpServlet {
 		super.destroy();
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
 		factory = null;
 		validator = null;
 	}
@@ -102,6 +108,7 @@ public class ProductosController extends HttpServlet {
 			pDescripcion = request.getParameter("descripcion");
 			pDescuento = request.getParameter("descuento");
 			pUsuarioId = request.getParameter("usuarioId");
+			pCategoriaId = request.getParameter("categoriaId");
 			
 			
 			try {
@@ -152,7 +159,7 @@ public class ProductosController extends HttpServlet {
 			pEditar = daoProducto.getById(id);
 			
 		}
-		
+		request.setAttribute("categorias", daoCategoria.getAll());
 		request.setAttribute("usuarios", daoUsuario.getAll() );
 		request.setAttribute("producto", pEditar );
 		vistaSeleccionda = VIEW_FORM;
@@ -166,11 +173,20 @@ public class ProductosController extends HttpServlet {
 		Producto pGuardar = new Producto();		
 		pGuardar.setId(id);
 		pGuardar.setNombre(pNombre);
+		pPrecio = pPrecio.replace(",", ".");
+		
+		pGuardar.setPrecio(Float.parseFloat(pPrecio));
+		pGuardar.setDescripcion(pDescripcion);
 		pGuardar.setDescuento( Integer.parseInt(pDescuento));
 		
 		Usuario u = new Usuario();
 		u.setId(Integer.parseInt(pUsuarioId));
 		pGuardar.setUsuario(u);
+		
+		int idCategoria = Integer.parseInt(pCategoriaId);
+		
+		Categoria c = daoCategoria.getById(idCategoria);
+		pGuardar.setCategoria(c);
 				
 		
 		Set<ConstraintViolation<Producto>> validaciones = validator.validate(pGuardar);
@@ -183,9 +199,10 @@ public class ProductosController extends HttpServlet {
 					if ( id > 0 ) {  // modificar
 						
 						daoProducto.update(id, pGuardar);		
-						
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Se ha actualizado el producto " + pGuardar.getNombre() + " con éxito."));
 					}else {            // crear
 						daoProducto.create(pGuardar);
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Se ha creado el producto " + pGuardar.getNombre() + " con éxito."));
 					}
 					
 				}catch (Exception e) {  // validacion a nivel de base datos
@@ -197,8 +214,8 @@ public class ProductosController extends HttpServlet {
 		
 		request.setAttribute("usuarios", daoUsuario.getAll() );
 		request.setAttribute("producto", pGuardar);
-		vistaSeleccionda = VIEW_FORM;
-	
+		listar(request, response);
+			
 		
 	}
 

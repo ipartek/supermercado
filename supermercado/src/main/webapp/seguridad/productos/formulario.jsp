@@ -51,6 +51,15 @@
 			</c:forEach>
 		</select>
 	</div>
+	
+	<div class="form-group">
+		<label>Categoría</label>
+		<select name="categoriaId" class="custom-select">
+			<c:forEach items="${categorias}" var="c">
+				<option value="${c.id}">${c.nombre}</option>
+			</c:forEach>
+		</select>
+	</div>
 
 	<input type="hidden" name="id" value="${producto.id}"> <input
 		type="hidden" name="accion" value="guardar"> <input

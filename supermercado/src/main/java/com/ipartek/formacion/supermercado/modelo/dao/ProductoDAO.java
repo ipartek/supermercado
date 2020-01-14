@@ -123,7 +123,7 @@ public class ProductoDAO implements IProductoDAO {
 
 			// sustituyo parametros en la SQL, en este caso 1º ? por id
 			cs.setInt(1, id);
-
+			LOG.debug(cs);
 			// ejecuto la consulta
 			try (ResultSet rs = cs.executeQuery()) {
 
@@ -283,10 +283,18 @@ public class ProductoDAO implements IProductoDAO {
 
 		try (Connection con = ConnectionManager.getConnection();
 				CallableStatement cs = con.prepareCall(SQL_GET_INSERT)) {
+			
+			int categoria = pojo.getCategoria().getId();
 
 			cs.setString(1, pojo.getNombre());
-			cs.setInt(2, pojo.getUsuario().getId());
-
+			cs.setFloat(2, pojo.getPrecio());
+			cs.setString(3, pojo.getImagen());
+			cs.setString(4, pojo.getDescripcion());
+			cs.setInt(5, pojo.getDescuento());
+			cs.setInt(6, categoria);
+			cs.setInt(7, pojo.getUsuario().getId());
+						
+			LOG.debug(cs);
 			int affectedRows = cs.executeUpdate();
 			if (affectedRows == 1) {
 				// conseguimos el ID que acabamos de crear
