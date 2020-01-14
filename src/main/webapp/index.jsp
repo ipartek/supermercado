@@ -10,7 +10,7 @@
 						<select name="categoriaId" class="custom-select">
 							<option value="0"> Seleccione una categoria </option>
 							<c:forEach items="${categorias}" var="c">
-								<option value="${c.id}">${c.nombre}</option>	
+								<option value="${c.id}" ${(c.id eq categoria)?"selected":""}>${c.nombre}</option>	
 							</c:forEach>
 						</select>
 					</div>
@@ -21,7 +21,7 @@
 							   class="form-control" 
 							   name="producto"
                                id="producto" 
-                               value=""
+                               value="${cadena}"
 							   placeholder="Buscar por..."
 							   aria-describedby="productoHelp">
 					      <span class="input-group-btn">

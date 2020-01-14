@@ -80,12 +80,20 @@ public class InicioController extends HttpServlet {
 		
 		if(pAccion != null) {   			// Si la variable pAccion no es null llama al procedure de busqueda de la base de datos 
 			
+			
 			try {
 				
 				int numCategoria = Integer.parseInt(pCategoria);
 				
 				productos = (ArrayList<Producto>) daoProducto.busqueda(numCategoria, pProducto);
-								
+						
+				if(productos.size()>0) {
+					alerta.setTipo(Alerta.TIPO_PRIMARY);
+					alerta.setTexto("Se han encontrado "+ productos.size()+" resultados");
+				} else {
+					alerta.setTipo(Alerta.TIPO_PRIMARY);
+					alerta.setTexto("No se han encontrado resultado que coincidan con la busqueda");
+				}
 				
 			} catch (NumberFormatException e) {
 				
@@ -100,9 +108,12 @@ public class InicioController extends HttpServlet {
 			
 		}
 
-		request.setAttribute("productos", productos );		
-		request.setAttribute("categorias", categorias );	
-		request.setAttribute("mensajeAlerta", alerta);				
+		request.setAttribute("productos", productos);		
+		request.setAttribute("categorias", categorias);	
+		request.setAttribute("mensajeAlerta", alerta);
+		request.setAttribute("categoria", pCategoria);
+		request.setAttribute("cadena", pProducto);
+		
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 		
 		

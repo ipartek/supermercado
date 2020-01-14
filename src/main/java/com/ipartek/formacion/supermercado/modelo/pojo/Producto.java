@@ -16,16 +16,26 @@ public class Producto {
 	
 	private int id;
 	
-	@NotNull
-	@NotBlank
-	@Size(min = 2, max = 50)
+	@NotNull(message="Este campo no puede estar vacio.")
+	@NotBlank(message="Este campo no puede estar vacio.")
+	@Size(min = 2, max = 50, message="El valor de este campo tiene que estar entre 2 y 150 caracteres.")
 	private String nombre;
 	
+	@NotNull(message= "Este campo no puede estar vacio.")
+	@Range(min = 1, message="El valor de este campo no puede ser menor que 1.")
 	private float precio;
+	
+	@NotNull(message="Este campo no puede estar vacio.")
+	@NotBlank(message="Este campo no puede estar vacio.")
 	private String imagen;
+	
+	@NotNull(message="Este campo no puede estar vacio.")
+	@NotBlank(message="Este campo no puede estar vacio.")
+	@Size(min = 2, message="El valor de este campo tiene que estar entre 2 y 150 caracteres.")
 	private String descripcion;
 	
-	@Range(min = 0, max= 100)
+	@NotNull(message= "Este campo no puede estar vacio.")
+	@Range(min = 0, max = 100, message="El valor de este campo tiene que estar entre 0 y 100.")
 	private int descuento;
 	
 	private Usuario usuario;

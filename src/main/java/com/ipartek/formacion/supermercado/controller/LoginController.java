@@ -71,7 +71,8 @@ public class LoginController extends HttpServlet {
 			
 		} catch (Exception e) {
 			
-			LOG.error(e);			
+			LOG.error(e);		
+			
 		}finally {
 			request.getRequestDispatcher(view).forward(request, response);
 		}	
