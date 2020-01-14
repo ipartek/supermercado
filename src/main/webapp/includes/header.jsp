@@ -13,7 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="Ander Uraga">
+    <meta name="author" content="Cristian y Ana">
     <title>Supermercado</title>
     
    <!-- la base para construir todas las rutas de esta página -->
@@ -122,7 +122,7 @@
 							  <button class="btn dropdown-toggle bg-primary text-white" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Usuario </button>
 							  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
 							    <c:if test="${usuarioLogeado.rol.id eq 1 }" >
-									<a class="py-2 d-none d-md-inline-block" href="mipanel/usuario?accion=listar">Datos personales</a>
+									<a class="py-2 d-none d-md-inline-block" href="mipanel/personal?accion=listar">Datos personales</a>
 						       </c:if>
 							  </div>
 							</div>
