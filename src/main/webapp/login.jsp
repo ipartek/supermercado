@@ -15,10 +15,11 @@
 					 
 					 <div class="form-group">
 					    <label for="contrasenya">Contraseña:</label>
-					    <input type="password" class="form-control" name="contrasenya" id="contrasenya" required>					    
+					    <input type="password" class="form-control" name="contrasenya" id="contrasenya" required>
+					    <input type="hidden" name="contraseniaMD5" id="contraseniaMD5">					    
 					 </div>
 					
-					 <button type="submit" class="btn btn-block btn-primary">Entrar</button>
+					 <button type="submit" class="btn btn-block btn-primary" onclick="calcMD5()">Entrar</button>
 				
 				</form>	
 		
