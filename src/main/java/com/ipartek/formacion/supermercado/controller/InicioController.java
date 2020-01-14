@@ -112,10 +112,10 @@ public class InicioController extends HttpServlet {
 			if (cId > 0) {
 				
 				if ("".equals(pNombre)) {
-					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado " + productos.size() + " productos de la categoría " + daoCategoria.getById(cId).getNombre()) );		
+					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado <b>" + productos.size() + "</b> productos de la categoría <b>" + daoCategoria.getById(cId).getNombre() + "</b>.") );		
 				
 				} else {
-					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado " + productos.size() + " productos de la categoría " + daoCategoria.getById(cId).getNombre() + " con el nombre \"" + pNombre + "\".") );		
+					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado <b>" + productos.size() + "</b> productos de la categoría <b>" + daoCategoria.getById(cId).getNombre() + "</b> con el nombre <b>\"" + pNombre + "</b>\".") );		
 				
 				}
 					
@@ -129,7 +129,7 @@ public class InicioController extends HttpServlet {
 					
 				} else {
 					
-					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado " + productos.size() + " productos con el nombre \"" + pNombre + "\".") );		
+					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado <b>" + productos.size() + "</b> productos con el nombre <b>\"" + pNombre + "</b>\".") );		
 				
 				}
 				
