@@ -43,6 +43,7 @@ main{
     width: 200px;
     border: 1px solid #F0F0F0;
     position: relative;
+    margin: 10px auto;
 }
 
 .producto .descuento{

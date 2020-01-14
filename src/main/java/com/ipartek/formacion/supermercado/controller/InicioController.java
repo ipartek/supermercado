@@ -99,13 +99,48 @@ public class InicioController extends HttpServlet {
 		if(cId > 0 || cId == 0) {
 			String pNombre = request.getParameter("nombre");
 			productos = (ArrayList<Producto>) daoProducto.getAllBuscador(cId, pNombre);
+			String tipoMensaje;
 			
+			if (productos.size() == 0) {
+				tipoMensaje = Alerta.TIPO_DANGER;
+				
+			} else {
+				tipoMensaje = Alerta.TIPO_SUCCESS;
+				
+			}
+			
+			if (cId > 0) {
+				
+				if ("".equals(pNombre)) {
+					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado " + productos.size() + " productos de la categoría " + daoCategoria.getById(cId).getNombre()) );		
+				
+				} else {
+					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado " + productos.size() + " productos de la categoría " + daoCategoria.getById(cId).getNombre() + " con el nombre \"" + pNombre + "\".") );		
+				
+				}
+					
+			}
+
+			if (cId == 0) {
+				
+				if ("".equals(pNombre)) {
+					
+					request.setAttribute("mensajeAlerta", new Alerta( Alerta.TIPO_PRIMARY , "Todos los productos disponibles.") );		
+					
+				} else {
+					
+					request.setAttribute("mensajeAlerta", new Alerta( tipoMensaje , "Se han encontrado " + productos.size() + " productos con el nombre \"" + pNombre + "\".") );		
+				
+				}
+				
+				
+			}
+			
+			request.setAttribute("cId", cId );
+			request.setAttribute("pNombre", pNombre );
 			request.setAttribute("productos", productos );		
 			request.setAttribute("categorias", categorias );
 		}
-
-		
-		request.setAttribute("mensajeAlerta", new Alerta( Alerta.TIPO_PRIMARY , "Los últimos productos destacados.") );		
 		
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 		

@@ -11,13 +11,13 @@
 						<div class="form-group">
 							<label for="category-select">Selecciona una categoría: </label>
 							<select name="id" class="form-control" id="category-select">
-								<option value="0">todas las categorias</option>
+								<option value="0">Todas las categorías</option>
 								<c:forEach items="${categorias}" var="c">
-									<option value="${c.id}">${c.nombre}</option>
+									<option value="${c.id}" ${(c.id eq cId)?"selected":""}>${c.nombre}</option>
 								</c:forEach>
 							</select>
 							
-							<input name="nombre" class="form-control" type="text" placeholder="Nombre de producto" aria-label="Search">
+							<input name="nombre" class="form-control" type="text" placeholder="Nombre de producto" value="${pNombre}" aria-label="Search">
 						</div>
 					</div>
 					<div class="col-2 text-right">
