@@ -29,9 +29,9 @@
 	rel="stylesheet">
 
 <!-- datatables -->
-<link
-	href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"
-	rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" />
+
 
 <!-- nuestro css -->
 <link rel="stylesheet" href="css/custom.css">
