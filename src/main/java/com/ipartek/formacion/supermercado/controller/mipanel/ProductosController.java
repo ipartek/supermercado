@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoException;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
@@ -41,6 +42,8 @@ public class ProductosController extends HttpServlet {
 	private static String vistaSeleccionda = VIEW_TABLA;
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
+	
 	private Usuario uLogeado;
 	//acciones
 	public static final String ACCION_LISTAR = "listar";
@@ -70,6 +73,8 @@ public class ProductosController extends HttpServlet {
 		super.init(config);
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
+		
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
 	}
@@ -79,6 +84,8 @@ public class ProductosController extends HttpServlet {
 		super.destroy();
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
+
 		factory = null;
 		validator = null;
 	}
@@ -173,6 +180,7 @@ public class ProductosController extends HttpServlet {
 
 		}
 
+		request.setAttribute("categorias", daoCategoria.getAll() );
 		request.setAttribute("usuarios", daoUsuario.getAll() );
 		request.setAttribute("producto", pEditar );
 		vistaSeleccionda = VIEW_FORM;
