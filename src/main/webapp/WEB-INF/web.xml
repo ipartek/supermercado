@@ -9,7 +9,8 @@
 	      	<welcome-file>inicio</welcome-file>
 	      </welcome-file-list>
 	      
-	      <!--  TODO para el final, si hay tiempo 
+	      <!--  
+	      TODO para el final, si hay tiempo 
 	      
 	      	paginas de errores para los controladores
 	      	en los JSPs hay que indiccar con una directiva cual es la pagina a donde tiene que ir en caso de error
