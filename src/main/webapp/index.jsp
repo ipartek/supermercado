@@ -10,9 +10,7 @@
 <%-- ${(c.id eq producto.categoria.id)?"selected":""} --%>
 
 			<div class="form-group">
-				<label>Filtrar por Categoria:</label> <select name="categoriaIdFiltro"
-					class="custom-select mb-2">
-					<option value="0">Seleccionar</option>
+					<option value="0">Todas las categorias</option>
 					<c:forEach items="${categorias}" var="c">
 						<option value="${c.id}" ${(c.id eq categoriaId)?"selected":""}>${c.nombre}</option>
 					</c:forEach>
