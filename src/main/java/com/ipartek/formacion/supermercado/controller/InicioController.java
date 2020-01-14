@@ -120,14 +120,16 @@ public class InicioController extends HttpServlet {
 				// de busqueda
 				if (pIdCategoria == 0 && pNombreProducto != "") {
 
-					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY,
-							productosPorCat + " producto(s) para el término de búsqueda " + pNombreProducto));
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "<b>" + productosPorCat
+							+ "</b> producto(s) para el término de búsqueda <b>" + pNombreProducto + "</b>"));
 				}
 				// Para una catrgoria todos los productos
 				else if (pIdCategoria != 0 && pNombreProducto == "") {
 
-					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, productosPorCat
-							+ " producto(s) en  la categoría " + daoCategoria.getById(pIdCategoria).getNombre()));
+					request.setAttribute("mensajeAlerta",
+							new Alerta(Alerta.TIPO_PRIMARY,
+									"<b>" + productosPorCat + "</b>" + " producto(s) en  la categoría <b>"
+											+ daoCategoria.getById(pIdCategoria).getNombre() + "</b>"));
 
 				}
 				// para una categoria productos que se llaman como pNombreProducto
@@ -135,9 +137,9 @@ public class InicioController extends HttpServlet {
 
 					request.setAttribute("mensajeAlerta",
 							new Alerta(Alerta.TIPO_PRIMARY,
-									productosPorCat + " producto(s)  en la categoría "
+									"<b>" + productosPorCat + " </b> producto(s)  en la categoría <b>"
 											+ daoCategoria.getById(pIdCategoria).getNombre()
-											+ " para el término de búsqueda " + pNombreProducto));
+											+ "</b> para el término de búsqueda <b>" + pNombreProducto + "</b>"));
 
 				} else {
 					request.setAttribute("mensajeAlerta",
