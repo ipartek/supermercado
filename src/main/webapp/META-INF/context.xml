@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Producción -->
 <Context>
 	<Resource auth="Container" 
 	    driverClassName="com.mysql.jdbc.Driver"
@@ -7,8 +9,24 @@
 		maxWait="10000" 
 		name="jdbc/mydb"	 
 		type="javax.sql.DataSource"
-		url="jdbc:mysql://192.168.0.73:3306/supermercado_grupo?useSSL=false" 
-		username="erozki"
-		password="erozki123" 
+		url="jdbc:mysql://192.168.0.58:8080/supermercado_AnaCristian?useSSL=false" 
+		username="root"
+		password="root" 
 		/>
-</Context>	
+</Context>
+
+<!-- 	Desarrollo
+		<Context>
+			<Resource auth="Container" 
+	    	driverClassName="com.mysql.jdbc.Driver"
+			maxActive="100" 
+			maxIdle="30" 
+			maxWait="10000" 
+			name="jdbc/mydb"	 
+			type="javax.sql.DataSource"
+			url="jdbc:mysql://192.168.0.73:3306/supermercado_grupo?useSSL=false" 
+			username="erozki"
+			password="erozki123" 
+			/>
+		</Context>
+ -->
