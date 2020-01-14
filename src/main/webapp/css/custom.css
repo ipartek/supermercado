@@ -3,7 +3,10 @@ nav, footer, .footer-wrapper{
     background-color: #DDD;
 }
 
-
+.navbar-nav{
+	
+	width: 100%;
+}
 
 main{
     min-height: 70vh;

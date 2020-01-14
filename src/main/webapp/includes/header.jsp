@@ -39,33 +39,56 @@
 		  </button>
 		
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-		    <ul class="navbar-nav mr-auto">
-		      <li class="nav-item">
-		        <a class="nav-link" href="#">Link</a>
+		    <ul class="navbar-nav mr-auto ">
+		      <li class="nav-item d-none">
+		        <a class="nav-link " href="#">Link</a>
 		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		          Dropdown
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="#">Action</a>
-		          <a class="dropdown-item" href="#">Another action</a>
-		        </div>
-		      </li>
-		      
-		      <li>
-		                  <c:if test="${empty usuarioLogeado }" >
-            	<a class="nav-link " href="login.jsp">Login</a>
-            </c:if>
-		      </li>
-
+		      <c:if test="${usuarioLogeado.rol.id eq 2 }" >
+			      <li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			          Productos
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          <a class="dropdown-item" href="seguridad/productos?accion=listar">Listar</a>
+			          <a class="dropdown-item" href="seguridad/productos?accion=formulario">Crear</a>
+			        </div>
+			      </li>
+			      <li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			          Categorias
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          <a class="dropdown-item" href="seguridad/categorias?accion=listar">Listar</a>
+			          <a class="dropdown-item" href="seguridad/categorias?accion=formulario">Crear</a>
+			        </div>
+			      </li>
+			      <li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			          Usuarios
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          <a class="dropdown-item" href="seguridad/usuarios?accion=listar">Listar</a>
+			          <a class="dropdown-item" href="seguridad/usuarios?accion=formulario">Crear</a>
+			        </div>
+			      </li>
+		      </c:if>
+		      <c:if test="${empty usuarioLogeado }" >
+			      <li class="nav-item ml-auto">
+	            	<a class="nav-link " href="login.jsp">Login</a>
+			      </li>
+	          </c:if>
+			<c:if test="${not empty usuarioLogeado }" >
+			<li class="nav-item ml-auto">
+            	<a class="nav-link" href="logout">Cerrar Sessión</a>
+            	</li>
+            </c:if>	
 		    </ul>
 		  </div>
 		</nav>  
 	  
 	  
 	  
-    <nav class="site-header sticky-top py-1">
+    <nav class="site-header sticky-top py-1 d-none">
         <div class="container d-flex flex-column flex-md-row justify-content-between">
             <a class="py-2" href="inicio">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mx-auto" role="img" viewBox="0 0 24 24" focusable="false"><title>Product</title><circle cx="12" cy="12" r="10"/><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"/></svg>
