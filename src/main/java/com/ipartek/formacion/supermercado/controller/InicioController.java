@@ -89,10 +89,21 @@ public class InicioController extends HttpServlet {
 						
 				if(productos.size()>0) {
 					alerta.setTipo(Alerta.TIPO_PRIMARY);
-					alerta.setTexto("Se han encontrado "+ productos.size()+" resultados");
+					if(pProducto.equals("") && numCategoria > 0) {
+						alerta.setTexto("Se han encontrado "+ productos.size()+" resultados dentro de la categoria "  + daoCategoria.getById(numCategoria).getNombre());
+					} 
+					
+					if(!pProducto.equals("") && numCategoria == 0) {
+						alerta.setTexto("Se han encontrado "+ productos.size()+" resultados que coincidan con la busqueda '" + pProducto + "'");
+					}
+					
+					if(!pProducto.equals("") && numCategoria > 0) {
+						alerta.setTexto("Se han encontrado "+ productos.size()+" resultados dentro de la categoria "  + daoCategoria.getById(numCategoria).getNombre() + " que coincidan con la busqueda '" + pProducto + "'");
+					} 
+					
 				} else {
 					alerta.setTipo(Alerta.TIPO_PRIMARY);
-					alerta.setTexto("No se han encontrado resultado que coincidan con la busqueda");
+					alerta.setTexto("No se han encontrado resultado que coincidan con la busqueda '" + pProducto + "'");
 				}
 				
 			} catch (NumberFormatException e) {
