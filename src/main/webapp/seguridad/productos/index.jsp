@@ -3,9 +3,9 @@
 <%@ include file="/includes/header.jsp" %>   
     	
 	
-	<a href="seguridad/productos?accion=formulario">Nuevo Producto</a>
+	<a  class="btn btn-primary mb-4" href="seguridad/productos?accion=formulario">Nuevo Producto</a>
 	
-	<table  class="tabla display" style="width:100%">
+	<table  id="tablaProductos" class="display" style="width:100%">
         <thead>
             <tr>
                 <th>id</th>                
@@ -25,10 +25,10 @@
                 	<td>${p.nombre}</td>
                 	<td>${p.descripcion}</td>
                 	<td>${p.precio}</td>
-                	<td>${p.imagen}</td>
+                	<td><img src="${p.imagen}" alt="${p.nombre}" width="75" height="75" /></td>
                 	<td>${p.descuento}</td>
                 	<td>${p.usuario.nombre}</td>
-                	<td><a href="seguridad/productos?accion=formulario&id=${p.id}">Editar</a></td>
+                	<td><a  class="btn btn-primary" href="seguridad/productos?accion=formulario&id=${p.id}">Editar</a></td>
             	</tr>
             </c:forEach>	
         </tbody>    
