@@ -19,34 +19,41 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 public class ProductoDAO implements IProductoDAO {
 
 	private final static Logger LOG = Logger.getLogger(ProductoDAO.class);
+	
+	private static UsuarioDAO usuarioDao;
+	private static CategoriaDAO categoriaDao;
 
 	private static ProductoDAO INSTANCE;
 
+	
 	private static final String SQL_GET_ALL = "CALL `pa_producto_getall`()";
 
-	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND u.id = ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	//Obtener todos los productos de un usuario
+	private static final String SQL_GET_ALL_BY_USER = "CALL `pa_producto_get_by_user`(?)";
 
-	private static final String SQL_GET_BY_ID = "CALL `pa_producto_get_by_id`(?)"
-			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? "
-			+ " ORDER BY p.id DESC LIMIT 500;";
+	//Obtener un producto por su id
+	private static final String SQL_GET_BY_ID = "CALL `pa_producto_get_by_id`(?)";
 	
+	//Obtener un producto por su id y su id de usuario
 	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', u.id 'id_usuario', u.nombre 'nombre_usuario' "
 			+ " FROM producto p, usuario u " + " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ? "
 			+ " ORDER BY p.id DESC LIMIT 500;";
 	
-	private static final String SQL_GET_BY_NAME = "CALL `pa_producto_busqueda_nombre`(?)";
-	private static final String SQL_GET_BY_CATEGORIA_ID= "CALL `pa_producto_busqueda_id`(?)";
-	private static final String SQL_GET_BY_NAME_AND_CATEGORIA_ID= "CALL `pa_producto_busqueda_id_nombre`(?, ?)";
+	//Búsqueda personalizada
+	private static final String SQL_BUSQUEDA_PERSONALIZADA = "CALL `pa_producto_busqueda_personalizada`(?,?)";
 	
 	
+	//Crear un nuevo producto
 	private static final String SQL_GET_INSERT = "INSERT INTO `producto` (`nombre`, `id_usuario`) VALUES (?, ?);";
+	
+	//Actualizar un producto por id y usuario
 	private static final String SQL_GET_UPDATE = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? ;";
 	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE `producto` SET `nombre`= ? , `id_usuario`= ? WHERE `id`= ? AND id_usuario = ?;";
 	
-	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ? ;";
-	private static final String SQL_DELETE_LOGICO = "UPDATE producto SET fecha_baja = NOW() WHERE id = ? ;";
+	//Eliminar un producto de forma lógica
+	private static final String SQL_DELETE_LOGICO = "CALL `pa_producto_delete_logico`(?)";
+	
+	
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ? ;";
 	
 
@@ -298,70 +305,18 @@ public class ProductoDAO implements IProductoDAO {
 	}
 
 	
-	public List<Producto> getByName(String nombreProducto) {
-		ArrayList<Producto> listaProductos = new ArrayList<Producto>();
-		Producto p = null;
-		
-
-		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall(SQL_GET_BY_NAME)) {
-
-			// sustituyo parametros en la SQL, en este caso 1º ? por id
-			cs.setString(1, nombreProducto);
-			LOG.debug(cs);
-			// ejecuto la consulta
-			try (ResultSet rs = cs.executeQuery()) {
-
-				while (rs.next()) {
-					p = mapper(rs);
-					listaProductos.add(p);
-				}
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return listaProductos;
-	}
-
-	public List<Producto> getByIdCategoria(int idCategoria) {
+	public List<Producto> busquedaPersonalizada(int idCategoria, String nProducto) {
 		ArrayList<Producto> listaProductos = new ArrayList<Producto>();
 		Producto p = null;
 		
 		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall(SQL_GET_BY_CATEGORIA_ID) ) {
-
-			// sustituyo parametros en la SQL, en este caso 1º ? por id
-			cs.setInt(1, idCategoria);
-
-			// ejecuto la consulta
-			try (ResultSet rs = cs.executeQuery()) {
-
-				while (rs.next()) {
-					p = mapper(rs);
-					listaProductos.add(p);
-				}
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return listaProductos ;
-	}
-
-	public List<Producto> getByIdCategoriaAndProducto(int idCategoria, String nProducto) {
-		ArrayList<Producto> listaProductos = new ArrayList<Producto>();
-		Producto p = null;
-		
-		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall(SQL_GET_BY_NAME_AND_CATEGORIA_ID) ) {
+				CallableStatement cs = con.prepareCall(SQL_BUSQUEDA_PERSONALIZADA) ) {
 
 			// sustituyo parametros en la SQL, en este caso 1º ? por id
 			cs.setInt(1, idCategoria);
 			cs.setString(2, nProducto);
-
+			
+			LOG.debug(cs);
 			// ejecuto la consulta
 			try (ResultSet rs = cs.executeQuery()) {
 
@@ -387,6 +342,10 @@ public class ProductoDAO implements IProductoDAO {
 	 */
 	private Producto mapper(ResultSet rs) throws SQLException {
 
+		usuarioDao = UsuarioDAO.getInstance();
+		
+		categoriaDao = CategoriaDAO.getInstance();
+		
 		Producto p = new Producto();
 		p.setId(rs.getInt("id_producto"));
 		p.setNombre(rs.getString("nombre_producto"));
@@ -395,16 +354,12 @@ public class ProductoDAO implements IProductoDAO {
 		p.setDescripcion(rs.getString("descripcion"));
 		p.setDescuento(rs.getInt("descuento"));
 		
-		Categoria c = new Categoria();
-		c.setId(rs.getInt("id_categoria"));
-		//c.setNombre(rs.getString("nombre_categoria"));
-		p.setCategoria(c);
 		
-		Usuario u = new Usuario();
-		u.setId(rs.getInt("id_usuario"));
-		//u.setNombre(rs.getString("nombre_usuario"));
-		p.setUsuario(u);
-
+		
+		//p.setCategoria(categoriaDao.getById(rs.getInt("id_categoria")));
+		
+		//p.setUsuario(usuarioDao.getById(rs.getInt("id_usuario")));
+		
 		return p;
 	}
 
