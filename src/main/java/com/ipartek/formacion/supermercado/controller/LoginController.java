@@ -65,6 +65,7 @@ public class LoginController extends HttpServlet {
 
 				if (usuario.getRol().getId() == Rol.ROL_ADMIN) {
 					isRedirect = false;
+
 					view = "seguridad/index.jsp"; // accedemos la BACK-OFFICE
 
 				} else {
