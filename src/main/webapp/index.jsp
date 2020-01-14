@@ -2,31 +2,25 @@
 
 <%@ include file="includes/header.jsp"%>
 
-<div class="row">
-	<div class="col-md-3"></div>
-	<div class="col-md-6">
-		<form action="inicio" method="post" class="mb-5">
-
-<%-- ${(c.id eq producto.categoria.id)?"selected":""} --%>
-
+		<form action="inicio" method="post" class="mb-5 form-inline">
 			<div class="form-group">
+				<select name="categoriaIdFiltro"
+					class="custom-select mr-2">
 					<option value="0">Todas las categorias</option>
 					<c:forEach items="${categorias}" var="c">
 						<option value="${c.id}" ${(c.id eq categoriaId)?"selected":""}>${c.nombre}</option>
 					</c:forEach>
-				</select> <label>Filtrar por Nombre:</label> <input type="text" name="nombreFiltro"
-					value="${producto.nombre}" class="form-control"
-					placeholder="introduce el nombre del producto">
+				</select>
+			</div>
+			<div class="form-group">
+				<input type="text" name="nombreFiltro"
+					value="${producto.nombre}" class="form-control mr-2"
+					placeholder="Nombre">
 			</div>
 
-			<input type="submit" value="Buscar" class="btn btn-block btn-dark">
+			<input type="submit" value="Buscar" class="btn btn-dark">
 
 		</form>
-	</div>
-
-</div>
-
-<hr>
 
 <div class="row contenedor-productos">
 	<c:forEach items="${productos}" var="p">
