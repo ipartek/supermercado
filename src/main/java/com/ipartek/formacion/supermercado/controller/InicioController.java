@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.ipartek.formacion.supermercado.model.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
@@ -50,13 +49,8 @@ public class InicioController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		if ( null == ConnectionManager.getConnection() ) {
-			resp.sendRedirect( req.getContextPath() + "/error.jsp");
-		}else {
-		
 			// llama a GET o POST
 			super.service(req, resp);
-		}	
 	}
 	
 	
