@@ -22,6 +22,7 @@ public class ProductoDAO implements IProductoDAO {
 
 	private static ProductoDAO INSTANCE;
 
+	//ALLGOOD
 	private static final String SQL_GET_ALL = "SELECT p.id as 'id_producto',  p.nombre as 'nombre_producto',\r\n"
 			+ "			p.descripcion as 'descripcion_producto',p.precio as 'precio_producto',\r\n"
 			+ "			p.imagen as 'imagen_producto',p.descuento as 'descuento_precio',p.id_categoria 'id_categoria',\r\n"
@@ -30,14 +31,12 @@ public class ProductoDAO implements IProductoDAO {
 			+ "			c.nombre as'nombre_categoria', u.nombre as 'nombre_usuario' \r\n"
 			+ "			FROM producto p, usuario u, categoria c WHERE p.id_usuario=u.id AND p.id_categoria=c.id\r\n"
 			+ "			ORDER BY p.id ASC LIMIT 500;";
-
 	private static final String SQL_GET_ALL_BY_USER = "SELECT p.id 'id_producto'," + "p.nombre'nombre_producto',"
 			+ "p.descripcion'descripcion_producto',p.precio'precio_producto',p.imagen'imagen_producto',"
 			+ "p.descuento'descuento_precio',p.id_categoria 'id_categoria', " + "p.fecha_alta'fechaAlta',"
 			+ "p.fecha_modificacion 'fechaModificada',p.fecha_baja 'fechaBaja', " + "c.nombre'nombre_categoria',"
 			+ "u.id'id_usuario',u.nombre'nombre_usuario'" + " FROM producto p, usuario u, categoria c"
 			+ " WHERE p.id_categoria = c.id AND p.id_usuario = u.id AND u.id = ?" + " ORDER BY p.id ASC LIMIT 500;";
-
 	private static final String SQL_GET_BY_ID = "SELECT p.id 'id_producto', "
 			+ "p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', "
 			+ "p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', "
@@ -46,17 +45,34 @@ public class ProductoDAO implements IProductoDAO {
 			+ "c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
 			+ " FROM producto p, usuario u, categoria c"
 			+ " WHERE p.id_usuario = u.id AND p.id= ? AND p.id_categoria = c.id" + " ORDER BY p.id DESC LIMIT 500;";
-
 	private static final String SQL_GET_BY_ID_BY_USER = "SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria',p.fecha_alta'fechaAlta',p.fecha_modificacion 'fechaModificada', p.fecha_baja 'fechaBaja', c.nombre 'nombre_categoria', u.id 'id_usuario', u.nombre 'nombre_usuario' "
 			+ " FROM producto p, usuario u, categoria c"
 			+ " WHERE p.id_usuario = u.id AND p.id= ? AND u.id = ? and p.id_categoria = c.id"
 			+ " ORDER BY p.id DESC LIMIT 500;";
+	private static final String SQL_GET_INSERT = "INSERT INTO producto( nombre, descripcion, imagen, precio, descuento, id_categoria, id_usuario) VALUES (?,?,?,?,?,?,?);";
 
-	private static final String SQL_GET_INSERT = "INSERT INTO 'producto' "
-			+ "( p.nombre 'nombre_producto', p.descripcion 'descripcion_producto', p.precio 'precio_producto', p.imagen 'imagen_producto', p.descuento 'descuento_precio', p.id_categoria 'id_categoria', p.id_usuario 'id_usuario') VALUES (?,?,?,?,?,?);";
-	private static final String SQL_GET_UPDATE = "UPDATE 'producto' SET p.nombre 'nombre'= ? , p.id_usuario 'id_usuario'= ? WHERE 'id'= ?;";
-	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE 'producto' SET p.nombre 'nombre'= ? , p.id_usuario 'id_usuario'= ? WHERE 'id'= ? AND id_usuario = ?;";
-
+	//probar
+	private static final String SQL_GET_UPDATE = "UPDATE producto SET "
+			+ " nombre = ?,"
+			+ " descripcion = ?,"
+			+ " imagen = ?,"
+			+ " precio = ?,"
+			+ " descuento = ?,"
+			+ " id_categoria = ?,"
+			+ " id_usuario = ? "
+			+ " WHERE id = ?;";
+	
+	private static final String SQL_GET_UPDATE_BY_USER = "UPDATE producto SET "
+			+ " nombre = ?,"
+			+ " descripcion = ?,"
+			+ " imagen = ?,"
+			+ " precio = ?,"
+			+ " descuento = ?,"
+			+ " id_categoria = ?,"
+			+ " id_usuario = ? "
+			+ " WHERE id= ? AND id_usuario = ?;";
+	
+	//ALLGOOD
 	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ? ;";
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_usuario = ? ;";
 
@@ -175,6 +191,30 @@ public class ProductoDAO implements IProductoDAO {
 		return p;
 	}
 
+	public List<Producto> buscarPorNombreCategoria(int pIdCategoria, String pNombreProducto) {
+		LOG.trace("filtro con procedimento almacenado");
+		List<Producto> registros = new ArrayList<Producto>();
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement cs = con.prepareCall("{ CALL pa_producto_busqueda(?,?) }");) {
+
+			cs.setInt(1, pIdCategoria);
+			cs.setString(2, pNombreProducto);
+			LOG.debug(cs);
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					registros.add(mapper(rs));
+				}
+			}
+
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+
+		return registros;
+	}
+	
 	@Override
 	public Producto delete(int id) throws Exception {
 
@@ -235,8 +275,15 @@ public class ProductoDAO implements IProductoDAO {
 				PreparedStatement pst = con.prepareStatement(SQL_GET_UPDATE)) {
 
 			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
-			pst.setInt(3, id);
+			pst.setString(2, pojo.getDescripcion());
+			pst.setString(3, pojo.getImagen());
+			pst.setFloat(4, pojo.getPrecio());
+			pst.setInt(5, pojo.getDescuento());
+			pst.setInt(6, pojo.getCategoria().getId());
+			pst.setInt(7, pojo.getUsuario().getId());
+			pst.setInt(8, id);
+			
+			LOG.debug(pst);
 
 			int affectedRows = pst.executeUpdate(); // lanza una excepcion si nombre repetido
 			if (affectedRows == 1) {
@@ -255,9 +302,14 @@ public class ProductoDAO implements IProductoDAO {
 				PreparedStatement pst = con.prepareStatement(SQL_GET_UPDATE_BY_USER)) {
 
 			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
-			pst.setInt(3, idProducto);
-			pst.setInt(4, idUsuario);
+			pst.setString(2, pojo.getDescripcion());
+			pst.setString(3, pojo.getImagen());
+			pst.setFloat(4, pojo.getPrecio());
+			pst.setInt(5, pojo.getDescuento());
+			pst.setInt(6, pojo.getCategoria().getId());
+			pst.setInt(7, pojo.getUsuario().getId());
+			pst.setInt(8, idProducto);
+			pst.setInt(9, idUsuario);
 
 			LOG.debug(pst);
 
@@ -266,7 +318,7 @@ public class ProductoDAO implements IProductoDAO {
 				LOG.debug("producto modificado");
 				pojo.setId(idProducto);
 			} else {
-				LOG.warn("No le pertence el producto");
+				LOG.warn("No le pertenece el producto");
 				throw new ProductoException(ProductoException.EXCEPTION_UNAUTORIZED);
 			}
 		} catch (SQLException e) {
@@ -284,7 +336,12 @@ public class ProductoDAO implements IProductoDAO {
 				PreparedStatement pst = con.prepareStatement(SQL_GET_INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
 			pst.setString(1, pojo.getNombre());
-			pst.setInt(2, pojo.getUsuario().getId());
+			pst.setString(2, pojo.getDescripcion());
+			pst.setString(3, pojo.getImagen());
+			pst.setFloat(4, pojo.getPrecio());
+			pst.setInt(5, pojo.getDescuento());
+			pst.setInt(6, pojo.getCategoria().getId());
+			pst.setInt(7, pojo.getUsuario().getId());
 
 			LOG.error("falla aki" + pst);
 			int affectedRows = pst.executeUpdate();
@@ -333,29 +390,5 @@ public class ProductoDAO implements IProductoDAO {
 		p.setUsuario(u);
 
 		return p;
-	}
-
-	public List<Producto> buscarPorNombreCategoria(int pIdCategoria, String pNombreProducto) {
-		LOG.trace("filtro con procedimento almacenado");
-		List<Producto> registros = new ArrayList<Producto>();
-
-		try (Connection con = ConnectionManager.getConnection();
-				CallableStatement cs = con.prepareCall("{ CALL pa_producto_busqueda(?,?) }");) {
-
-			cs.setInt(1, pIdCategoria);
-			cs.setString(2, pNombreProducto);
-			LOG.debug(cs);
-
-			try (ResultSet rs = cs.executeQuery()) {
-				while (rs.next()) {
-					registros.add(mapper(rs));
-				}
-			}
-
-		} catch (Exception e) {
-			LOG.error(e);
-		}
-
-		return registros;
 	}
 }

@@ -60,7 +60,7 @@ public class LoginController extends HttpServlet {
 				LOG.info("login correcto " + usuario);
 				HttpSession session = request.getSession();
 				session.setAttribute("usuarioLogeado", usuario);
-				session.setMaxInactiveInterval(60 * 3); // 3min
+				session.setMaxInactiveInterval(60 * 10); // 10min
 
 				if (usuario.getRol().getId() == Rol.ROL_ADMIN) {
 					isRedirect = false;

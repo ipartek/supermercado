@@ -15,9 +15,11 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
 import com.ipartek.formacion.supermercado.modelo.pojo.Alerta;
+import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -33,11 +35,12 @@ public class ProductosController extends HttpServlet {
 	private static String vistaSeleccionda = VIEW_TABLA;
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
+	private static CategoriaDAO daoCategoria;
 
 	// acciones
 	public static final String ACCION_LISTAR = "listar";
 	public static final String ACCION_IR_FORMULARIO = "formulario";
-	public static final String ACCION_GUARDAR = "guardar"; // crear y modificar
+	public static final String ACCION_GUARDAR = "guardar"; //crear y modificar
 	public static final String ACCION_ELIMINAR = "eliminar";
 
 	// Crear Factoria y Validador
@@ -52,6 +55,7 @@ public class ProductosController extends HttpServlet {
 	String pImagen;
 	String pDescripcion;
 	String pDescuento;
+	String pCategoriaId;
 	String pUsuarioId;
 
 	@Override
@@ -59,6 +63,7 @@ public class ProductosController extends HttpServlet {
 		super.init(config);
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
 	}
@@ -68,6 +73,7 @@ public class ProductosController extends HttpServlet {
 		super.destroy();
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
 		factory = null;
 		validator = null;
 	}
@@ -101,6 +107,7 @@ public class ProductosController extends HttpServlet {
 		pImagen = request.getParameter("imagen");
 		pDescripcion = request.getParameter("descripcion");
 		pDescuento = request.getParameter("descuento");
+		pCategoriaId = request.getParameter("categoriaId");
 		pUsuarioId = request.getParameter("usuarioId");
 
 		try {
@@ -145,6 +152,7 @@ public class ProductosController extends HttpServlet {
 
 		}
 
+		request.setAttribute("categorias", daoCategoria.getAll());
 		request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("producto", pEditar);
 		vistaSeleccionda = VIEW_FORM;
@@ -157,8 +165,15 @@ public class ProductosController extends HttpServlet {
 		Producto pGuardar = new Producto();
 		pGuardar.setId(id);
 		pGuardar.setNombre(pNombre);
+		pGuardar.setDescripcion(pDescripcion);
+		pGuardar.setImagen(pImagen);
+		pGuardar.setPrecio(Float.parseFloat(pPrecio));
 		pGuardar.setDescuento(Integer.parseInt(pDescuento));
 
+		Categoria c = new Categoria();
+		c.setId(Integer.parseInt(pCategoriaId));
+		pGuardar.setCategoria(c);
+		
 		Usuario u = new Usuario();
 		u.setId(Integer.parseInt(pUsuarioId));
 		pGuardar.setUsuario(u);
