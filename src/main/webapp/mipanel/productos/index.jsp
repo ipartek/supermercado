@@ -10,8 +10,13 @@
 			height: auto;
 		}
 	</style>
+	
+	<br>
+	<h4>Tienes ${productos.size()} productos en tu panel</h1>
+	<br>
     	
 	<a href="mipanel/productos?accion=formulario">Nuevo Producto</a>
+	<br>
 	
 	<!-- DATATABLES -->
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
