@@ -194,15 +194,18 @@ public class ProductosController extends HttpServlet {
 	private void guardar(HttpServletRequest request, HttpServletResponse response) throws ProductoException {
 		
 		
-		int id = Integer.parseInt(pId);
-		Producto pGuardar = new Producto();		
-		pGuardar.setId(id);
-		pGuardar.setNombre(pNombre);
-		pGuardar.setPrecio( Integer.parseInt(pPrecio));
-		pGuardar.setImagen(pImagen);
-		pGuardar.setDescripcion(pDescripcion);		
-		pGuardar.setDescuento( Integer.parseInt(pDescuento));
+		int pId = Integer.parseInt(request.getParameter("id"));
+		float pPrecioFloat = Float.parseFloat(pPrecio);
+		int pDescuentoInt = Integer.parseInt(pDescuento);
 		int pIdCategoria = Integer.parseInt(request.getParameter("idCategoria"));
+		
+		Producto pGuardar = new Producto();
+		pGuardar.setId(pId);
+		pGuardar.setNombre(pNombre);
+		pGuardar.setPrecio(pPrecioFloat);
+		pGuardar.setImagen(pImagen);
+		pGuardar.setDescripcion(pDescripcion);
+		pGuardar.setDescuento(pDescuentoInt);
 		
 		Usuario u = new Usuario();
 		u.setId(uLogeado.getId()); //Evitar que se envie el parametro desde el formulario
@@ -220,9 +223,9 @@ public class ProductosController extends HttpServlet {
 		
 				try {
 				
-					if ( id > 0 ) {  // modificar
+					if ( pId > 0 ) {  // modificar
 						LOG.trace("Modificar datos del producto");
-						daoProducto.updateByUser(id, uLogeado.getId(), pGuardar);	
+						daoProducto.updateByUser(pId, uLogeado.getId(), pGuardar);	
 						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los datos del producto se han modificado correctamente"));
 						
 					}else {            // crear
@@ -266,12 +269,17 @@ public class ProductosController extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws ProductoException, SQLException {
 	
-		int id = Integer.parseInt(pId);
-		
-		Producto pEliminado = daoProducto.deleteByUser(id, uLogeado.getId() );
-		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Eliminado " + pEliminado.getNombre() ));
-		
-		listar(request, response);
+		// recibimos parámetros:
+		int pId = (request.getParameter("id") == null) ? 0 : Integer.parseInt(request.getParameter("id"));
+
+		if (pId > 0) { 
+
+			Producto pEliminado = daoProducto.deleteByUser(pId, uLogeado.getId() );
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Eliminado " + pEliminado.getNombre() ));
+			LOG.info("Se ha eliminado " + pEliminado.getNombre());
+			
+			listar(request, response);
+		}
 		
 	}
 
