@@ -258,16 +258,17 @@ public class ProductoDAO implements IProductoDAO {
 	public Producto updateByUser(int idProducto, int idUsuario, Producto pojo) throws SQLException,ProductoException { //TODO Por hacer de momento
 		try (Connection con = ConnectionManager.getConnection();
 				CallableStatement cs = con.prepareCall("{CALL pa_producto_updatebyuser(?,?,?,?,?,?,?,?,?)}");) {
-
-			cs.setString(1, pojo.getNombre());
-			cs.setInt(2, pojo.getCategoria().getId());
-			cs.setString(3, pojo.getDescripcion());
-			cs.setFloat(4, pojo.getPrecio());
-			cs.setInt(5, pojo.getDescuento());
-			cs.setString(6, pojo.getImagen());
-			cs.setInt(7, pojo.getValidado());
-			cs.setInt(8, idProducto);
-			cs.setInt(9, idUsuario);
+			
+			cs.setInt(1, idProducto);
+			cs.setInt(2, idUsuario);
+			cs.setString(3, pojo.getNombre());
+			cs.setInt(4, pojo.getCategoria().getId());
+			cs.setString(5, pojo.getDescripcion());
+			cs.setFloat(6, pojo.getPrecio());
+			cs.setInt(7, pojo.getDescuento());
+			cs.setString(8, pojo.getImagen());
+			cs.setInt(9, pojo.getValidado());
+		
 			
 			LOG.debug(cs);
 

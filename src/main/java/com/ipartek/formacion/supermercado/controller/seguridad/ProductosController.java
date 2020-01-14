@@ -84,6 +84,7 @@ public class ProductosController extends HttpServlet {
 		super.destroy();
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
 		factory = null;
 		validator = null;
 	}

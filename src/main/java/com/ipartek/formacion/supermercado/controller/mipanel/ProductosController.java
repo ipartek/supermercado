@@ -19,6 +19,7 @@ import javax.validation.ValidatorFactory;
 import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.supermercado.controller.Alerta;
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.ProductoException;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
@@ -41,6 +42,7 @@ public class ProductosController extends HttpServlet {
 	private static ProductoDAO daoProducto;
 	private static UsuarioDAO daoUsuario;
 	private Usuario uLogeado;
+	private static CategoriaDAO daoCategoria;
 	//acciones
 	public static final String ACCION_LISTAR = "listar";
 	public static final String ACCION_IR_FORMULARIO = "formulario";
@@ -61,6 +63,9 @@ public class ProductosController extends HttpServlet {
 	String pImagen;
 	String pDescripcion;
 	String pDescuento;
+	String pUsuarioId;
+	String pCategoria;
+	String pValidado;
 	
 	
 	
@@ -69,6 +74,7 @@ public class ProductosController extends HttpServlet {
 		super.init(config);
 		daoProducto = ProductoDAO.getInstance();
 		daoUsuario = UsuarioDAO.getInstance();
+		daoCategoria = CategoriaDAO.getInstance();
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
 	}
@@ -78,6 +84,7 @@ public class ProductosController extends HttpServlet {
 		super.destroy();
 		daoProducto = null;
 		daoUsuario = null;
+		daoCategoria = null;
 		factory = null;
 		validator = null;
 	}
@@ -109,6 +116,8 @@ public class ProductosController extends HttpServlet {
 			pImagen = request.getParameter("imagen");
 			pDescripcion = request.getParameter("descripcion");
 			pDescuento = request.getParameter("descuento");
+			pCategoria = request.getParameter("categoriaId");
+			pValidado = request.getParameter("validadoId");
 						
 			uLogeado = (Usuario)request.getSession().getAttribute("usuarioLogeado");
 			
@@ -133,29 +142,26 @@ public class ProductosController extends HttpServlet {
 					listar(request, response);
 					break;
 				}
-				
-				
-			}catch (ProductoException e) {
+					
+			} catch (ProductoException e) {
 				
 				LOG.warn(e);
 				isRedirect = true;
 							
-				
 			}catch (Exception e) {
 				
 				LOG.error(e);
 				
-			}finally {
+			} finally {
+				
 				if ( isRedirect) {
-					//invalidamos la session del usuario => ProductoException
-					response.sendRedirect( request.getContextPath() + "/logout");	
-				}else {
+					
+					response.sendRedirect( request.getContextPath() + "/logout");
+					
+				} else {
 					request.getRequestDispatcher(vistaSeleccionda).forward(request, response);
 				}	
 			}
-			
-			
-		
 		
 	}
 
@@ -164,7 +170,7 @@ public class ProductosController extends HttpServlet {
 		
 		Producto pEditar = new Producto();
 		
-		if ( pId != null ) {
+		if ( pId != null && !pId.equals("0")) {
 			
 			int id = Integer.parseInt(pId);
 			//pEditar = daoProducto.getById(id);
@@ -172,56 +178,88 @@ public class ProductosController extends HttpServlet {
 			
 		}
 		
-		request.setAttribute("usuarios", daoUsuario.getAll() );
+		request.setAttribute("categorias", daoCategoria.getAll() );
 		request.setAttribute("producto", pEditar );
 		vistaSeleccionda = VIEW_FORM;
 		
 	}
 
-	private void guardar(HttpServletRequest request, HttpServletResponse response) throws ProductoException {
+	private void guardar(HttpServletRequest request, HttpServletResponse response) throws ProductoException, SQLException {
 		
 		
 		int id = Integer.parseInt(pId);
-		Producto pGuardar = new Producto();		
-		pGuardar.setId(id);
+		
+		Producto pGuardar = null;
+		
+		if(id != 0) {
+		
+			pGuardar = daoProducto.getById(id);
+		
+		} else {
+			
+			pGuardar = new Producto();
+			
+		}
+		
 		pGuardar.setNombre(pNombre);
 		pGuardar.setDescuento( Integer.parseInt(pDescuento));
+		pGuardar.setDescripcion(pDescripcion);
+		pGuardar.setImagen(pImagen);
+		pGuardar.setPrecio(Float.parseFloat(pPrecio));
+		pGuardar.setCategoria(daoCategoria.getById(Integer.parseInt(pCategoria)));
 		
-		Usuario u = new Usuario();
-		u.setId(uLogeado.getId()); //Evitar que se envie el parametro desde el formulario
-		pGuardar.setUsuario(u);
-				
+		if(id != 0) {
+			
+			Usuario u = new Usuario();
+			u.setId(uLogeado.getId()); //Evitar que se envie el parametro desde el formulario
+			pGuardar.setUsuario(u);
+		
+		}			
 		
 		Set<ConstraintViolation<Producto>> validaciones = validator.validate(pGuardar);
-		if( validaciones.size() > 0 ) {			
+		if( validaciones.size() > 0 ) {	
+			
 			mensajeValidacion(request, validaciones);
-		}else {	
+			
+			request.setAttribute("categorias", daoCategoria.getAll() );
+			request.setAttribute("producto", pGuardar );
+
+			this.irFormulario(request, response);
+			
+		} else {	
 		
 				try {
 				
 					if ( id > 0 ) {  // modificar
 						
-						daoProducto.updateByUser(id, uLogeado.getId(), pGuardar);		
+						daoProducto.updateByUser(id, uLogeado.getId(), pGuardar);	
+						
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Producto modificado correctamente :)"));
 						
 					}else {            // crear
 						daoProducto.create(pGuardar);
+						
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Producto creado correctamente :)"));
 					}
 				
 				}catch (ProductoException e) {
+					
 					throw e;
 					
 				}catch (Exception e) {  // validacion a nivel de base datos
 					
-					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "El nombre ya existe, selecciona otro"));
-				}					
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "El nombre ya existe, selecciona otro"));		
+					request.setAttribute("categorias", daoCategoria.getAll() );
+					request.setAttribute("producto", pGuardar );
+					
+					this.irFormulario(request, response);
+
+				}	
+				
+				this.listar(request, response);
 			
 		}	
-		
-		request.setAttribute("usuarios", daoUsuario.getAll() );
-		request.setAttribute("producto", pGuardar);
-		vistaSeleccionda = VIEW_FORM;
-	
-		
+
 	}
 
 	private void mensajeValidacion(HttpServletRequest request, Set<ConstraintViolation<Producto>> validaciones ) {
