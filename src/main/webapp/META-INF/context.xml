@@ -9,7 +9,7 @@
 		maxWait="10000" 
 		name="jdbc/mydb"	 
 		type="javax.sql.DataSource"
-		url="jdbc:mysql://192.168.0.58:8080/supermercado_AnaCristian?useSSL=false" 
+		url="jdbc:mysql://192.168.0.58:3306/supermercado_AnaCristian?useSSL=false" 
 		username="root"
 		password="root" 
 		/>
