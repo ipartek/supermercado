@@ -99,7 +99,7 @@
 		  
 		  <c:if test="${empty usuarioLogeado}">
 		  
-			 <li class="nav-item ml-2">
+			 <li class="nav-item active ml-2">
 			    <a class="nav-link" href="registro"> Registrase </a>
 		    </li>
 		  	 <li class="nav-item ml-2">
