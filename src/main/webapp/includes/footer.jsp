@@ -4,7 +4,7 @@
 </main>
 
 	<!-- footer -->                                
-    <footer class="bg-primary text-white">
+    <footer class="bg-primary text-white mt-3">
         <div class="container p-1 p-sm-3 clearfix"> <!-- p-4: padding, p-sm-3 padding para tamaño de dispositivo pequeño -->
             <nav>
                 <ul class="p-0 d-flex flex-column flex-sm-row justify-content-between"> 
