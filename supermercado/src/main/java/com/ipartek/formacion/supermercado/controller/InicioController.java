@@ -95,10 +95,10 @@ public class InicioController extends HttpServlet {
 			idCategoria = ("".equalsIgnoreCase(idCategoria) || idCategoria == null )?"0":idCategoria;
 			nombreProducto = "";
 			 idParseado = Integer.parseInt(idCategoria);
-			daoProducto.busquedaPersonalizada(idParseado, nombreProducto);		
+			productos = (ArrayList<Producto>) daoProducto.busquedaPersonalizada(idParseado, nombreProducto);		
 		}else {
 			idParseado = Integer.parseInt(idCategoria);
-			daoProducto.busquedaPersonalizada(idParseado, nombreProducto);
+			productos = (ArrayList<Producto>) daoProducto.busquedaPersonalizada(idParseado, nombreProducto);
 		}
 				
 		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
