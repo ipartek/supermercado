@@ -41,11 +41,11 @@ public class LoginController extends HttpServlet {
 		String view = "login.jsp";
 		
 		String nombre = request.getParameter("nombre");
-		String pass = request.getParameter("contrasenya");
+		String passMD5 = request.getParameter("contraseniaMD5");
 		
 		try {
 			
-			Usuario usuario = usuarioDao.exist(nombre, pass);
+			Usuario usuario = usuarioDao.exist(nombre, passMD5);
 			
 			if ( usuario != null ) {
 				
@@ -76,7 +76,6 @@ public class LoginController extends HttpServlet {
 			LOG.error(e);		
 			
 		}finally {
-			
 			request.getRequestDispatcher(view).forward(request, response);
 		}	
 		

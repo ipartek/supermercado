@@ -28,11 +28,22 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>    
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     
+    <!-- Llamamos el script de encriptación MD5 desde la página de Paul Johnston -->
+	<script src="http://pajhome.org.uk/crypt/md5/2.2/md5-min.js"></script>
+    
     <script>
 	    $(document).ready(function() {
 	        $('.tabla').DataTable();
 	    } );
     </script>
+    
+    <!-- Función para convertir la cadena a MD5 e imprimirla -->
+	<script type="text/javascript">
+		function calcMD5(){
+			var passwordMD5 = document.getElementById('nombre').value + document.getElementById('contrasenya').value;
+			document.getElementById('contraseniaMD5').value = hex_md5(passwordMD5);
+		}
+	</script>
 
     </body>
 
