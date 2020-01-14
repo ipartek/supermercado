@@ -74,7 +74,7 @@ public class CategoriaController extends HttpServlet {
 	}
 
 
-	private void doAction(HttpServletRequest request, HttpServletResponse response) {
+	private void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		pAccion = request.getParameter("accion");
 		pId = request.getParameter("id");
 		pNombre= request.getParameter("nombre");
@@ -101,6 +101,8 @@ public class CategoriaController extends HttpServlet {
 		} catch(Exception e) {
 			LOG.error(e);
 			e.printStackTrace();
+		} finally {
+			request.getRequestDispatcher(vistaSeleccionda).forward(request, response);
 		}
 	}
 
@@ -132,15 +134,17 @@ public class CategoriaController extends HttpServlet {
 			if(id > 0) {
 				// Queremos modificar la categoria
 				dao.update(id, c);
+				LOG.trace("Categoria " + id + "actualizada");
 			} else {
 				dao.create(c);
+				LOG.trace("Categoria " + id + "creada");
 			}
 		} catch(Exception e) {
 			LOG.error(e);
 			e.printStackTrace();
 		}
 
-		request.setAttribute("categorias", dao.getAll());
+		request.setAttribute("categoria", dao.getById(id));
 
 		vistaSeleccionda = VIEW_FORM;
 	}
