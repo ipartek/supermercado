@@ -81,6 +81,7 @@
 							<button type="button" class="btn btn-success" data-toggle="modal"
 								data-target="#reactivarModal">Reactivar</button>
 						</c:if>
+						<p>${producto.validado}</p>
 						<c:if test="${producto.validado==1}">
 							<button type="button" class="btn btn-secondary" data-toggle="modal"
 								data-target="#desvalidarModal">Desvalidar</button>

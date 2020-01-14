@@ -28,7 +28,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
 			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
 			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
-			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		p.validado, " + "		c.id 'id_categoria', "
 			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario', " + "		u.nombre 'nombre_usuario', "
 			+ "		u.contrasenia, " + "		u.email AS 'email', " + "		u.imagen AS 'imagen_usuario', "
 			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
@@ -40,7 +40,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
 			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
 			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
-			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		p.validado, " + "		c.id 'id_categoria', "
 			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario', " + "		u.nombre 'nombre_usuario', "
 			+ "		u.contrasenia, " + "		u.email AS 'email', " + "		u.imagen AS 'imagen_usuario', "
 			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
@@ -52,7 +52,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
 			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
 			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
-			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		p.validado, " + "		c.id 'id_categoria', "
 			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario', " + "		u.nombre 'nombre_usuario', "
 			+ "		u.contrasenia, " + "		u.email AS 'email', " + "		u.imagen AS 'imagen_usuario', "
 			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
@@ -64,7 +64,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
 			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
 			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
-			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		p.validado, " + "		c.id 'id_categoria', "
 			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario', " + "		u.nombre 'nombre_usuario', "
 			+ "		u.contrasenia, " + "		u.email AS 'email', " + "		u.imagen AS 'imagen_usuario', "
 			+ "		u.fecha_creacion AS 'fecha_creacion_usuario', "
@@ -76,7 +76,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
 			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
 			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
-			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		p.validado, " + "		c.id 'id_categoria', "
 			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario',"
 			+ "		u.nombre AS 'nombre_usuario', " + "		u.contrasenia, " + "		u.email, "
 			+ "		u.imagen AS 'imagen_usuario', " + "		u.fecha_creacion AS 'fecha_creacion_usuario',"
@@ -87,7 +87,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "		p.nombre AS 'nombre_producto', " + "		p.imagen AS 'imagen_producto', " + "		p.precio, "
 			+ "		p.descripcion, " + "		p.descuento, " + "		p.fecha_creacion AS 'fecha_creacion_producto', "
 			+ "		p.fecha_modificacion AS 'fecha_modificacion_producto', "
-			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		c.id 'id_categoria', "
+			+ "		p.fecha_eliminacion AS 'fecha_eliminacion_producto', " + "		p.validado, " + "		c.id 'id_categoria', "
 			+ "		c.nombre 'nombre_categoria', " + "		u.id AS 'id_usuario',"
 			+ "		u.nombre AS 'nombre_usuario', " + "		u.contrasenia, " + "		u.email, "
 			+ "		u.imagen AS 'imagen_usuario', " + "		u.fecha_creacion AS 'fecha_creacion_usuario',"
@@ -96,7 +96,7 @@ public class ProductoDAO implements IProductoDAO {
 			+ "WHERE p.fecha_eliminacion IS NULL AND p.id_usuario = u.id AND c.id = p.id_categoria AND p.id = ? AND u.id = ?"
 			+ "ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_INSERT = "INSERT INTO producto (id, nombre, imagen, precio, descuento, descripcion, fecha_creacion, id_usuario, id_categoria) VALUES ( ? , ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), ?,?);";
-	private static final String SQL_UPDATE = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ?;";
+	private static final String SQL_UPDATE = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=?, validado=? WHERE id = ?;";
 	private static final String SQL_VALIDATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=1 WHERE id = ?;";
 	private static final String SQL_UNVALIDATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=0 WHERE id = ?;";
 	private static final String SQL_UPDATE_BY_USER = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ? AND id_usuario = ?;";
@@ -566,7 +566,9 @@ public class ProductoDAO implements IProductoDAO {
 			pst.setInt(4, pojo.getDescuento());
 			pst.setString(5, pojo.getDescripcion());
 			pst.setInt(6, pojo.getUsuario().getId());
-			pst.setInt(7, id);
+			pst.setInt(7, pojo.getCategoria().getId());
+			pst.setInt(8, pojo.getValidado());
+			pst.setInt(9, id);
 
 			LOG.debug("Ejecuta la query: " + pst.toString());
 
