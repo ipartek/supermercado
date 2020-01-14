@@ -47,8 +47,8 @@ public class CategoriasController extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {		
 		super.init(config);
 		daoCategoria = CategoriaDAO.getInstance();
-		//Drfactory = Validation.buildDefaultValidatorFactory();
-		//validator = factory.getValidator();
+		factory = Validation.buildDefaultValidatorFactory();
+		validator = factory.getValidator();
 	}
       
 	@Override
@@ -118,7 +118,7 @@ public class CategoriasController extends HttpServlet {
 						
 		}
 		
-		request.setAttribute("categorias", categoria);
+		request.setAttribute("categoria", categoria);
 		vistaSeleccionda = VIEW_FORM;
 		
 	}
@@ -154,11 +154,27 @@ public class CategoriasController extends HttpServlet {
 				try {
 				
 					if ( id > 0 ) {  // modificar
-						daoCategoria.update(id, categoria);
-								
+						try {
+							categoria = daoCategoria.update(id, categoria);
+							request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Se ha creado la categoría " + categoria.getNombre() ));
+						} catch (Exception e) {
+							request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede crear la categoria"));
+							
+						}
+											
+						listar(request, response);
 						
 					}else {            // crear
-						daoCategoria.create(categoria);
+						
+						try {
+							categoria = daoCategoria.create(categoria);
+							request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Se ha creado la categoría " + categoria.getNombre() ));
+						} catch (Exception e) {
+							request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede crear la categoria"));
+							
+						}
+						
+						listar(request, response);
 					}
 					
 				}catch (Exception e) {  // validacion a nivel de base datos
@@ -168,7 +184,7 @@ public class CategoriasController extends HttpServlet {
 			
 		}	
 		
-		request.setAttribute("categproas", daoCategoria.getAll());
+		request.setAttribute("categorias", daoCategoria.getAll());
 		request.setAttribute("categoria", categoria);
 		vistaSeleccionda = VIEW_FORM;
 	
@@ -180,7 +196,7 @@ public class CategoriasController extends HttpServlet {
 			Categoria categoria = daoCategoria.delete(id);
 			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Se ha eliminado la categoría " + categoria.getNombre() ));
 		} catch (Exception e) {
-			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede Eliminar el producto"));
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede Eliminar la categoria"));
 			
 		}
 		

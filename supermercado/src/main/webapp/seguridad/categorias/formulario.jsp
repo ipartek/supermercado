@@ -10,15 +10,6 @@
 			<label>Nombre:</label>
 			<input type="text" name="nombre" value="${categoria.nombre}" class="form-control" placeholder="mínimo 2 letras, máximo 50">
 		</div>
-					
-		<div class="form-group">		
-			<label>Categorias:</label>
-			<select name="usuarioId" class="custom-select">
-				<c:forEach items="${categoria}" var="c">
-					<option value="${c.id}"  ${(c.id eq categoria.categoria.id)?"selected":""} >${c.nombre}</option>	
-				</c:forEach>
-			</select>
-		</div>
 		
 		<input type="hidden" name="id" value="${categoria.id}">
 		<input type="hidden" name="accion" value="guardar">

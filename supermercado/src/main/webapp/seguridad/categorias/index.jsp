@@ -14,13 +14,13 @@
             </tr>
         </thead>
         <tbody>
-        	<%-- <c:forEach items="${categorias}" var="c">
+        	<c:forEach items="${categorias}" var="c">
             	<tr>
                 	<td>${c.id}</td>
                 	<td>${c.nombre }</td>
                 	<td><a href="seguridad/categorias?accion=formulario&id=${c.id}">Editar</a></td>
             	</tr>
-            </c:forEach> --%>	
+            </c:forEach> 	
         </tbody>    
     </table>
 	
