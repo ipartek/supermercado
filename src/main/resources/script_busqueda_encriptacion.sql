@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `producto` (
   CONSTRAINT `FK_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado_grupo.producto: ~12 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado_grupo.producto: ~7 rows (aproximadamente)
 DELETE FROM `producto`;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
 INSERT INTO `producto` (`id`, `nombre`, `precio`, `imagen`, `descripcion`, `descuento`, `id_usuario`, `id_categoria`, `fecha_modificacion`) VALUES
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   CONSTRAINT `FK_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla supermercado_grupo.usuario: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla supermercado_grupo.usuario: ~2 rows (aproximadamente)
 DELETE FROM `usuario`;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT INTO `usuario` (`id`, `nombre`, `contrasenia`, `id_rol`) VALUES
@@ -237,6 +237,45 @@ BEGIN
 	
 	-- 1) si se seleciona 1 categoría y un producto:
 	IF pIdCategoria <> 0 && pNombreProducto <> "" THEN  
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' 
+		FROM producto p, usuario u, categoria c 
+		WHERE p.id_usuario = u.id AND p.id_categoria = c.id AND c.id = pIdCategoria AND p.nombre LIKE CONCAT('%',pNombreProducto,'%')
+		ORDER BY p.nombre ASC LIMIT 500;	
+	END IF;	
+	
+	-- 2) si se seleciona 1 categoría y ningún producto, deberá sacar una lista con todos los productos de esa categoria:
+	IF pIdCategoria <> 0 && pNombreProducto = "" THEN  
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' 
+		FROM producto p, usuario u, categoria c 
+		WHERE 
+		p.id_usuario = u.id AND
+		p.id_categoria = c.id AND 
+		c.id = pIdCategoria
+		ORDER BY p.nombre ASC LIMIT 500;
+	END IF;	
+	
+	-- 3) si se seleciona 1 producto y ninguna categoria, deberá sacar una lista con todos los productos con ese nombre:
+	IF pIdCategoria = 0 && pNombreProducto <> "" THEN  
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' 
+		FROM producto p, usuario u, categoria c 
+		WHERE p.id_usuario = u.id AND p.id_categoria = c.id AND p.nombre LIKE CONCAT('%',pNombreProducto,'%')
+		ORDER BY p.nombre ASC LIMIT 500;
+	END IF;
+	
+	-- 4) si no se seleciona ninguna opción, deberá sacar una lista con todos los productos de la bd:
+	IF pIdCategoria = 0 && pNombreProducto = "" THEN  
+		SELECT p.id 'id_producto', p.nombre 'nombre_producto', p.descripcion, p.imagen, p.precio, p.descuento, u.id 'id_usuario', u.nombre 'nombre_usuario', c.id 'id_categoria', c.nombre 'nombre_categoria' 
+		FROM producto p, usuario u, categoria c 
+		WHERE p.id_usuario = u.id AND p.id_categoria = c.id
+		ORDER BY p.nombre ASC LIMIT 500;
+	END IF;
+	
+	
+	
+	
+/*	
+	-- 1) si se seleciona 1 categoría y un producto:
+	IF pIdCategoria <> 0 && pNombreProducto <> "" THEN  
 		SELECT c.id 'id_categoria1', p.nombre 'nombre_producto' 
 		FROM categoria c, producto p 
 		WHERE p.id_categoria = c.id AND c.id = pIdCategoria AND p.nombre LIKE CONCAT('%',pNombreProducto,'%')
@@ -271,7 +310,7 @@ BEGIN
     
 	-- desde java executeQuery
 	-- retorna ResultSet
-
+*/
 END//
 DELIMITER ;
 
