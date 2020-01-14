@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.ipartek.formacion.supermercado.modelo.dao.CategoriaDAO;
+import com.ipartek.formacion.supermercado.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.supermercado.modelo.dao.UsuarioDAO;
 import com.ipartek.formacion.supermercado.modelo.pojo.Alerta;
 import com.ipartek.formacion.supermercado.modelo.pojo.Rol;
@@ -26,6 +28,8 @@ public class LoginController extends HttpServlet {
 	private final static Logger LOG = Logger.getLogger(LoginController.class);
 
 	private static UsuarioDAO usuarioDao = UsuarioDAO.getInstance();
+	private static CategoriaDAO categoriaDao = CategoriaDAO.getInstance();
+	private static ProductoDAO productoDao = ProductoDAO.getInstance();
 
 	private static boolean isRedirect = false;
 
@@ -65,6 +69,9 @@ public class LoginController extends HttpServlet {
 
 				if (usuario.getRol().getId() == Rol.ROL_ADMIN) {
 					isRedirect = false;
+
+					request.setAttribute("categoriasTodosNum", categoriaDao.getAll().size());
+					request.setAttribute("productosTodosNum", productoDao.getAll().size());
 
 					view = "seguridad/index.jsp"; // accedemos la BACK-OFFICE
 

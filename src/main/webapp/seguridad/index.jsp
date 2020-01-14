@@ -4,8 +4,8 @@
     	
 	<h2 class="text-center py-2">Dashboard de ${usuarioLogeado.nombre }</h2>
 	
-	<p class="alert alert-danger">Existen ${categoriasTodosNum} categorias de productos</p>
-	<p class="alert alert-primary"> Hay ${productosTodosNum} productos creados</p>
+	<p class="alert alert-danger">Existen <b>${categoriasTodosNum}</b>  categorias de productos</p>
+	<p class="alert alert-primary"> Hay <b>${productosTodosNum}</b>b> productos creados</p>
 	<p class="alert alert-success"> Ud ha creado ${productosAdminNum} productos</p>
 	<p class="alert alert-warning"> Hay ${usuariosTodosNum} usuarios creados</p>
 

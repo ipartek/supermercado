@@ -34,7 +34,7 @@
 
 
 
-<!-- produccion
+<!-- produccion 
 <Context>
 	<Resource auth="Container"
 	    driverClassName="com.mysql.jdbc.Driver"
@@ -47,4 +47,4 @@
 		username="root"
 		password="root"
 		/>
-</Context>	 -->
+</Context>	-->
