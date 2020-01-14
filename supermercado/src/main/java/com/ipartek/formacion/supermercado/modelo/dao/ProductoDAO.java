@@ -233,12 +233,19 @@ public class ProductoDAO implements IProductoDAO {
 		try (Connection con = ConnectionManager.getConnection();
 				CallableStatement cs = con.prepareCall(SQL_GET_UPDATE)) {
 
-			cs.setString(1, pojo.getNombre());
-			cs.setInt(2, pojo.getUsuario().getId());
-			cs.setInt(3, id);
+			int categoria = pojo.getCategoria().getId();		
+			cs.setInt(1, id);
+			cs.setString(2, pojo.getNombre());
+			cs.setFloat(3, pojo.getPrecio());
+			cs.setString(4, pojo.getImagen());
+			cs.setString(5, pojo.getDescripcion());
+			cs.setInt(6, pojo.getDescuento());
+			cs.setInt(7, categoria);
+			cs.setInt(8, pojo.getUsuario().getId());
+			LOG.debug(cs);
 
 			int affectedRows = cs.executeUpdate(); // lanza una excepcion si nombre repetido
-			if (affectedRows == 1) {
+			if (affectedRows >= 1) {
 				pojo.setId(id);
 			} else {
 				throw new Exception("No se encontro registro para id=" + id);

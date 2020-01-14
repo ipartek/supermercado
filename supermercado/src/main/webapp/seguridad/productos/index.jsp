@@ -1,5 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/includes/header.jsp" %>   
     	
 	
@@ -15,6 +15,7 @@
 					<th>DESCRIPCIÓN</th>
 					<th>DESCUENTO</th>
 					<th>USUARIO</th>
+					<th>CATEGORIA</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -28,6 +29,7 @@
 						<td>${p.descripcion }</td>
 						<td>${p.descuento }%</td>
 						<td>${p.usuario.nombre}
+						<td>${p.categoria.nombre }</td>
 						<td><a href="seguridad/productos?accion=formulario&id=${p.id}">Editar</a></td>
 			
 					</tr>
