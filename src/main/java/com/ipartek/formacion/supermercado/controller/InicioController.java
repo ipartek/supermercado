@@ -1,6 +1,7 @@
 package com.ipartek.formacion.supermercado.controller;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.servlet.ServletConfig;
@@ -48,7 +49,7 @@ public class InicioController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		ConnectionManager con = (ConnectionManager) ConnectionManager.getConnection();
+		Connection con = ConnectionManager.getConnection();
 		if (null == con) {
 			resp.sendRedirect(req.getContextPath() + "/error.jsp");
 		} else {
