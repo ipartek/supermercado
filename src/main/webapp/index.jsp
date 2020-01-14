@@ -10,13 +10,13 @@
 						<option value="0" selected>Ninguna categoria</option>
 						<c:forEach items="${categorias}" var="c">
 						    <!-- ${(c.id eq producto.usuario.id)?"selected":""} -->
-							<option value="${c.id}">${c.nombre}</option>	
+							<option ${c.id eq idcategoria?"selected":"" } value="${c.id}">${c.nombre}</option>	
 						</c:forEach>
 					</select>
 					
 					<label class="mx-2">Filtro nombre : </label>
 					<div class="form-group">
-					<input type="text" name="nombre" value="${producto.nombre}" class="form-control" placeholder="mínimo 2 letras, máximo 50">
+					<input type="text" name="nombre" value="${nombreProducto}" class="form-control" placeholder="mínimo 2 letras, máximo 50">
 					
 					<input type="hidden" nombre="accion" value="listar">
 					<input type="submit" value="Buscar" class="btn btn-primary ml-3">
@@ -45,6 +45,8 @@
 	                        </p>
 	                        <p class="text-muted precio-unidad ">${p.nombre}</p>
 	                        <p class="descripcion text-truncate">${p.descripcion}</p>
+	                        <p class="descripcion text-truncate">Usuario : ${p.usuario.nombre}</p>
+	                        <p class="descripcion text-truncate">Categoria : ${p.categoria.nombre}</p>
 	                    </div>
 	
 	                    <div class="botones">

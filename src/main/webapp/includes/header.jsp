@@ -72,16 +72,25 @@
 			        </div>
 			      </li>
 		      </c:if>
+		      <c:if test="${usuarioLogeado.rol.id eq 1 }" >            	
+	            	<li class="nav-item ">
+	            		<a class="nav-link" href="mipanel/productos?accion=listar">Mis Producto</a>
+	            	</li>
+	            	<li class="nav-item ">
+	            		<a class="nav-link" href="mipanel/productos?accion=formulario">Crear Nuevo</a> 
+	            	</li>
+	            	
+	          </c:if>
 		      <c:if test="${empty usuarioLogeado }" >
 			      <li class="nav-item ml-auto">
 	            	<a class="nav-link " href="login.jsp">Login</a>
 			      </li>
 	          </c:if>
-			<c:if test="${not empty usuarioLogeado }" >
-			<li class="nav-item ml-auto">
-            	<a class="nav-link" href="logout">Cerrar Sessión</a>
-            	</li>
-            </c:if>	
+			  <c:if test="${not empty usuarioLogeado }" >
+				<li class="nav-item ml-auto">
+	            	<a class="nav-link" href="logout">Cerrar Sessión</a>
+	            </li>
+	          </c:if>
 		    </ul>
 		  </div>
 		</nav>  

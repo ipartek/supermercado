@@ -117,15 +117,23 @@ public class InicioController extends HttpServlet {
 		List<Producto> productos = daoProducto.getAllFiltered(categoriaId, pNombre);
 
 		LOG.trace("Obtenidos los productos filtrados");
+		int contProductos = 0;
 		for (Producto p : productos) {
 			LOG.trace(p);
+			contProductos++;
 		}
 
 		request.setAttribute("categorias", daoCategoria.getAll() );
-
 		request.setAttribute("productos", productos);
+		request.setAttribute("idcategoria", pCategoriaId);
+		request.setAttribute("nombreProducto", pNombre);
 
-		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
+		if(0 == categoriaId && "".equalsIgnoreCase(pNombre)) {
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
+		}
+		else {
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, contProductos+"  producto(s) encontrado(s) en su busqueda."));
+		}
 
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 

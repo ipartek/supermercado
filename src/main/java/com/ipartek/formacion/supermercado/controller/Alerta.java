@@ -6,6 +6,8 @@ public class Alerta {
 	//TODO resto de tipos: success, warning,...
 	public static final String TIPO_PRIMARY = "primary";
 	public static final String TIPO_DANGER = "danger";
+	public static final String TIPO_SUCCESS = "success";
+	public static final String TIPO_WARNING = "warning";
 	
 	private String texto;
 	private String tipo;
