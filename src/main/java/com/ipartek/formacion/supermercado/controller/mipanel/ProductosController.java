@@ -208,7 +208,7 @@ public class ProductosController extends HttpServlet {
 		pGuardar.setPrecio(Float.parseFloat(pPrecio));
 		pGuardar.setCategoria(daoCategoria.getById(Integer.parseInt(pCategoria)));
 		
-		if(id != 0) {
+		if(id == 0) {
 			
 			Usuario u = new Usuario();
 			u.setId(uLogeado.getId()); //Evitar que se envie el parametro desde el formulario
@@ -239,7 +239,7 @@ public class ProductosController extends HttpServlet {
 					}else {            // crear
 						daoProducto.create(pGuardar);
 						
-						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Producto creado correctamente :)"));
+						request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Producto creado correctamente :) No podra ver el producto en su lista hasta el que administrador lo valide."));
 					}
 				
 				}catch (ProductoException e) {

@@ -54,6 +54,8 @@ public class LoginController extends HttpServlet {
 				session.setAttribute("usuarioLogeado", usuario );
 				session.setMaxInactiveInterval(60*3); // 3min
 				
+				request.setAttribute("usuario", usuario);
+				
 				if ( usuario.getRol().getId() == Rol.ROL_ADMIN ) {
 				
 					view = "seguridad/index.jsp";   // accedemos la BACK-OFFICE

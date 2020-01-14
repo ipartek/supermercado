@@ -117,7 +117,7 @@
 			          <i class="fas fa-user mr-1"></i> ${usuarioLogeado.nombre}
 			      </a>
 			      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-			        <a class="dropdown-item" href="seguridad/usuarios?accion=formulario&id=${usuarioLogeado.id}">Perfil</a>
+			        <a class="dropdown-item" href="seguridad/usuarios?accion=datos">Perfil</a>
 			        <div class="dropdown-divider"></div>
 	          		<a class="dropdown-item" href="logout">Cerrar sesion</a>
 			      </div>
@@ -132,7 +132,7 @@
 			        <i class="fas fa-user mr-1"></i> ${usuarioLogeado.nombre}
 			      </a>
 			      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-			        <a class="dropdown-item" href="mipanel/usuarios?accion=formulario&id=${usuarioLogeado.id}">Perfil</a>
+			        <a class="dropdown-item" href="mipanel/usuarios?accion=datos">Perfil</a>
 			        <div class="dropdown-divider"></div>
 	          		<a class="dropdown-item" href="logout">Cerrar sesion</a>
 			      </div>
