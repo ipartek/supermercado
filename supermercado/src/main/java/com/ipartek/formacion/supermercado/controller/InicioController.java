@@ -95,6 +95,7 @@ public class InicioController extends HttpServlet {
 			idCategoria = ("".equalsIgnoreCase(idCategoria) || idCategoria == null )?"0":idCategoria;
 			nombreProducto = "";
 			idParseado = Integer.parseInt(idCategoria);
+			request.setAttribute("categoria", daoCategoria.getById(idParseado));
 			productos = (ArrayList<Producto>) daoProducto.busquedaPersonalizada(idParseado, nombreProducto);		
 		}else {
 			idParseado = (idCategoria==null || idCategoria.isEmpty())? 0:Integer.parseInt(idCategoria) ;
@@ -104,6 +105,9 @@ public class InicioController extends HttpServlet {
 		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
 		
 		request.setAttribute("productos", productos);
+		
+		//Enviamos de nuevo al formulario el parámetro de búsqueda y la categoria.
+		request.setAttribute("parametroBusqueda", nombreProducto);
 
 	}
 

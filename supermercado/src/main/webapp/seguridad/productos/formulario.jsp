@@ -51,12 +51,13 @@
 			</c:forEach>
 		</select>
 	</div>
-	
+
+
 	<div class="form-group">
 		<label>Categoría</label>
 		<select name="categoriaId" class="custom-select">
 			<c:forEach items="${categorias}" var="c">
-				<option value="${c.id}">${c.nombre}</option>
+				<option value="${c.id}"><c:if test="${categoria!=0 }?"selected></c:if>${c.nombre}</option>
 			</c:forEach>
 		</select>
 	</div>
