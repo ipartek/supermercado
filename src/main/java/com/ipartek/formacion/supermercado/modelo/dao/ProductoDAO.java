@@ -97,8 +97,8 @@ public class ProductoDAO implements IProductoDAO {
 			+ "ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_INSERT = "INSERT INTO producto (id, nombre, imagen, precio, descuento, descripcion, fecha_creacion, id_usuario, id_categoria) VALUES ( ? , ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), ?,?);";
 	private static final String SQL_UPDATE = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ?;";
-	private static final String SQL_ACTIVATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=1 WHERE id = ?;";
-	private static final String SQL_DESACTIVATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=0 WHERE id = ?;";
+	private static final String SQL_VALIDATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=1 WHERE id = ?;";
+	private static final String SQL_UNVALIDATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=0 WHERE id = ?;";
 	private static final String SQL_UPDATE_BY_USER = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ? AND id_usuario = ?;";
 	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ?;";
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_producto = ?;";
@@ -181,23 +181,24 @@ public class ProductoDAO implements IProductoDAO {
 		return resultado;
 	}
 
-	public List<Producto> getAllByUser(int id) {
+	public List<Producto> getAllById(int id) throws Exception {
+		LOG.trace("getAll by id: " + id);
 
-		LOG.debug("Entra en getAllByUser");
-
-		ArrayList<Producto> lista = new ArrayList<Producto>();
+		List<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_BY_USER)) {
+				CallableStatement cs = con.prepareCall(" { CALL pa_productos_busqueda(?,?) } ")) {
 
-			pst.setInt(1, id);
 
-			LOG.debug("Ejecuta la query: " + pst.toString());
-			ResultSet rs = pst.executeQuery();
+			cs.setInt(1, id);
 
-			while (rs.next()) {
-				Producto p = mapper(rs);
-				lista.add(p);
+			LOG.debug("Ejecuta la query: " + cs.toString());
+
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto c = mapper(rs);
+					resultado.add(c);
+				}
 
 			}
 
@@ -205,26 +206,25 @@ public class ProductoDAO implements IProductoDAO {
 			LOG.error(e);
 			e.printStackTrace();
 		}
-
-		return lista;
+		return resultado;
 	}
 
 	public List<Producto> getAllInactive() {
 
-		LOG.debug("Entra en getAllInactive");
+		LOG.debug("Entra en producto getAllToInactive");
 
-		ArrayList<Producto> lista = new ArrayList<Producto>();
+		ArrayList<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_INACTIVE);
-				ResultSet rs = pst.executeQuery()) {
+				CallableStatement cs = con.prepareCall( " { CALL pa_producto_get_all_inactive() } ")) {
 
-			LOG.debug("Ejecuta la query: " + pst.toString());
+			LOG.debug("Ejecuta la query: " + cs.toString());
 
-			while (rs.next()) {
-
-				Producto p = mapper(rs);
-				lista.add(p);
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto p = mapper(rs);
+					resultado.add(p);
+				}
 
 			}
 
@@ -232,26 +232,25 @@ public class ProductoDAO implements IProductoDAO {
 			LOG.error(e);
 			e.printStackTrace();
 		}
-
-		return lista;
+		return resultado;
 	}
 
 	public List<Producto> getAllToValidate() {
 
-		LOG.debug("Entra en getAllToValidate");
+		LOG.debug("Entra en producto getAllToValidate");
 
-		ArrayList<Producto> lista = new ArrayList<Producto>();
+		ArrayList<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_TOVALIDATE);
-				ResultSet rs = pst.executeQuery()) {
+				CallableStatement cs = con.prepareCall( " { CALL pa_producto_get_all_to_validate() } ")) {
 
-			LOG.debug("Ejecuta la query: " + pst.toString());
+			LOG.debug("Ejecuta la query: " + cs.toString());
 
-			while (rs.next()) {
-
-				Producto p = mapper(rs);
-				lista.add(p);
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto p = mapper(rs);
+					resultado.add(p);
+				}
 
 			}
 
@@ -259,8 +258,7 @@ public class ProductoDAO implements IProductoDAO {
 			LOG.error(e);
 			e.printStackTrace();
 		}
-
-		return lista;
+		return resultado;
 	}
 
 	public List<Producto> getAllFiltros(int idCategoria, String nombre) throws Exception {
@@ -295,20 +293,20 @@ public class ProductoDAO implements IProductoDAO {
 	@Override
 	public List<Producto> getAll() {
 
-		LOG.debug("Entra en getAll");
+		LOG.debug("Entra en producto getAll");
 
-		ArrayList<Producto> lista = new ArrayList<Producto>();
+		ArrayList<Producto> resultado = new ArrayList<Producto>();
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_GET_ALL);
-				ResultSet rs = pst.executeQuery()) {
+				CallableStatement cs = con.prepareCall( " { CALL pa_producto_get_all() } ")) {
 
-			LOG.debug("Ejecuta la query: " + pst.toString());
+			LOG.debug("Ejecuta la query: " + cs.toString());
 
-			while (rs.next()) {
-
-				Producto p = mapper(rs);
-				lista.add(p);
+			try (ResultSet rs = cs.executeQuery()) {
+				while (rs.next()) {
+					Producto p = mapper(rs);
+					resultado.add(p);
+				}
 
 			}
 
@@ -316,8 +314,7 @@ public class ProductoDAO implements IProductoDAO {
 			LOG.error(e);
 			e.printStackTrace();
 		}
-
-		return lista;
+		return resultado;
 	}
 
 	public List<Producto> getAllByName(String nombre) {
@@ -585,12 +582,12 @@ public class ProductoDAO implements IProductoDAO {
 
 	public Producto validate(int id) throws Exception {
 
-		LOG.debug("Entra en activate");
+		LOG.debug("Entra en validate");
 
 		Producto resultado = null;
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_ACTIVATE)) {
+				PreparedStatement pst = con.prepareStatement(SQL_VALIDATE)) {
 
 			pst.setInt(1, id);
 
@@ -608,12 +605,12 @@ public class ProductoDAO implements IProductoDAO {
 
 	public Producto unvalidate(int id) throws Exception {
 
-		LOG.debug("Entra en desactivate");
+		LOG.debug("Entra en unvalidate");
 
 		Producto resultado = null;
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DESACTIVATE)) {
+				PreparedStatement pst = con.prepareStatement(SQL_UNVALIDATE)) {
 
 			pst.setInt(1, id);
 
@@ -696,6 +693,12 @@ public class ProductoDAO implements IProductoDAO {
 		}
 
 		return pojo;
+	}
+
+	@Override
+	public List<Producto> getAllByUser(int idProducto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
