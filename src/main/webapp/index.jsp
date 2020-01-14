@@ -6,10 +6,10 @@
         
         	<c:forEach items="${productos}" var="p">
 
-	            <div class="col">
+	            <div class="col my-2">
 	
 	                <!-- producto -->
-	                <div class="producto">
+	                <div class="producto mb-3">
 	                	<button class="categoria">${p.categoria.nombre}</button>
 	                    <span class="descuento">${p.descuento}%</span>
 	                    <img src="${p.imagen}" alt="imagen de ${p.nombre}">

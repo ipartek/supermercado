@@ -92,16 +92,60 @@ public class InicioController extends HttpServlet {
 
 		String pCategoriaId = request.getParameter("categoriaElegida");
 		String pNombreProducto = request.getParameter("productoElegido");
+		int productosPorCat;
+
 		ArrayList<Categoria> categorias = new ArrayList<Categoria>();
 		ArrayList<Producto> productos = new ArrayList<Producto>();
 
 		try {
 			int pIdCategoria = Integer.parseInt(pCategoriaId);
+
 			categorias = (ArrayList<Categoria>) daoCategoria.getAll();
 			productos = (ArrayList<Producto>) daoProducto.buscarPorNombreCategoria(pIdCategoria, pNombreProducto);
+
+			productosPorCat = productos != null ? productos.size() : 0;
+
 			request.setAttribute("productos", productos);
 			request.setAttribute("categorias", categorias);
-			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
+
+			request.setAttribute("catElegida", pIdCategoria);
+			request.setAttribute("prodElegido", pNombreProducto);
+
+			if (productosPorCat == 0) {
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER,
+						"No se han encontrado productos para los términos de búsqueda especificados. "));
+			} else {
+
+				// Para todas las categorias los productos que se corresponden con el terminos
+				// de busqueda
+				if (pIdCategoria == 0 && pNombreProducto != "") {
+
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY,
+							productosPorCat + " producto(s) para el término de búsqueda " + pNombreProducto));
+				}
+				// Para una catrgoria todos los productos
+				else if (pIdCategoria != 0 && pNombreProducto == "") {
+
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, productosPorCat
+							+ " producto(s) en  la categoría " + daoCategoria.getById(pIdCategoria).getNombre()));
+
+				}
+				// para una categoria productos que se llaman como pNombreProducto
+				else if (pIdCategoria != 0 && pNombreProducto != "") {
+
+					request.setAttribute("mensajeAlerta",
+							new Alerta(Alerta.TIPO_PRIMARY,
+									productosPorCat + " producto(s)  en la categoría "
+											+ daoCategoria.getById(pIdCategoria).getNombre()
+											+ " para el término de búsqueda " + pNombreProducto));
+
+				} else {
+					request.setAttribute("mensajeAlerta",
+							new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
+				}
+
+			}
+
 		} catch (NumberFormatException e) {
 			LOG.error("Problema al parsear el string a entero");
 		} catch (Exception e) {

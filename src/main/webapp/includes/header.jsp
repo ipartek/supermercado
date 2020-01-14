@@ -49,9 +49,9 @@
 			
 				
 					<select class="form-control mx-1" name="categoriaElegida">
-						<option value="0" selected>Todas las categorías</option>
+						<option value="0">Todas las categorías</option>
 						<c:forEach items="${categorias}" var="cat">
-							<option value="${cat.id }">${cat.nombre}</option>
+							<option value="${cat.id}"  ${(cat.id eq catElegida)?"selected":""} >${cat.nombre}</option>	
 						</c:forEach>
 					</select>
 			
@@ -60,6 +60,7 @@
 					<input type="text" 
 							class="form-control mx-1"
 							name="productoElegido"
+							value="${prodElegido}"
 						placeholder="Buscar por nombre">
 		
 			
