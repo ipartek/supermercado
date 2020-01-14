@@ -80,6 +80,7 @@ public class ProductoDAO implements IProductoDAO {
 		return lista;
 	}
 
+	@Override
 	public List<Producto> getAllFiltered(int idCategoria, String nombre) {
 
 		LOG.trace("idCategoria=" + idCategoria + " nombre=" + nombre);
