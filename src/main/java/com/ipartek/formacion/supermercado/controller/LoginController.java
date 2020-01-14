@@ -68,8 +68,9 @@ public class LoginController extends HttpServlet {
 					view = "seguridad/index.jsp"; // accedemos la BACK-OFFICE
 
 				} else {
-
-					view = "mipanel/index.jsp"; // accedemos la FRONT-OFFICE
+					// accedemos la FRONT-OFFICE
+					//view = "mipanel/index.jsp"; 
+					view = "mipanel/personal?accion=listar";
 				}
 
 			} else {
