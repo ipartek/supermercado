@@ -134,13 +134,13 @@ public class UsuariosController extends HttpServlet {
 
 				LOG.error("El ID pasado no es un numero. ERROR: " + e);
 				
-				request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador.", Alerta.TIPO_DANGER));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador."));
 				
 			} catch (Exception e) {
 				
 				LOG.error("Error al convertir el string de pId en integer. ERROR: " + e);
 				
-				request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador.", Alerta.TIPO_DANGER));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador."));
 			}
 
 		}
@@ -246,7 +246,7 @@ public class UsuariosController extends HttpServlet {
 
 		}
 
-		request.setAttribute("mensajeAlerta", new Alerta(mensaje.toString(), Alerta.TIPO_DANGER));
+		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, mensaje.toString()));
 
 	}
 

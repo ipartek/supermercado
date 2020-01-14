@@ -47,8 +47,6 @@ public class LoginController extends HttpServlet {
 			
 			Usuario usuario = usuarioDao.exist(nombre, pass);
 			
-			LOG.debug(usuario.toString());
-			
 			if ( usuario != null ) {
 				
 				LOG.info("login correcto " + usuario);
@@ -65,12 +63,14 @@ public class LoginController extends HttpServlet {
 					view = "mipanel/index.jsp";    // accedemos la FRONT-OFFICE
 				}	
 				
-			}else {
+			} else {
 				
-				request.setAttribute("mensajeAlerta", new Alerta( Alerta.TIPO_DANGER, "Credenciales incorrectas, prueba de nuevo"));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Credenciales incorrectas, prueba de nuevo"));
 				
 			}
-		}catch (Exception e) {
+			
+		} catch (Exception e) {
+			
 			LOG.error(e);			
 		}finally {
 			

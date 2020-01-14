@@ -123,13 +123,13 @@ public class CategoriasController extends HttpServlet {
 
 				LOG.error("El ID pasado no es un numero. ERROR: " + e);
 				
-				request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador.", Alerta.TIPO_DANGER));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador."));
 				
 			} catch (Exception e) {
 				
 				LOG.error("Error al convertir el string de pId en integer. ERROR: " + e);
 				
-				request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador.", Alerta.TIPO_DANGER));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador."));
 			}
 
 		}
@@ -172,7 +172,7 @@ public class CategoriasController extends HttpServlet {
 					LOG.error("Error al crear la nueva categoria. Datos de la categoria: " + categoria.toString() + "\n ERROR: " + e);
 				}
 
-				request.setAttribute("mensajeAlerta", new Alerta("Categoria agregada correctamente :)", Alerta.TIPO_SUCCESS));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Categoria agregada correctamente :)"));
 				this.listar(request, response);
 
 			} else {
@@ -187,16 +187,16 @@ public class CategoriasController extends HttpServlet {
 					
 					LOG.error("El ID pasado no es un numero. ERROR: " + e);
 					
-					request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el administrador.", Alerta.TIPO_DANGER));
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el administrador."));
 					
 				} catch (Exception e) {
 					
 					LOG.error("Error al actualizar la categoria. Datos usuario: " + categoria.toString() + "\n ERROR: " + e);
 					
-					request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador.", Alerta.TIPO_DANGER));
+					request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el adminitrador."));
 				}
 
-				request.setAttribute("mensajeAlerta", new Alerta("Categoria modificado correctamente :)", Alerta.TIPO_SUCCESS));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_SUCCESS, "Categoria modificado correctamente :)"));
 
 				this.listar(request, response);
 
@@ -219,7 +219,7 @@ public class CategoriasController extends HttpServlet {
 
 		}
 
-		request.setAttribute("mensajeAlerta", new Alerta(mensaje.toString(), Alerta.TIPO_DANGER));
+		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, mensaje.toString()));
 
 	}
 
@@ -238,7 +238,7 @@ public class CategoriasController extends HttpServlet {
 				
 			} catch (MySQLIntegrityConstraintViolationException e1) {
 				
-				request.setAttribute("mensajeAlerta", new Alerta("No se puede eliminar una categoria con productos asociados >:(", Alerta.TIPO_DANGER));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "No se puede eliminar una categoria con productos asociados >:("));
 				
 				this.listar(request, response);
 				
@@ -246,7 +246,7 @@ public class CategoriasController extends HttpServlet {
 				
 				LOG.error("El ID pasado no es un numero. ERROR: " + e);
 				
-				request.setAttribute("mensajeAlerta", new Alerta("Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el administrador.", Alerta.TIPO_DANGER));
+				request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_DANGER, "Ha ocurrido un error a la hora de procesar la solicitud. Contacte con el administrador."));
 			} 
 			alerta.setTexto("La categoria " + categoria.toString() + " ha sido eliminada con exito.");
 			alerta.setTipo(Alerta.TIPO_SUCCESS);
