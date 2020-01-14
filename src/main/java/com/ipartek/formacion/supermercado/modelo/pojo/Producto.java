@@ -1,5 +1,7 @@
 package com.ipartek.formacion.supermercado.modelo.pojo;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -30,6 +32,10 @@ public class Producto {
 	private Usuario usuario;
 
 	private Categoria categoria;
+
+	private Date fechaAlta;
+	private Date fechaModifica;
+	private Date fechaBaja;
 
 	public Producto() {
 		super();

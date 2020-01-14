@@ -184,7 +184,7 @@ public class ProductosController extends HttpServlet {
 		Usuario u = new Usuario();
 		u.setId(Integer.parseInt(pUsuarioId));
 		pGuardar.setUsuario(u);
-		
+
 		Categoria c = new Categoria();
 		c.setId(Integer.parseInt(pCategoriaId));
 		pGuardar.setCategoria(c);
@@ -211,7 +211,7 @@ public class ProductosController extends HttpServlet {
 				}
 
 		}
-		
+
 		request.setAttribute("usuarios", daoUsuario.getAll() );
 		request.setAttribute("categorias", daoCategoria.getAll());
 		request.setAttribute("producto", pGuardar);
@@ -247,6 +247,8 @@ public class ProductosController extends HttpServlet {
 
 		}
 
+
+
 		listar(request, response);
 
 	}
@@ -270,6 +272,12 @@ public class ProductosController extends HttpServlet {
 		List<Producto> productos =  daoProducto.getAllFiltered(categoriaId, pNombre);
 
 		request.setAttribute("productos", productos );
+		request.setAttribute("categorias", daoCategoria.getAll());
+
+		request.setAttribute("nombre", pNombre);
+		request.setAttribute("idcategoria", categoriaId);
+
+
 		vistaSeleccionda = VIEW_TABLA;
 
 	}

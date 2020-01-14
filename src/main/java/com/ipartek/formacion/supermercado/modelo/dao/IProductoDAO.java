@@ -8,12 +8,22 @@ import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 public interface IProductoDAO extends IDAO<Producto> {
 
 	/**
+	 * Filtra todos los productos por idCategoria o nombre o ambos o ninguno (solo saca los activos)
+	 * @param idCategoria
+	 * @param nombre
+	 * @return productos filtrados por nombre y categoria. Si no le pasa un nombre o categoria devuelve todos los productos
+	 */
+	List<Producto> getActivesFiltered(int idCategoria, String nombre);
+
+
+	/**
 	 * Filtra todos los productos por idCategoria o nombre o ambos o ninguno
 	 * @param idCategoria
 	 * @param nombre
 	 * @return productos filtrados por nombre y categoria. Si no le pasa un nombre o categoria devuelve todos los productos
 	 */
 	List<Producto> getAllFiltered(int idCategoria, String nombre);
+
 
 	/**
 	 * Lista los producto de un Usuario

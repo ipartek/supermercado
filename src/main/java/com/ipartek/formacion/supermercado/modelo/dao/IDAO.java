@@ -3,23 +3,25 @@ package com.ipartek.formacion.supermercado.modelo.dao;
 
 import java.util.List;
 
+import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
+
 
 public interface IDAO<P> {
-	
-		
+
+
 	/**
 	 * Obtiene todos los datos
 	 * @return lista de pojos
 	 */
 	List<P> getAll();
-	
+
 	/**
 	 * recupera un pojo por su identificador
 	 * @param id identificador
 	 * @return pojo si lo encuentra, si no null
 	 */
 	P getById(int id);
-	
+
 	/**
 	 * Elimina
 	 * @param id identificador
@@ -36,7 +38,7 @@ public interface IDAO<P> {
 	 * @throws Exception si no puede modificar o no lo encuentra
 	 */
 	P update(int id, P pojo)  throws Exception;
-	
+
 	/**
 	 * crea un nuevo pojo
 	 * @param pojo a crear

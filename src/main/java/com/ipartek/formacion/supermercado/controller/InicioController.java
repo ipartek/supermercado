@@ -114,7 +114,7 @@ public class InicioController extends HttpServlet {
 
 		LOG.trace("Limpiados los parametros de filtrado...");
 
-		List<Producto> productos = daoProducto.getAllFiltered(categoriaId, pNombre);
+		List<Producto> productos = daoProducto.getActivesFiltered(categoriaId, pNombre);
 
 		LOG.trace("Obtenidos los productos filtrados");
 		int contProductos = 0;
@@ -132,7 +132,17 @@ public class InicioController extends HttpServlet {
 			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
 		}
 		else {
-			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, contProductos+"  producto(s) encontrado(s) en su busqueda."));
+			String mensaje = contProductos + " producto" + (contProductos == 1?"":"s") +" encontrado" + (contProductos == 1?"":"s");
+
+			if(categoriaId > 0) {
+				mensaje += " de la categoria <b>" + daoCategoria.getById(categoriaId).getNombre() + "</b>";
+			}
+
+			if(pNombre != null && !pNombre.equals("")) {
+				mensaje += (categoriaId > 0 ? " y": "") + " con nombre similar a <b>" + pNombre + "</b>";
+			}
+
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, mensaje));
 		}
 
 		request.getRequestDispatcher("index.jsp").forward(request, response);

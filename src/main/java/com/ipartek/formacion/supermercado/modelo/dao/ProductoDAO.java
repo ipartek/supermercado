@@ -27,7 +27,9 @@ public class ProductoDAO implements IProductoDAO {
 	private static ProductoDAO INSTANCE;
 
 	private static final String SQL_GET_ALL = "{CALL pa_producto_getall()}";
+	private static final String SQL_GET_ACTIVOS_FILTER = "{CALL pa_productos_busqueda(?, ?)}";
 	private static final String SQL_GET_ALL_FILTER = "{CALL pa_productos_busqueda(?, ?)}";
+
 
 	private static final String SQL_GET_ALL_BY_USER = "{CALL pa_producto_getall_byuser(?)}";
 
@@ -75,6 +77,32 @@ public class ProductoDAO implements IProductoDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+
+		return lista;
+	}
+
+	@Override
+	public List<Producto> getActivesFiltered(int idCategoria, String nombre) {
+
+		LOG.trace("idCategoria=" + idCategoria + " nombre=" + nombre);
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+
+		try (Connection con = ConnectionManager.getConnection();
+				CallableStatement pst = con.prepareCall(SQL_GET_ACTIVOS_FILTER);) {
+
+			pst.setInt(1, idCategoria);
+			pst.setString(2, nombre);
+			LOG.debug(pst);
+
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					lista.add(mapper(rs));
+				}
+			} // executeQuery
+
+		} catch (SQLException e) {
+			LOG.error(e);
 		}
 
 		return lista;
