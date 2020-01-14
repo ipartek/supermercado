@@ -33,6 +33,7 @@
                                    value="${usuario.contrasenia}"     
                                    placeholder="Mínimo 2 Máximo 150"
                                    aria-describedby="nombreHelp">
+                            <input type="hidden" name="contraseniaMD5" id="contraseniaMD5">
                             <small id="nombreHelp" class="form-text text-muted">Contraseña del usuario</small>
                         </div>
                         
@@ -66,11 +67,11 @@
                         
                         <c:choose>
                         	<c:when test="${usuario.id > 0}">
-                        		<button type="submit" class="btn btn-block btn-primary">Modificar usuario</button> 
+                        		<button type="submit" class="btn btn-block btn-primary" onclick="calcMD5()">Modificar usuario</button> 
                         		<button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#modalEliminar"> Eliminar usuario </button>	            		
                         	</c:when>
                         	<c:otherwise>
-                        		<button type="submit" class="btn btn-block btn-outline-primary">Crear usuario</button> 
+                        		<button type="submit" class="btn btn-block btn-outline-primary" onclick="calcMD5()">Crear usuario</button> 
                         	</c:otherwise>
                         </c:choose>
   

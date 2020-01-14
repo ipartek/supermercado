@@ -15,7 +15,7 @@
 					 
 					 <div class="form-group">
 					    <label for="contrasenya">Contraseña:</label>
-					    <input type="password" class="form-control" name="contrasenya" id="contrasenya" required>
+					    <input type="password" class="form-control" name="contrasenya" id="password" required>
 					    <input type="hidden" name="contraseniaMD5" id="contraseniaMD5">					    
 					 </div>
 					

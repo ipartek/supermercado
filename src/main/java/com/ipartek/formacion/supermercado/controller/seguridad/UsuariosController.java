@@ -155,7 +155,9 @@ public class UsuariosController extends HttpServlet {
 
 		String pId = request.getParameter("id");
 		String pNombre = request.getParameter("nombre");
-		String pPassword = request.getParameter("password");
+		//String pPassword = request.getParameter("password");
+		String pPassMD5 = request.getParameter("contraseniaMD5");
+
 		String pRol = request.getParameter("rolId");
 		String pImagen = request.getParameter("imagen");
 		String pValidado = request.getParameter("validadoId");
@@ -163,7 +165,7 @@ public class UsuariosController extends HttpServlet {
 		Usuario user = new Usuario();
 		user.setId(Integer.parseInt(pId));
 		user.setNombre(pNombre);
-		user.setContrasenia(pPassword);
+		user.setContrasenia(pPassMD5);
 		user.setImagen(pImagen);
 		user.setValidado(Integer.parseInt(pValidado));
 		

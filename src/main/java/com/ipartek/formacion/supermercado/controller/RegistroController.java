@@ -44,13 +44,14 @@ public class RegistroController extends HttpServlet {
 		String vistaSeleccionda = "";
 		
 		String pNombre = request.getParameter("nombre");
-		String pPassword = request.getParameter("password");
+		//String pPassword = request.getParameter("password");
+		String pPassMD5 = request.getParameter("contraseniaMD5");
 		String pImagen = request.getParameter("imagen");
 		
 		Usuario user = new Usuario();
 		
 		user.setNombre(pNombre);
-		user.setContrasenia(pPassword);
+		user.setContrasenia(pPassMD5);
 		
 		if(!pImagen.trim().equals("") && pImagen != null) {	
 			

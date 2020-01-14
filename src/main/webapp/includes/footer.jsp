@@ -40,7 +40,7 @@
     <!-- Función para convertir la cadena a MD5 e imprimirla -->
 	<script type="text/javascript">
 		function calcMD5(){
-			var passwordMD5 = document.getElementById('nombre').value + document.getElementById('contrasenya').value;
+			var passwordMD5 = document.getElementById('nombre').value + document.getElementById('password').value;
 			document.getElementById('contraseniaMD5').value = hex_md5(passwordMD5);
 		}
 	</script>

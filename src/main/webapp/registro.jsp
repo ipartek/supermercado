@@ -33,6 +33,7 @@
                                    value="${usuario.contrasenia}"     
                                    placeholder="Mínimo 2 Máximo 150"
                                    aria-describedby="nombreHelp">
+                            <input type="hidden" name="contraseniaMD5" id="contraseniaMD5">
                             <small id="nombreHelp" class="form-text text-muted">Contraseña del usuario</small>
                         </div>
                         
@@ -47,7 +48,7 @@
                             <small id="nombreHelp" class="form-text text-muted">Imagen del producto</small>
                         </div>
                         
-                        <button type="submit" class="btn btn-block btn-outline-primary">Crear usuario</button> 
+                        <button type="submit" class="btn btn-block btn-outline-primary" onclick="calcMD5()">Crear usuario</button> 
                     
                     </form>
 
