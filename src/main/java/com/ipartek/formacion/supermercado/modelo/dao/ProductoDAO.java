@@ -97,8 +97,8 @@ public class ProductoDAO implements IProductoDAO {
 			+ "ORDER BY p.id DESC LIMIT 500;";
 	private static final String SQL_INSERT = "INSERT INTO producto (id, nombre, imagen, precio, descuento, descripcion, fecha_creacion, id_usuario, id_categoria) VALUES ( ? , ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), ?,?);";
 	private static final String SQL_UPDATE = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ?;";
-	private static final String SQL_ACTIVATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=1 WHERE id = ?;";
-	private static final String SQL_DESACTIVATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=0 WHERE id = ?;";
+	private static final String SQL_VALIDATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=1 WHERE id = ?;";
+	private static final String SQL_UNVALIDATE = "UPDATE producto SET fecha_modificacion=CURRENT_TIMESTAMP(), validado=0 WHERE id = ?;";
 	private static final String SQL_UPDATE_BY_USER = "UPDATE producto SET nombre= ?, imagen=?, precio=?, descuento=?, descripcion=?, fecha_modificacion=CURRENT_TIMESTAMP(), id_usuario=?, id_categoria=? WHERE id = ? AND id_usuario = ?;";
 	private static final String SQL_DELETE = "DELETE FROM producto WHERE id = ?;";
 	private static final String SQL_DELETE_BY_USER = "DELETE FROM producto WHERE id = ? AND id_producto = ?;";
@@ -582,12 +582,12 @@ public class ProductoDAO implements IProductoDAO {
 
 	public Producto validate(int id) throws Exception {
 
-		LOG.debug("Entra en activate");
+		LOG.debug("Entra en validate");
 
 		Producto resultado = null;
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_ACTIVATE)) {
+				PreparedStatement pst = con.prepareStatement(SQL_VALIDATE)) {
 
 			pst.setInt(1, id);
 
@@ -605,12 +605,12 @@ public class ProductoDAO implements IProductoDAO {
 
 	public Producto unvalidate(int id) throws Exception {
 
-		LOG.debug("Entra en desactivate");
+		LOG.debug("Entra en unvalidate");
 
 		Producto resultado = null;
 
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(SQL_DESACTIVATE)) {
+				PreparedStatement pst = con.prepareStatement(SQL_UNVALIDATE)) {
 
 			pst.setInt(1, id);
 
