@@ -6,7 +6,7 @@
 	<artifactId>supermerkado</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1</version>
-	<name>supermerkado</name>
+	<name>supermerkado-aiken</name>
 
 
 	<!-- variables comunes para todo el POM -->
@@ -122,6 +122,6 @@
 		</plugins>
 
 
-		<finalName>supermerkado</finalName>
+		<finalName>supermerkado-aiken</finalName>
 	</build>
 </project>
