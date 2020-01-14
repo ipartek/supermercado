@@ -18,7 +18,7 @@
 	<div class="form-group row">
 		<div class="col-lg-6">
 			<label>Contraseña</label><br /> 
-			<input type="text" name="contrasenia" value="${usuario.contrasenia}" class="form-control">
+			<input type="password" id="contrasenia" name="contrasenia" value="${usuario.contrasenia}" class="form-control">
 		</div>
 	</div>
 	<%-- <div class="form-group row">

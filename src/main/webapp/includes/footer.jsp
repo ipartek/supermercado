@@ -27,12 +27,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>    
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.12.0/js/md5.js"></script>
     
-    <script>
+   
+    <script> 
+    
+    	<!-- datatable -->
 	    $(document).ready(function() {
-	        $('.tabla').DataTable();
+	        
+	    	$('.tabla').DataTable();
+	        
 	    } );
+	    
+    <!-- encriptar contraseña -->
+	   function encripta(){
+		
+		let trans =  document.getElementById('contrasenia');
+		console.log(md5(trans.value));
+		trans.value = md5(trans.value);
+	   } 
     </script>
+    
 
     </body>
 

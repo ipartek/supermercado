@@ -49,6 +49,7 @@ public class LoginController extends HttpServlet {
 
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("contrasenya");
+
 		Usuario usuario = new Usuario();
 
 		try {
