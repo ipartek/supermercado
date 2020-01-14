@@ -94,10 +94,10 @@ public class InicioController extends HttpServlet {
 		if ( nombreProducto == null || "".equalsIgnoreCase(nombreProducto)) {
 			idCategoria = ("".equalsIgnoreCase(idCategoria) || idCategoria == null )?"0":idCategoria;
 			nombreProducto = "";
-			 idParseado = Integer.parseInt(idCategoria);
+			idParseado = Integer.parseInt(idCategoria);
 			productos = (ArrayList<Producto>) daoProducto.busquedaPersonalizada(idParseado, nombreProducto);		
 		}else {
-			idParseado = Integer.parseInt(idCategoria);
+			idParseado = (idCategoria==null || idCategoria.isEmpty())? 0:Integer.parseInt(idCategoria) ;
 			productos = (ArrayList<Producto>) daoProducto.busquedaPersonalizada(idParseado, nombreProducto);
 		}
 				
