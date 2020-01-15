@@ -90,19 +90,31 @@ public class InicioController extends HttpServlet {
 		String idCategoria = request.getParameter("categoria");
 		String nombreProducto = request.getParameter("textoBuscado");
 		int idParseado = 0;
+		Categoria c = new Categoria();
 		
 		if ( nombreProducto == null || "".equalsIgnoreCase(nombreProducto)) {
 			idCategoria = ("".equalsIgnoreCase(idCategoria) || idCategoria == null )?"0":idCategoria;
 			nombreProducto = "";
 			idParseado = Integer.parseInt(idCategoria);
-			request.setAttribute("categoria", daoCategoria.getById(idParseado));
-			productos = (ArrayList<Producto>) daoProducto.busquedaPersonalizada(idParseado, nombreProducto);		
+			
+			productos = (ArrayList<Producto>) daoProducto.busquedaPersonalizada(idParseado, nombreProducto);	
+			
+			
 		}else {
 			idParseado = (idCategoria==null || idCategoria.isEmpty())? 0:Integer.parseInt(idCategoria) ;
 			productos = (ArrayList<Producto>) daoProducto.busquedaPersonalizada(idParseado, nombreProducto);
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Estos son los productos cuyo nombre contiene " + nombreProducto));
+		}
+		
+		if (idParseado!=0) {
+			c = daoCategoria.getById(idParseado);
+			request.setAttribute("categoria",c);
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Estos son los productos de la categoría " + c.getNombre()));
 		}
 				
-		request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "Los últimos productos destacados."));
+		if (productos.size()==0) {
+			request.setAttribute("mensajeAlerta", new Alerta(Alerta.TIPO_PRIMARY, "No hay productos disponibles "));
+		}
 		
 		request.setAttribute("productos", productos);
 		

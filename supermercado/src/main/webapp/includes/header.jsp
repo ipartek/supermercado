@@ -93,6 +93,8 @@
 					Sesión</a>
 				<a href="seguridad/" class="py-2 d-none d-md-inline-block"><i class="fas fa-user fa-sm bg-secondary"></i>${usuarioLogeado.nombre}</a>
 			</c:if>
+			
+	<!-- FILTRO DE BÚSQUEDA -->
 			<c:if test="${pagina == 'inicio' }">
 				<form action="inicio" method="post">
 				
@@ -101,17 +103,18 @@
 							<div class="form-group">
 							
 								<select class="browser-default custom-select" name="categoria">
-									<option value="" disabled selected>Selecciona una categoría</option>
-									<c:forEach items="${categorias}" var="c">
-										<option value="${c.id}">${c.nombre}</option>
-									</c:forEach>
+									<option value="0" disabled selected>Selecciona una categoría</option>
 									
+										<c:forEach items="${categorias}" var="c">
+											<option value="${c.id}" ${(c.id eq categoria.id)?"selected":""}>${c.nombre}</option>
+										</c:forEach>
+																	
 								</select>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
-								<input type="text" name="textoBuscado" class="form-control"placeholder="Introduce lo que deseas buscar">				
+								<input type="text" name="textoBuscado" class="form-control" value="${parametroBusqueda }" placeholder="Introduce lo que deseas buscar">				
 							</div>
 						</div>
 						<div class="col-3">
