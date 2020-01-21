@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.ipartek.formacion.supermercado.model.ConnectionManager;
+import com.ipartek.formacion.supermercado.modelo.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.pojo.Rol;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
 
@@ -32,7 +32,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 	private static final String SQL_GET_DELETE = "{CALL pa_usuario_delete_logico(?)}";
 
 
-	
+
 	private static UsuarioDAO INSTANCE;
 
 	private UsuarioDAO() {

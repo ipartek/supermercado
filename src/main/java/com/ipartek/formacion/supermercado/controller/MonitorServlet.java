@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ipartek.formacion.supermercado.model.ConnectionManager;
+import com.ipartek.formacion.supermercado.modelo.ConnectionManager;
 @WebServlet("/poolmonitor")
 public class MonitorServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
