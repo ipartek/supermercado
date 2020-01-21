@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.ipartek.formacion.supermercado.model.ConnectionManager;
+import com.ipartek.formacion.supermercado.modelo.ConnectionManager;
 import com.ipartek.formacion.supermercado.modelo.pojo.Categoria;
 import com.ipartek.formacion.supermercado.modelo.pojo.Producto;
 import com.ipartek.formacion.supermercado.modelo.pojo.Usuario;
