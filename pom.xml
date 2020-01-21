@@ -21,6 +21,11 @@
 
 	<!-- librerias que vamos a usar u otros proyectos maven -->
 	<dependencies>
+	<dependency>
+		<groupId>com.ipartek.formacion</groupId>
+		<artifactId>supermercado-modelo</artifactId>
+		<version>0.0.1</version>
+	</dependency>
 
 		<!-- Web Project 3.0 -->
 		<dependency>
